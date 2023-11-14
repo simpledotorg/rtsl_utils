@@ -1,7 +1,10 @@
-package org.rtsl.openmetrics.utils;
+package org.rtsl.openmetrics.utils.basic;
 
+import org.rtsl.openmetrics.utils.basic.ReadOnlyMetric;
 import java.util.ArrayList;
 import java.util.List;
+import org.rtsl.openmetrics.utils.Metric;
+import org.rtsl.openmetrics.utils.MetricProvider;
 
 public final class ReadOnlyMetricProvider implements MetricProvider {
 

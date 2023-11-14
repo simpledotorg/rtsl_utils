@@ -1,4 +1,4 @@
-package org.rtsl.openmetrics.utils;
+package org.rtsl.openmetrics.utils.basic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import org.rtsl.openmetrics.utils.Metric;
+import org.rtsl.openmetrics.utils.MetricProvider;
+import org.rtsl.openmetrics.utils.StandardMetric;
 
 public final class CountersMetricProvider implements MetricProvider<AtomicLong> {
 

@@ -1,4 +1,6 @@
-package org.rtsl.openmetrics.utils;
+package org.rtsl.openmetrics.utils.basic;
+
+import org.rtsl.openmetrics.utils.Metric;
 
 public final class ReadOnlyMetric<T extends Number> implements Metric<T> {
 

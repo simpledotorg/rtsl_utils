@@ -7,6 +7,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class OpenmetricsProducerServlet extends HttpServlet {
 
@@ -24,9 +26,13 @@ public final class OpenmetricsProducerServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setCharacterEncoding("UTF-8");
-        for (Metric currentMetric : metricProvider.getMetrics()) {
-            resp.getOutputStream().print(currentMetric.getAsString());
-            resp.getOutputStream().print("\n");
+        try {
+            for (Metric currentMetric : metricProvider.getMetrics()) {
+                resp.getOutputStream().print(currentMetric.getAsString());
+                resp.getOutputStream().print("\n");
+            }
+        } catch (Exception ex) {
+            // TODO: manage error
         }
     }
 

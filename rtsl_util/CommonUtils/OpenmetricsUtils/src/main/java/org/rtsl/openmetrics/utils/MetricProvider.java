@@ -5,7 +5,7 @@ import java.util.concurrent.Callable;
 
 public interface MetricProvider<T extends Number> extends Callable<List<Metric<T>>>, IMetricSource {
 
-    List<Metric<T>> getMetrics();
+    List<Metric<T>> getMetrics() throws Exception;
 
     @Override
     default String getAsString() throws Exception {

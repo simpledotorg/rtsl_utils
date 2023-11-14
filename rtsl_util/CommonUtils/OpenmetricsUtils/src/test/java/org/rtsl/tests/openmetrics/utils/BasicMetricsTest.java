@@ -1,6 +1,6 @@
 package org.rtsl.tests.openmetrics.utils;
 
-import org.rtsl.openmetrics.utils.CountersMetricProvider;
+import org.rtsl.openmetrics.utils.basic.CountersMetricProvider;
 import org.rtsl.openmetrics.utils.StandardMetric;
 import org.rtsl.openmetrics.utils.servlet.OpenmetricsProducerServlet;
 import java.io.IOException;

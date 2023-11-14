@@ -15,7 +15,7 @@ public class SortingMetricProviderWrapper implements MetricProvider, IMetricProv
     }
 
     @Override
-    public List<Metric> getMetrics() {
+    public List<Metric> getMetrics() throws Exception {
         List<Metric> returnMetrics = wrappedMetricProvider.getMetrics();
         Collections.sort(returnMetrics);
         return returnMetrics;

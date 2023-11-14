@@ -12,7 +12,7 @@ public final class AggregatingMetricProvider implements MetricProvider {
     }
 
     @Override
-    public List<Metric> getMetrics() {
+    public List<Metric> getMetrics() throws Exception {
         ArrayList<Metric> returnMetrics = new ArrayList<>();
         for (MetricProvider currentProvider : providers) {
             returnMetrics.addAll(currentProvider.getMetrics());

@@ -1,5 +1,6 @@
 package org.rtsl.openmetrics.utils;
 
+import org.rtsl.openmetrics.utils.basic.ReadOnlyMetric;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
