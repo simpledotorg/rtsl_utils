@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+    <groupId>org.rtsl.common.helper</groupId>
+    <artifactId>HelpersParent</artifactId>
+        <version>0.0.0</version>
+    </parent>
+    <groupId>org.rtsl.common.helper</groupId>
+    <artifactId>LogsCommon</artifactId>
+    <version>0.0.0</version>
+    <packaging>pom</packaging>
+    <dependencies>
+        <!-- We want to ship JCL into slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+		<!-- we want to ship all other logging systems into slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+        </dependency>
+        <!-- We want to use logback as our logging system -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+        </dependency>
+    </dependencies> 
+    <dependencyManagement>
+        <dependencies>	
+            <dependency>
+                <groupId>org.rtsl.common.helper</groupId>
+                <artifactId>Public3rdPartyDependencies</artifactId>
+                <version>0.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
