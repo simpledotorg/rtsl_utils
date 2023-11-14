@@ -35,7 +35,7 @@ public final class StandardMetric<T extends Number> implements Metric<T> {
 
     public StandardMetric(String metricName, T value, String... labelsAndValues) throws IllegalArgumentException {
         this.metricFullName = getStandardMetricFullName(metricName, toMap(labelsAndValues));
-        setMetricValue(metricValue);
+        setMetricValue(value);
     }
 
     private static Map<String, String> toMap(String... keysAndValues) {

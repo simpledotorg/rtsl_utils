@@ -9,7 +9,7 @@ import org.rtsl.openmetrics.utils.StandardMetric;
 public class SelfMonitoringMetricProviderWrapper implements MetricProvidedWrapper {
 
     private String metric_prefix = "metric_collection_metadata";
-    private String monitoringName;
+    private String monitoringName = "test";
 
     private MetricProvider wrappedMetricProvider;
 
