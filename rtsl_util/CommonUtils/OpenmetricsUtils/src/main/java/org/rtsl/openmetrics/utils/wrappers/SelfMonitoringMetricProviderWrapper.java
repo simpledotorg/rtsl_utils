@@ -5,10 +5,13 @@ import java.util.List;
 import org.rtsl.openmetrics.utils.Metric;
 import org.rtsl.openmetrics.utils.MetricProvider;
 import org.rtsl.openmetrics.utils.StandardMetric;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SelfMonitoringMetricProviderWrapper implements IMetricProviderWrapper, IMetricProviderNameAware {
 
-    private String metric_prefix = "metric_collection_metadata";
+     private static final Logger LOGGER = LoggerFactory.getLogger(SelfMonitoringMetricProviderWrapper.class);
+  private String metric_prefix = "metric_collection_metadata";
     private String metricProviderName = "unknown";
 
     private MetricProvider wrappedMetricProvider;
@@ -25,6 +28,7 @@ public class SelfMonitoringMetricProviderWrapper implements IMetricProviderWrapp
 
     @Override
     public List<Metric> getMetrics() {
+        LOGGER.debug("Wrapping Metric Provider <{}> to add performance metrics", metricProviderName);
         List<Metric> returnList = new ArrayList<>();
         long t1 = java.lang.System.currentTimeMillis();
         int error_count = 0;

@@ -23,14 +23,12 @@ public class ParallelMetricProvider implements MetricProvider {
     @Override
     public List getMetrics() {
         ArrayList<Metric> returnMetrics = new ArrayList<>();
-        for (MetricProvider currentProvider : providers) {
-            returnMetrics.addAll(currentProvider.getMetrics());
-        }
         List<Future<List<Metric>>> futures = new ArrayList<>();
+        // get all the futures
         for (MetricProvider currentMetricProvider : providers) {
             futures.add(executor.submit(currentMetricProvider));
         }
-
+        // then loop on all the futures
         for (Future<List<Metric>> currentFuture : futures) {
             try {
                 List<Metric> currentResult = currentFuture.get();

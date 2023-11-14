@@ -10,8 +10,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public final class CountersMetricProvider implements MetricProvider<AtomicLong> {
 
     private final Map<String, String> sharedLabels;
-    private ConcurrentHashMap<String, Metric<AtomicLong>> metricsReference = new ConcurrentHashMap<>();
-    private List<Metric<AtomicLong>> metrics = new ArrayList<>();
+    private final ConcurrentHashMap<String, Metric<AtomicLong>> metricsReference = new ConcurrentHashMap<>();
+    private final List<Metric<AtomicLong>> metrics = new ArrayList<>();
 
     public CountersMetricProvider() {
         this(new HashMap<>());
