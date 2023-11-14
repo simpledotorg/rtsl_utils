@@ -6,16 +6,21 @@ import org.rtsl.openmetrics.utils.Metric;
 import org.rtsl.openmetrics.utils.MetricProvider;
 import org.rtsl.openmetrics.utils.StandardMetric;
 
-public class SelfMonitoringMetricProviderWrapper implements MetricProvidedWrapper {
+public class SelfMonitoringMetricProviderWrapper implements IMetricProviderWrapper, IMetricProviderNameAware {
 
     private String metric_prefix = "metric_collection_metadata";
-    private String monitoringName = "test";
+    private String metricProviderName = "unknown";
 
     private MetricProvider wrappedMetricProvider;
 
     @Override
     public void setMetricProvider(MetricProvider wrappedMetricProvider) {
         this.wrappedMetricProvider = wrappedMetricProvider;
+    }
+
+    @Override
+    public void setMetricProviderName(String metricProviderName) {
+        this.metricProviderName = metricProviderName;
     }
 
     @Override
@@ -35,9 +40,9 @@ public class SelfMonitoringMetricProviderWrapper implements MetricProvidedWrappe
         // TODO : replace by an AggregatingMetricProvider
         returnList.addAll(wrappedList); // horrible in term of perfs. Should be improved at some point
 
-        returnList.add(new StandardMetric(metric_prefix + "_duration_milliseconds", t2 - t1, "monitoring_source", monitoringName)); // horrible in term of perfs. Should be improved at some point
-        returnList.add(new StandardMetric(metric_prefix + "_metrics_count", wrappedList.size(), "monitoring_source", monitoringName)); // horrible in term of perfs. Should be improved at some point
-        returnList.add(new StandardMetric(metric_prefix + "_error_status", error_count, "monitoring_source", monitoringName)); // horrible in term of perfs. Should be improved at some point
+        returnList.add(new StandardMetric(metric_prefix + "_duration_milliseconds", t2 - t1, "monitoring_source", metricProviderName)); // horrible in term of perfs. Should be improved at some point
+        returnList.add(new StandardMetric(metric_prefix + "_metrics_count", wrappedList.size(), "monitoring_source", metricProviderName)); // horrible in term of perfs. Should be improved at some point
+        returnList.add(new StandardMetric(metric_prefix + "_error_status", error_count, "monitoring_source", metricProviderName)); // horrible in term of perfs. Should be improved at some point
 
         return returnList;
     }
