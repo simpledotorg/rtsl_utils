@@ -32,6 +32,7 @@ public class SelfMonitoringMetricProviderWrapper implements MetricProvidedWrappe
         }
         long t2 = java.lang.System.currentTimeMillis();
 
+        // TODO : replace by an AggregatingMetricProvider
         returnList.addAll(wrappedList); // horrible in term of perfs. Should be improved at some point
 
         returnList.add(new StandardMetric(metric_prefix + "_duration_milliseconds", t2 - t1, "monitoring_source", monitoringName)); // horrible in term of perfs. Should be improved at some point

@@ -25,7 +25,7 @@ public final class OpenmetricsProducerServlet extends HttpServlet {
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setCharacterEncoding("UTF-8");
         for (Metric currentMetric : metricProvider.getMetrics()) {
-            resp.getOutputStream().print(currentMetric.getMetric());
+            resp.getOutputStream().print(currentMetric.getAsString());
             resp.getOutputStream().print("\n");
         }
     }

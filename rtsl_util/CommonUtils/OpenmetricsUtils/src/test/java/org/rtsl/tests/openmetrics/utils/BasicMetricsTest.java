@@ -44,8 +44,8 @@ public final class BasicMetricsTest {
         LOGGER.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         LOGGER.info("" + testProperties);
         LOGGER.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-        LOGGER.info("" + metric1.getMetric());
-        LOGGER.info("" + metric2.getMetric());
+        LOGGER.info("" + metric1.getAsString());
+        LOGGER.info("" + metric2.getAsString());
     }
 
     @Test

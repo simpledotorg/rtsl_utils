@@ -2,17 +2,19 @@ package org.rtsl.openmetrics.utils;
 
 import java.io.Serializable;
 
-public interface Metric<T extends Number> extends Serializable, Comparable<Metric>, Cloneable {
+public interface Metric<T extends Number> extends Serializable, Comparable<Metric>, Cloneable, IMetricSource {
 
     String getMetricFullName();
 
     T getMetricValue();
 
-    default String getMetric() {
+    @Override
+    default String getAsString() {
         return getMetricFullName() + (" " + getMetricValue());
     }
 
-    default void appendMetric(StringBuilder sb) {
+    @Override
+    default void append(StringBuilder sb) {
         sb.append(getMetricFullName()).append(" ").append(getMetricValue());
     }
 
