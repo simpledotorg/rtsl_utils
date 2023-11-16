@@ -160,4 +160,12 @@ public final class BasicMetricsTest {
 
     }
 
+    @Resource(name = "simpleConsumer")
+    Runnable asynchFileWriterConsumer;
+
+    @Test
+    public void testAsynch() throws ServletException, IOException {
+        asynchFileWriterConsumer.run();
+    }
+
 }

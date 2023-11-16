@@ -3,11 +3,10 @@ package org.rtsl.openmetrics.utils.asynch;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import org.rtsl.openmetrics.utils.Metric;
 import org.rtsl.openmetrics.utils.MetricProvider;
 
-public class FileMetricConsumer implements Runnable {
+public class FileWriterMetricConsumer implements Runnable {
 
     private File metricFile;
     private MetricProvider<Number> metricProvider;
