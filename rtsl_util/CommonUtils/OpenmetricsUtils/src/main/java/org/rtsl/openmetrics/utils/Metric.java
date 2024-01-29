@@ -2,7 +2,7 @@ package org.rtsl.openmetrics.utils;
 
 import java.io.Serializable;
 
-public interface Metric<T extends Number> extends Serializable, Comparable<Metric>, Cloneable, IMetricSource {
+public interface Metric<T extends Number> extends Serializable, Comparable<Metric>, Cloneable, MetricSource {
 
     String getMetricFullName();
 

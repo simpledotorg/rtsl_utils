@@ -19,6 +19,18 @@ public class SqlMetricProvider implements MetricProvider {
     private String query;
     private List<RowConverter> converters;
 
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
+    public void setConverters(List<RowConverter> converters) {
+        this.converters = converters;
+    }
+
     @Override
     public List<Metric> getMetrics() {
         List<Metric> returnMetrics = new ArrayList<>();

@@ -20,6 +20,11 @@
             <artifactId>jakarta.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>prometheus-metrics-exporter-common</artifactId>
+            <version>1.1.0</version>
+        </dependency>
         <!-- test dependencies -->
         <dependency>
             <groupId>org.rtsl.common.helper</groupId>

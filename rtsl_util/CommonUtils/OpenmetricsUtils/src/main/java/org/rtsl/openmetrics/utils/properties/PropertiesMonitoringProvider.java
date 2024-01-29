@@ -1,4 +1,4 @@
-package org.rtsl.openmetrics.utils;
+package org.rtsl.openmetrics.utils.properties;
 
 import org.rtsl.openmetrics.utils.basic.ReadOnlyMetric;
 import java.math.BigDecimal;
@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import org.rtsl.openmetrics.utils.Metric;
+import org.rtsl.openmetrics.utils.MetricProvider;
+import org.rtsl.openmetrics.utils.StandardMetric;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

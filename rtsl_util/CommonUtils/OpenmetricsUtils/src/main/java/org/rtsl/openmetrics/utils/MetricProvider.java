@@ -3,7 +3,7 @@ package org.rtsl.openmetrics.utils;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public interface MetricProvider<T extends Number> extends Callable<List<Metric<T>>>, IMetricSource {
+public interface MetricProvider<T extends Number> extends Callable<List<Metric<T>>>, MetricSource {
 
     List<Metric<T>> getMetrics() throws Exception;
 
