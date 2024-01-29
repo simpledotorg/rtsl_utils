@@ -1,4 +1,4 @@
-package org.rtsl.openmetrics.utils.asynch;
+package org.rtsl.openmetrics.utils.file;
 
 import java.io.BufferedWriter;
 import java.io.File;
