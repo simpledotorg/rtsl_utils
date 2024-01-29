@@ -39,4 +39,8 @@ public class DynamicConfigRegistry<S, K> implements Function<S, K> {
         return finalObject;
     }
 
+    public Function<S, String> getGetKeyFunction() {
+        return getKeyFunction;
+    }
+
 }

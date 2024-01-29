@@ -19,6 +19,10 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
         <!-- test dependencies -->
         <dependency>
             <groupId>org.rtsl.common.helper</groupId>
