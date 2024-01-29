@@ -8,7 +8,6 @@ import org.rtsl.openmetrics.utils.StandardMetric;
 public class SimpleRowConverter implements RowConverter {
 
     private String metricName;
-    private String metricNameKey;
     private String metricValueKey;
     private Map<String, String> labelsKeys;
 
@@ -18,14 +17,6 @@ public class SimpleRowConverter implements RowConverter {
 
     public void setMetricName(String metricName) {
         this.metricName = metricName;
-    }
-
-    public String getMetricNameKey() {
-        return metricNameKey;
-    }
-
-    public void setMetricNameKey(String metricNameKey) {
-        this.metricNameKey = metricNameKey;
     }
 
     public String getMetricValueKey() {
@@ -47,14 +38,8 @@ public class SimpleRowConverter implements RowConverter {
     @Override
     public Metric getMetric(Map<String, Object> row) {
         Map<String, String> labels = new HashMap<>();
-        String name = null;
+        String name = metricName;
 
-        // get the name
-        if (metricName != null) {
-            name = metricName;
-        } else {
-            name = row.get(metricNameKey).toString();
-        }
         // get the labels
         for (String currentLabelName : labelsKeys.keySet()) {
             String currentLabelKey = labelsKeys.get(currentLabelName);

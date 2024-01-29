@@ -7,7 +7,7 @@
         <artifactId>CommonUtilsParent</artifactId>
         <version>0.0.0</version>
     </parent>
-    <artifactId>OpenmetricsUtils</artifactId>
+    <artifactId>ConfigUtils</artifactId>
     <packaging>jar</packaging>
     <version>0.0.0</version>
     <dependencies>
@@ -16,9 +16,8 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <scope>provided</scope>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
         </dependency>
         <!-- test dependencies -->
         <dependency>
