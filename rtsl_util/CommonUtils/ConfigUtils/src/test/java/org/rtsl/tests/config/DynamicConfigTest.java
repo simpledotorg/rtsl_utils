@@ -1,5 +1,6 @@
 package org.rtsl.tests.config;
 
+import com.google.gson.Gson;
 import jakarta.annotation.Resource;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -30,6 +31,8 @@ public final class DynamicConfigTest {
 
         Object testObject = testRegistry.apply(content);
         LOGGER.info("Obtained Object is :{}", testObject);
+        Gson gson = new Gson();
+        LOGGER.info("Obtained Object is :{}", gson.toJson(testObject));
 
     }
 
