@@ -7,7 +7,7 @@ import org.rtsl.openmetrics.utils.MetricProvider;
 import org.rtsl.openmetrics.utils.sql.RowConverter;
 import org.rtsl.openmetrics.utils.sql.SqlMetricProvider;
 
-public class SqlMetricFactory implements Function<SqlMetricProviderConfig, MetricProvider> {
+public class SqlMetricProviderFactory implements Function<SqlMetricProviderConfig, MetricProvider> {
     
     private DataSource dataSource = null;
     

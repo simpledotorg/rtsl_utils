@@ -13,6 +13,7 @@ import jakarta.servlet.ServletException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.rtsl.config.dynamic.folder.FolderCrawler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -36,6 +37,9 @@ public final class BasicMetricsTest {
 
     @Resource(name = "countersMonitoringProvider")
     CountersMetricProvider countersMonitoringProvider;
+
+    @Resource(name = "metricCrawler")
+    FolderCrawler metricCrawler;
 
     private OpenmetricsProducerServlet servlet = new OpenmetricsProducerServlet();
 
@@ -166,6 +170,14 @@ public final class BasicMetricsTest {
     @Test
     public void testAsynch() throws ServletException, IOException {
         asynchFileWriterConsumer.run();
+    }
+
+    @Test
+    public void testCrawler() throws Exception {
+        LOGGER.info("testing");
+        Map<String, Object> parsedObjects = metricCrawler.getAll();
+        LOGGER.info("___" + parsedObjects.toString());
+
     }
 
 }
