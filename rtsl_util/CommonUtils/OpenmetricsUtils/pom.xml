@@ -28,5 +28,14 @@
             <type>pom</type>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.rtsl.common</groupId>
+            <artifactId>ConfigUtils</artifactId>
+            <version>0.0.0</version>
+            <scope>test</scope>
+        </dependency>
+        
+        
+        
     </dependencies>
 </project>

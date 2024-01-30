@@ -1,4 +1,4 @@
-package org.rtsl.openmetrics.utils.config;
+package org.rtsl.openmetrics.config;
 
 public interface MonitoringSourceConfig {
 

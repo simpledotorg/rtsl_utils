@@ -4,15 +4,15 @@
     "config": {
         "sqlQuery": "select 1 as test",
         "metrics": [{
-                "name": "metric_a_name",
-                "valueSourceColumn": "COLA",
-                "labels": {
+                "metricName": "metric_a_name",
+                "metricValueKey": "COLA",
+                "labelsKeys": {
                     "col1": "label1",
                     "col2": "label2"
                 },
-                "name": "metric_b_name",
-                "valueSourceColumn": "COLB",
-                "labels": {
+                "metricName": "metric_b_name",
+                "metricValueKey": "COLB",
+                "labelsKeys": {
                     "col1": "label1",
                     "col2": "label2"
                 }

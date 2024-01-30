@@ -17,7 +17,7 @@ public class SqlMetricProvider implements MetricProvider {
 
     private DataSource dataSource = null;
     private String query;
-    private List<RowConverter> converters;
+    private List<? extends RowConverter> converters;
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -27,7 +27,7 @@ public class SqlMetricProvider implements MetricProvider {
         this.query = query;
     }
 
-    public void setConverters(List<RowConverter> converters) {
+    public void setConverters(List<? extends RowConverter> converters) {
         this.converters = converters;
     }
 
