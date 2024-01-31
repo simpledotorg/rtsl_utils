@@ -16,14 +16,14 @@ import org.rtsl.config.dynamic.DynamicConfigRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FolderCrawler<TARGET> {
+public class FolderCrawler<KEY, TARGET> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FolderCrawler.class);
 
-    private final DynamicConfigRegistry<String, String, TARGET> metaFactory;
+    private final DynamicConfigRegistry<String, KEY, TARGET> metaFactory;
     private final File folder;
 
-    public FolderCrawler(DynamicConfigRegistry metaFactory, File folder) {
+    public FolderCrawler(DynamicConfigRegistry<String, KEY, TARGET> metaFactory, File folder) {
         this.metaFactory = metaFactory;
         this.folder = folder;
         if (!folder.isDirectory()) {
@@ -32,16 +32,17 @@ public class FolderCrawler<TARGET> {
 
     }
 
-    public Map<String, TARGET> getAll() throws IOException {
+    public Map<KEY, TARGET> getAll() throws IOException {
         LOGGER.info("Parsing all files from folder <{}>", folder.getAbsolutePath());
-        Map<String, TARGET> returnMap = new HashMap<>();
+        Map<KEY, TARGET> returnMap = new HashMap<>();
         Collection<File> files = FileUtils.listFiles(folder, new RegexFileFilter("^(.*?)"), DirectoryFileFilter.DIRECTORY
         );
         for (File currentFile : files) { // TODO: logzzz
-            String currentKey = currentFile.getName();
-            LOGGER.info("Parsing file <{}>", currentKey);
-            String currentString = readFile(currentFile.getAbsolutePath(), Charset.defaultCharset());
-            TARGET currentObject = metaFactory.apply(currentString);
+            String currentFileName = currentFile.getName();
+            LOGGER.info("Parsing file <{}>", currentFileName);
+            String currentFileContent = readFile(currentFile.getAbsolutePath(), Charset.defaultCharset());
+            KEY currentKey = metaFactory.getKey(currentFileContent);
+            TARGET currentObject = metaFactory.apply(currentFileContent);
             returnMap.put(currentKey, currentObject);
         }
         return returnMap;

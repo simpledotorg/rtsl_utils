@@ -46,8 +46,8 @@ public class DynamicConfigRegistry<SOURCE, KEY, TARGET> implements Function<SOUR
         return finalObject;
     }
 
-    public Function<SOURCE, KEY> getGetKeyFunction() {
-        return getKeyFunction;
+    public KEY getKey(SOURCE source) {
+        return getKeyFunction.apply(source);
     }
 
 }
