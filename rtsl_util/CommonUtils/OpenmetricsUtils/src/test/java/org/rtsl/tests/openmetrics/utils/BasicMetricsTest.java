@@ -14,6 +14,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.rtsl.config.dynamic.folder.FolderCrawler;
+import org.rtsl.openmetrics.config.MetricConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -174,10 +175,14 @@ public final class BasicMetricsTest {
 
     @Test
     public void testCrawler() throws Exception {
-        LOGGER.info("testing");
-        Map<String, Object> parsedObjects = metricCrawler.getAll();
-        LOGGER.info("___" + parsedObjects.toString());
-
+        try {
+            LOGGER.info("testing");
+            Map<MetricConfig, Object> parsedObjects = metricCrawler.getAll();
+            LOGGER.info("___" + parsedObjects.toString());
+        } catch (Exception ex) {
+            LOGGER.warn("Exception occurred", ex);
+            throw ex;
+        }
     }
 
 }

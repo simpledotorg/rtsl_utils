@@ -35,15 +35,19 @@ public class FolderCrawler<KEY, TARGET> {
     public Map<KEY, TARGET> getAll() throws IOException {
         LOGGER.info("Parsing all files from folder <{}>", folder.getAbsolutePath());
         Map<KEY, TARGET> returnMap = new HashMap<>();
-        Collection<File> files = FileUtils.listFiles(folder, new RegexFileFilter("^(.*?)"), DirectoryFileFilter.DIRECTORY
-        );
+        Collection<File> files = FileUtils.listFiles(folder, new RegexFileFilter("^(.*?)"), DirectoryFileFilter.DIRECTORY);
         for (File currentFile : files) { // TODO: logzzz
             String currentFileName = currentFile.getName();
-            LOGGER.info("Parsing file <{}>", currentFileName);
+            LOGGER.debug("Parsing file <{}>", currentFileName);
             String currentFileContent = readFile(currentFile.getAbsolutePath(), Charset.defaultCharset());
             KEY currentKey = metaFactory.getKey(currentFileContent);
             TARGET currentObject = metaFactory.apply(currentFileContent);
-            returnMap.put(currentKey, currentObject);
+            if (currentObject != null) {
+                LOGGER.info("Finshed parsing file <{}>. Resulting key is <{}>, resulting object is <{}>", currentFileName, currentKey, currentObject);
+                returnMap.put(currentKey, currentObject);
+            } else {
+                LOGGER.warn("Obtained <null> object for file <{}>. Resulting key is <{}>", currentFileName, currentKey);
+            }
         }
         return returnMap;
     }

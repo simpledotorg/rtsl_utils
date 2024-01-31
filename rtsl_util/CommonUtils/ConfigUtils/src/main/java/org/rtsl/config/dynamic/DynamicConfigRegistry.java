@@ -7,24 +7,20 @@ import java.util.function.Function;
 public class DynamicConfigRegistry<SOURCE, KEY, TARGET> implements Function<SOURCE, TARGET> {
 
     private final Function<SOURCE, KEY> getKeyFunction;
-    private final Function<KEY, String> getIdentifier;
+    private final Function<KEY, String> getType;
     private final Map<String, List<Function>> factories;
 
-    public DynamicConfigRegistry(Function<SOURCE, KEY> getKeyFunction, Map<String, List<Function>> factories, Function<KEY, String> getIdentifier) {
+    public DynamicConfigRegistry(Function<SOURCE, KEY> getKeyFunction, Map<String, List<Function>> factories, Function<KEY, String> getType) {
         this.getKeyFunction = getKeyFunction;
-        this.getIdentifier = getIdentifier;
+        this.getType = getType;
         this.factories = factories;
-    }
-
-    public DynamicConfigRegistry(Function<SOURCE, KEY> getKeyFunction, Map<String, List<Function>> factories) {
-        this(getKeyFunction, factories, new DefaultIdentifierGetter<KEY>());
     }
 
     @Override
     public TARGET apply(SOURCE source) {
         KEY key = getKeyFunction.apply(source);
-        String identifier = getIdentifier.apply(key);
-        List<Function> currentFunctions = factories.get(identifier);
+        String type = getType.apply(key);
+        List<Function> currentFunctions = factories.get(type);
         if (currentFunctions == null) {
             // TODO warn
             return null;
@@ -48,6 +44,10 @@ public class DynamicConfigRegistry<SOURCE, KEY, TARGET> implements Function<SOUR
 
     public KEY getKey(SOURCE source) {
         return getKeyFunction.apply(source);
+    }
+
+    public String getType(SOURCE source) {
+        return getType.apply(getKeyFunction.apply(source));
     }
 
 }
