@@ -28,6 +28,19 @@
             <artifactId>OpenmetricsUtils</artifactId>
             <version>0.0.0</version>
         </dependency>
+        <!-- 3rd party dependencies -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency> 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
         <!-- test dependencies -->
         <dependency>
             <groupId>org.rtsl.common.helper</groupId>
