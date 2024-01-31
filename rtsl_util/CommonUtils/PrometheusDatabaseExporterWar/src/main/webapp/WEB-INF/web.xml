@@ -9,12 +9,24 @@
     <!-- LOADS THE SPRING CONTEXT -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath*:applicationContext*.xml</param-value>
+        <param-value>classpath:spring.main.xml</param-value>
     </context-param>
 
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+    
+    
+    <servlet>
+        <servlet-name>Metrics</servlet-name>
+        <servlet-class>org.rtsl.openmetrics.utils.servlet.OpenmetricsProducerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Metrics</servlet-name>
+        <url-pattern>/metrics</url-pattern>
+    </servlet-mapping>
+    
+    
     
     
     

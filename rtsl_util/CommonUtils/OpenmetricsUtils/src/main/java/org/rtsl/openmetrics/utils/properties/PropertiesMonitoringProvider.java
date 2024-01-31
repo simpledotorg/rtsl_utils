@@ -46,7 +46,6 @@ public final class PropertiesMonitoringProvider implements MetricProvider {
                     labels.put("original_property_name", currentPropertyName);
                     labels.putAll(additionnalLabels);
                     if (!ERROR_COUNT_METRIC_NAME.equals(currentPromKey) && !SUCCESS_COUNT_METRIC_NAME.equals(currentPromKey)) {
-
                         StandardMetric currentMetric = new StandardMetric(metricPrefix + "property_" + currentPromKey, labels);
                         currentMetric.setMetricValue(new BigDecimal(currentPropertyValue));
                         metrics.add(new ReadOnlyMetric(currentMetric));

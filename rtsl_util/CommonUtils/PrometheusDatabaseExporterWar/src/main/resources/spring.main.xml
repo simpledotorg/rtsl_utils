@@ -41,7 +41,9 @@
         </constructor-arg> 
     </bean>
 
-
+    <bean class="org.rtsl.openmetrics.utils.servlet.OpenmetricsProducerServlet">
+        <property name="metricProvider" ref="propertiesMonitoringProvider" />
+    </bean>
                 
                     
                         
