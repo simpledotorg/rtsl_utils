@@ -40,6 +40,8 @@ public class FolderCrawler<KEY, TARGET> {
             String currentFileName = currentFile.getName();
             LOGGER.debug("Parsing file <{}>", currentFileName);
             String currentFileContent = readFile(currentFile.getAbsolutePath(), Charset.defaultCharset());
+            // TODO : optionnally modify the string to add the file name ?
+            // rather dirty, but could work
             KEY currentKey = metaFactory.getKey(currentFileContent);
             TARGET currentObject = metaFactory.apply(currentFileContent);
             if (currentObject != null) {
