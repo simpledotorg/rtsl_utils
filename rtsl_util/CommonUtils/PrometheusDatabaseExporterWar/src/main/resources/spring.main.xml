@@ -32,19 +32,27 @@
         </property>
     </bean>
 
-    <bean id="propertiesMonitoringProvider" class="org.rtsl.openmetrics.utils.properties.PropertiesMonitoringProvider" >
+    <bean id="rawPropertiesMonitoringProvider" class="org.rtsl.openmetrics.utils.properties.PropertiesMonitoringProvider" >
         <constructor-arg index="0" ref="appProperties" />
         <constructor-arg index="1">
             <map>
-                <entry key="application" value="unitTests"/>
+                <entry key="application" value="database_exporter"/>
             </map>
         </constructor-arg> 
+        <constructor-arg index="2" value="application_" />
     </bean>
+    
+    
+    <bean id="propertiesMonitoringProvider" class="org.rtsl.openmetrics.utils.wrappers.SelfMonitoringMetricProviderWrapper" >
+        <property name="metricProvider" ref="rawPropertiesMonitoringProvider"/>
+        <property name="metricProviderName" value="properties"/>
+    </bean>
+    
 
     <bean class="org.rtsl.openmetrics.utils.servlet.OpenmetricsProducerServlet">
         <property name="metricProvider" ref="propertiesMonitoringProvider" />
     </bean>
-                
+
                     
                         
 </beans>
