@@ -6,18 +6,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import org.rtsl.config.dynamic.DefaultIdentifierGetter;
 import org.rtsl.config.dynamic.DynamicConfigRegistry;
 
-public class JSonDynamicConfigRegistryBuilder<K> {
+public class JSonDynamicConfigRegistryBuilder<KEY, TARGET> {
 
-    private List<String> jsonKeys = JsonKeyFinder.DEFAULT_JSON_KEYS;
-    private String separator = JsonKeyFinder.DEFAULT_SEPARATOR;
-
+    private Function<String, KEY> getKeyFunction;
+    private Function<KEY, String> getIdentifier = new DefaultIdentifierGetter<>();
     private Map<String, Class> configClasses = new HashMap<>();
     private Map<String, Function> additionalFactories = new HashMap<>();
 
-    public DynamicConfigRegistry<String, K> build() {
-        return new DynamicConfigRegistry<>(new JsonKeyFinder(jsonKeys, separator), getAllFactories());
+    public DynamicConfigRegistry<String, KEY, TARGET> build() {
+        return new DynamicConfigRegistry<>(getKeyFunction, getAllFactories(), getIdentifier);
     }
 
     private Map<String, List<Function>> getAllFactories() {
@@ -35,12 +35,12 @@ public class JSonDynamicConfigRegistryBuilder<K> {
         return returnMap;
     }
 
-    public void setJsonKeys(List<String> jsonKeys) {
-        this.jsonKeys = jsonKeys;
+    public void setGetKeyFunction(Function<String, KEY> getKeyFunction) {
+        this.getKeyFunction = getKeyFunction;
     }
 
-    public void setSeparator(String separator) {
-        this.separator = separator;
+    public void setGetIdentifier(Function<KEY, String> getIdentifier) {
+        this.getIdentifier = getIdentifier;
     }
 
     public void setConfigClasses(Map<String, Class> configClasses) {

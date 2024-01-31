@@ -4,20 +4,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public class DynamicConfigRegistry<S, K> implements Function<S, K> {
+public class DynamicConfigRegistry<SOURCE, KEY, TARGET> implements Function<SOURCE, TARGET> {
 
-    private final Function<S, String> getKeyFunction;
+    private final Function<SOURCE, KEY> getKeyFunction;
+    private final Function<KEY, String> getIdentifier;
     private final Map<String, List<Function>> factories;
 
-    public DynamicConfigRegistry(Function<S, String> getKeyFunction, Map<String, List<Function>> factories) {
+    public DynamicConfigRegistry(Function<SOURCE, KEY> getKeyFunction, Map<String, List<Function>> factories, Function<KEY, String> getIdentifier) {
         this.getKeyFunction = getKeyFunction;
+        this.getIdentifier = getIdentifier;
         this.factories = factories;
     }
 
+    public DynamicConfigRegistry(Function<SOURCE, KEY> getKeyFunction, Map<String, List<Function>> factories) {
+        this(getKeyFunction, factories, new DefaultIdentifierGetter<KEY>());
+    }
+
     @Override
-    public K apply(S source) {
-        String key = getKeyFunction.apply(source);
-        List<Function> currentFunctions = factories.get(key);
+    public TARGET apply(SOURCE source) {
+        KEY key = getKeyFunction.apply(source);
+        String identifier = getIdentifier.apply(key);
+        List<Function> currentFunctions = factories.get(identifier);
         if (currentFunctions == null) {
             // TODO warn
             return null;
@@ -30,16 +37,16 @@ public class DynamicConfigRegistry<S, K> implements Function<S, K> {
         for (Function currentFactory : currentFunctions) {
             currentObject = currentFactory.apply(currentObject);
         }
-        K finalObject = null;
+        TARGET finalObject = null;
         try {
-            finalObject = (K) currentObject;
+            finalObject = (TARGET) currentObject;
         } catch (Exception ex) {
             // TODO Log WARN
         }
         return finalObject;
     }
 
-    public Function<S, String> getGetKeyFunction() {
+    public Function<SOURCE, KEY> getGetKeyFunction() {
         return getKeyFunction;
     }
 

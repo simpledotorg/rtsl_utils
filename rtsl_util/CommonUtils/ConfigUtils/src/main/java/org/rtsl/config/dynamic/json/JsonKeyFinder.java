@@ -49,7 +49,7 @@ public class JsonKeyFinder implements Function<String, String> {
             }
         }
         String result = sb.toString();
-        LOGGER.info("resulting key is <{}>",result);
+        LOGGER.info("resulting key is <{}>", result);
         return result;
     }
 
