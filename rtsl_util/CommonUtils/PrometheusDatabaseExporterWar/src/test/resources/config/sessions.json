@@ -1,0 +1,14 @@
+{
+    "asynch": false,
+    "type": "sql",
+    "config": {
+        "sqlQuery": "select application_name, count(*) as value from pg_stat_activity group by application_name",
+        "metrics": [{
+                "name": "postgres_sessions_per_application_count",
+                "valueSourceColumn": "value",
+                "labels": {
+                    "application_name": "application_name"
+                }
+            }]
+    }
+}

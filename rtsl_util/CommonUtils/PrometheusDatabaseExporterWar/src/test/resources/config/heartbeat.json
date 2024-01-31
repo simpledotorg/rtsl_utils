@@ -1,0 +1,14 @@
+{
+    "asynch": false,
+    "type": "sql",
+    "config": {
+        "sqlQuery": "select 1 as value, 'database' as source;",
+        "metrics": [{
+                "name": "postgres_heartbeat",
+                "valueSourceColumn": "value",
+                "labels": {
+                    "source": "source"
+                }
+            }]
+    }
+}

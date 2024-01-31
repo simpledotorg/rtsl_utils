@@ -8,7 +8,7 @@ import org.rtsl.openmetrics.utils.StandardMetric;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SelfMonitoringMetricProviderWrapper implements IMetricProviderWrapper, IMetricProviderNameAware {
+public final class SelfMonitoringMetricProviderWrapper implements IMetricProviderWrapper, IMetricProviderNameAware {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SelfMonitoringMetricProviderWrapper.class);
     private String metric_prefix = "metric_collection_metadata";
@@ -44,7 +44,7 @@ public class SelfMonitoringMetricProviderWrapper implements IMetricProviderWrapp
             error_count = 1;
         }
         long t2 = java.lang.System.currentTimeMillis();
-        double durationInSecond = ((double) (t2 -t1))/1000;
+        double durationInSecond = ((double) (t2 - t1)) / 1000;
 
         // TODO : replace by an AggregatingMetricProvider
         returnList.addAll(wrappedList); // horrible in term of perfs. Should be improved at some point

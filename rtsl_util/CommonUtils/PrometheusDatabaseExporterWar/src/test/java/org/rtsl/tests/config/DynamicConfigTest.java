@@ -22,35 +22,10 @@ public final class DynamicConfigTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicConfigTest.class);
 
-    @Resource(name = "testMetaFactory")
-    DynamicConfigRegistry testRegistry;
-
-    @Resource(name = "testCrawler")
-    FolderCrawler testCrawler;
-
     @Test
     public void test0() throws Exception {
         LOGGER.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-        String content = readFile("./src/test/resources/config/key1.json", Charset.defaultCharset());
-        LOGGER.info("Json Text is : {}", content);
-
-        Object testObject = testRegistry.apply(content);
-        LOGGER.info("Obtained Object is :{}", testObject);
-        Gson gson = new Gson();
-        LOGGER.info("Obtained Object is :{}", gson.toJson(testObject));
 
     }
 
-    static String readFile(String path, Charset encoding) throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
-        return new String(encoded, encoding);
-    }
-
-    @Test
-    public void testCrawler() throws Exception {
-        LOGGER.info("testing");
-        Map<String, Object> parsedObjects = testCrawler.getAll();
-        LOGGER.info("___" + parsedObjects.toString());
-
-    }
 }

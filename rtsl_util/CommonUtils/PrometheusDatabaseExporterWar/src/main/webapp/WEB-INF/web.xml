@@ -9,7 +9,10 @@
     <!-- LOADS THE SPRING CONTEXT -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:spring.main.xml</param-value>
+        <param-value>
+                classpath:spring.main.xml
+                classpath:spring.database.xml
+        </param-value>
     </context-param>
 
     <listener>

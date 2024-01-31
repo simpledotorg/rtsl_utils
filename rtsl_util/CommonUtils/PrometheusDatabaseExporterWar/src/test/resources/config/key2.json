@@ -1,7 +1,0 @@
-{
-    "asynch": false,
-    "type": "file",
-    "config": {
-        "filepath": "whatever"
-    }
-}

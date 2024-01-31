@@ -5,7 +5,7 @@ import java.util.List;
 import org.rtsl.openmetrics.utils.Metric;
 import org.rtsl.openmetrics.utils.MetricProvider;
 
-public class SortingMetricProviderWrapper implements MetricProvider, IMetricProviderWrapper {
+public final class SortingMetricProviderWrapper implements MetricProvider, IMetricProviderWrapper {
 
     private MetricProvider wrappedMetricProvider;
 

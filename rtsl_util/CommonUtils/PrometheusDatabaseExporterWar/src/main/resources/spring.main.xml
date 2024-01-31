@@ -28,9 +28,20 @@
         <property name="locations">
             <list>
                 <value>classpath:default.properties</value>
+                <value>file:${org.rtsl.prometheus.exporter.properties}</value>
+                <value>file:${org.rtsl.prometheus.exporter.1.properties}</value>
+                <value>file:${org.rtsl.prometheus.exporter.2.properties}</value>
+                <value>file:${org.rtsl.prometheus.exporter.3.properties}</value>
+                <value>file:${org.rtsl.prometheus.exporter.4.properties}</value>
+                <value>file:${org.rtsl.prometheus.exporter.5.properties}</value>
+                <value>file:${org.rtsl.prometheus.exporter.6.properties}</value>
+                <value>file:${org.rtsl.prometheus.exporter.7.properties}</value>
+                <value>file:${org.rtsl.prometheus.exporter.8.properties}</value>
+                <value>file:${org.rtsl.prometheus.exporter.9.properties}</value>
             </list>
         </property>
     </bean>
+    <context:property-placeholder ignore-unresolvable="true" properties-ref="appProperties"/>
 
     <bean id="rawPropertiesMonitoringProvider" class="org.rtsl.openmetrics.utils.properties.PropertiesMonitoringProvider" >
         <constructor-arg index="0" ref="appProperties" />
