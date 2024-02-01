@@ -38,7 +38,7 @@
        <!-- <property name="metricsTrackerFactory" ref="hikariMetricProvider" /> . -->
     </bean>
     
-    <bean id="hikariDataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+    <bean id="finalDataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
         <constructor-arg ref="hikariConfig" />
     </bean>
     

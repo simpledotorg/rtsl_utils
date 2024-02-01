@@ -5,7 +5,7 @@ import java.util.Map;
 import org.rtsl.openmetrics.utils.Metric;
 import org.rtsl.openmetrics.utils.StandardMetric;
 
-public class SimpleRowConverter implements RowConverter {
+public final class SimpleRowConverter implements RowConverter {
 
     private String metricName;
     private String metricValueKey;

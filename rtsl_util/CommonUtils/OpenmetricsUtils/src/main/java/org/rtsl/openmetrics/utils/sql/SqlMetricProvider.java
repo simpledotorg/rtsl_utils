@@ -13,12 +13,13 @@ import javax.sql.DataSource;
 import org.rtsl.openmetrics.utils.Metric;
 import org.rtsl.openmetrics.utils.MetricProvider;
 
-public class SqlMetricProvider<CONVERTER extends RowConverter> implements MetricProvider {
+public class SqlMetricProvider implements MetricProvider, DataSourceAware {
 
     private DataSource dataSource = null;
     private String query;
-    private List<CONVERTER> converters;
+    private List<? extends RowConverter> converters;
 
+    @Override
     public final void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -27,7 +28,7 @@ public class SqlMetricProvider<CONVERTER extends RowConverter> implements Metric
         this.query = query;
     }
 
-    public void setConverters(List<CONVERTER> converters) {
+    public final void setConverters(List<? extends RowConverter> converters) {
         this.converters = converters;
     }
 
