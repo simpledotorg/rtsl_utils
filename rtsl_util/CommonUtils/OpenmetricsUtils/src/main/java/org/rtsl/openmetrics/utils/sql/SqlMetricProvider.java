@@ -13,26 +13,26 @@ import javax.sql.DataSource;
 import org.rtsl.openmetrics.utils.Metric;
 import org.rtsl.openmetrics.utils.MetricProvider;
 
-public class SqlMetricProvider implements MetricProvider {
+public class SqlMetricProvider<CONVERTER extends RowConverter> implements MetricProvider {
 
     private DataSource dataSource = null;
     private String query;
-    private List<? extends RowConverter> converters;
+    private List<CONVERTER> converters;
 
-    public void setDataSource(DataSource dataSource) {
+    public final void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public void setQuery(String query) {
+    public final void setQuery(String query) {
         this.query = query;
     }
 
-    public void setConverters(List<? extends RowConverter> converters) {
+    public void setConverters(List<CONVERTER> converters) {
         this.converters = converters;
     }
 
     @Override
-    public List<Metric> getMetrics() {
+    public final List<Metric> getMetrics() {
         List<Metric> returnMetrics = new ArrayList<>();
 
         try (Connection connection = dataSource.getConnection()) {
@@ -51,7 +51,7 @@ public class SqlMetricProvider implements MetricProvider {
         return returnMetrics;
     }
 
-    private Map<String, Object> resultSetToMap(ResultSet rs) throws SQLException {
+    private final Map<String, Object> resultSetToMap(ResultSet rs) throws SQLException {
         ResultSetMetaData metaData = rs.getMetaData();
         int columnCount = metaData.getColumnCount();
 
