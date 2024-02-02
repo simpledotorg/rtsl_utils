@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.rtsl.config.dynamic.folder.FolderCrawler;
 import org.rtsl.openmetrics.config.MetricMetadata;
-import org.rtsl.openmetrics.utils.sql.SqlMetricProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mock.web.MockHttpServletResponse;

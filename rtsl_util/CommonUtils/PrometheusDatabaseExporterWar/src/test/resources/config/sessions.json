@@ -1,11 +1,12 @@
 {
     "asynch": false,
     "type": "sql",
-    "sqlQuery": "select application_name, count(*) as value from pg_stat_activity group by application_name",
+    "name": "getSessionInfo",
+    "query": "select application_name, count(*) as value from pg_stat_activity group by application_name",
     "metrics": [{
-            "name": "postgres_sessions_per_application_count",
-            "valueSourceColumn": "value",
-            "labels": {
+            "metricName": "postgres_sessions_per_application_count",
+            "metricValueKey": "value",
+            "labelsKeys": {
                 "application_name": "application_name"
             }
         }]

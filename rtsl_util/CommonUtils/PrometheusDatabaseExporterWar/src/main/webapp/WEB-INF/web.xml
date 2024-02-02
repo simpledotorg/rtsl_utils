@@ -11,6 +11,7 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
                 classpath:spring.main.xml
+                classpath:spring.metrics.xml
                 classpath:spring.database.xml
         </param-value>
     </context-param>

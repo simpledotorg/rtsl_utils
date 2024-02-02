@@ -32,19 +32,21 @@ public final class SelfMonitoringMetricProviderWrapper implements IMetricProvide
 
     @Override
     public List<Metric> getMetrics() {
-        LOGGER.debug("Wrapping Metric Provider <{}> to add performance metrics", metricProviderName);
+        LOGGER.debug("Wrapping Metric Provider <{}> with name <{}> to add performance metrics", wrappedMetricProvider, metricProviderName);
         List<Metric> returnList = new ArrayList<>();
         long t1 = java.lang.System.currentTimeMillis();
         int error_count = 0;
         List<Metric> wrappedList;
         try {
             wrappedList = wrappedMetricProvider.getMetrics();
-        } catch (Exception ex) { // TODO : log
+        } catch (Exception ex) {
+            LOGGER.warn("Exception occured while running getting metrics: ", ex);// TODO : log
             wrappedList = new ArrayList<>();
             error_count = 1;
         }
         long t2 = java.lang.System.currentTimeMillis();
         double durationInSecond = ((double) (t2 - t1)) / 1000;
+        LOGGER.debug("Obtained <{}> metrics in <{}> milliseconds", wrappedList.size(), t2 - t1);
 
         // TODO : replace by an AggregatingMetricProvider
         returnList.addAll(wrappedList); // horrible in term of perfs. Should be improved at some point
@@ -55,6 +57,7 @@ public final class SelfMonitoringMetricProviderWrapper implements IMetricProvide
         returnList.add(new StandardMetric(metric_prefix + "_metrics_count", wrappedList.size(), "monitoring_source", metricProviderName)); // horrible in term of perfs. Should be improved at some point
         returnList.add(new StandardMetric(metric_prefix + "_error_status", error_count, "monitoring_source", metricProviderName)); // horrible in term of perfs. Should be improved at some point
 
+        LOGGER.debug("Returning <{}> metrics after adding self monitoring info", returnList.size());
         return returnList;
     }
 

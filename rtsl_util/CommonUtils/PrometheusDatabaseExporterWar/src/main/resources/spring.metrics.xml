@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util" 
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.1.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security-3.1.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util-3.1.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+       http://www.springframework.org/schema/task
+       http://www.springframework.org/schema/task/spring-task.xsd
+       ">
+
+    
+
+    <bean id="rawPropertiesMonitoringProvider" class="org.rtsl.openmetrics.utils.properties.PropertiesMonitoringProvider" >
+        <constructor-arg index="0" ref="appProperties" />
+        <constructor-arg index="1">
+            <map>
+                <entry key="application" value="database_exporter"/>
+            </map>
+        </constructor-arg> 
+        <constructor-arg index="2" value="application_" />
+    </bean>
+    
+    
+    <bean id="propertiesMonitoringProvider" class="org.rtsl.openmetrics.utils.wrappers.SelfMonitoringMetricProviderWrapper" >
+        <property name="metricProvider" ref="rawPropertiesMonitoringProvider"/>
+        <property name="metricProviderName" value="properties"/>
+    </bean>
+    
+
+    
+    <bean id="metricProviderBuilder" class="org.rtsl.config.dynamic.json.JSonDynamicConfigRegistryBuilder" >
+        <property name="configClasses" >
+            <util:map id="utilmap" map-class="java.util.HashMap">
+                <entry key="sql" value="org.rtsl.openmetrics.utils.sql.SimpleSqlMetricProvider"/>
+            </util:map>
+        </property>
+        <property name="additionalFactories">
+            <util:map id="utilmap" map-class="java.util.HashMap">
+                <entry key="sql">
+                    <bean class="org.rtsl.openmetrics.utils.sql.DataSourceInjector">
+                        <constructor-arg ref="finalDataSource" />
+                    </bean>
+                </entry>
+            </util:map>
+        </property>
+        <property name="getKeyFunction" >
+            <bean class="org.rtsl.config.dynamic.json.JsonFactoryFunction" >
+                <constructor-arg value="org.rtsl.openmetrics.config.MetricMetadata"/>
+            </bean>
+        </property>
+        <property name="getTypeFunction" >
+            <bean class="org.rtsl.openmetrics.config.MetricMetadataTypeGetter" />
+        </property>
+    </bean>
+    
+    <bean id="metricProviderMetafactory"  class="org.rtsl.config.dynamic.DynamicConfigRegistry" factory-bean="metricProviderBuilder" factory-method="build" />
+
+    <bean id="metricCrawler"  class="org.rtsl.config.dynamic.folder.FolderCrawler" >
+        <constructor-arg ref="metricProviderMetafactory"/>
+        <constructor-arg value="${config.root.folder}" />
+    </bean>
+    
+    <bean id="providersMap" factory-bean="metricCrawler" factory-method="getAll" />
+
+    <bean id="mainDynamicMetricProvider" class="org.rtsl.openmetrics.config.DecoratingParallelMetricProvider">  
+        <constructor-arg ref="providersMap"/>
+        <constructor-arg>
+            <bean class="org.rtsl.openmetrics.config.MetricProviderDecorator">
+                <constructor-arg>
+                    <util:list>
+                        <value>org.rtsl.openmetrics.utils.wrappers.SelfMonitoringMetricProviderWrapper</value>
+                    </util:list>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <constructor-arg value="${config.parallel.thread.pool.size}"/>
+    </bean>
+    
+    <bean id="mainUnsortedMetricProvider" class="org.rtsl.openmetrics.utils.basic.AggregatingMetricProvider">
+        <constructor-arg>
+            <util:list>
+                <ref bean="propertiesMonitoringProvider" />
+                <ref bean="mainDynamicMetricProvider" />
+            </util:list>
+        </constructor-arg>
+    </bean>
+                        
+</beans>

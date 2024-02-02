@@ -43,61 +43,9 @@
     </bean>
     <context:property-placeholder ignore-unresolvable="true" properties-ref="appProperties"/>
 
-    <bean id="rawPropertiesMonitoringProvider" class="org.rtsl.openmetrics.utils.properties.PropertiesMonitoringProvider" >
-        <constructor-arg index="0" ref="appProperties" />
-        <constructor-arg index="1">
-            <map>
-                <entry key="application" value="database_exporter"/>
-            </map>
-        </constructor-arg> 
-        <constructor-arg index="2" value="application_" />
-    </bean>
-    
-    
-    <bean id="propertiesMonitoringProvider" class="org.rtsl.openmetrics.utils.wrappers.SelfMonitoringMetricProviderWrapper" >
-        <property name="metricProvider" ref="rawPropertiesMonitoringProvider"/>
-        <property name="metricProviderName" value="properties"/>
-    </bean>
-    
-
+    <!-- Injects the main metric provider into the servlet class -->
     <bean class="org.rtsl.openmetrics.utils.servlet.OpenmetricsProducerServlet">
-        <property name="metricProvider" ref="propertiesMonitoringProvider" />
+        <property name="metricProvider" ref="mainUnsortedMetricProvider" />
     </bean>
-    
-    <bean id="metricProviderBuilder" class="org.rtsl.config.dynamic.json.JSonDynamicConfigRegistryBuilder" >
-        <property name="configClasses" >
-            <util:map id="utilmap" map-class="java.util.HashMap">
-                <entry key="sql" value="org.rtsl.openmetrics.utils.sql.SimpleSqlMetricProvider"/>
-            </util:map>
-        </property>
-        <property name="additionalFactories">
-            <util:map id="utilmap" map-class="java.util.HashMap">
-                <entry key="sql">
-                    <bean class="org.rtsl.openmetrics.utils.sql.DataSourceInjector">
-                        <constructor-arg ref="finalDataSource" />
-                    </bean>
-                </entry>
-            </util:map>
-        </property>
-        <property name="getKeyFunction" >
-            <bean class="org.rtsl.config.dynamic.json.JsonFactoryFunction" >
-                <constructor-arg value="org.rtsl.openmetrics.config.MetricMetadata"/>
-            </bean>
-        </property>
-        <property name="getTypeFunction" >
-            <bean class="org.rtsl.openmetrics.config.MetricMetadataTypeGetter" />
-        </property>
-    </bean>
-    
-    <bean id="metricProviderMetafactory"  class="org.rtsl.config.dynamic.DynamicConfigRegistry" factory-bean="metricProviderBuilder" factory-method="build" />
-
-    <bean id="metricCrawler"  class="org.rtsl.config.dynamic.folder.FolderCrawler" >
-        <constructor-arg ref="metricProviderMetafactory"/>
-        <constructor-arg value="${config.root.folder}" />
-    </bean>
-    
-    <bean id="providersMap" factory-bean="metricCrawler" factory-method="getAll" />
-
-                    
                         
 </beans>

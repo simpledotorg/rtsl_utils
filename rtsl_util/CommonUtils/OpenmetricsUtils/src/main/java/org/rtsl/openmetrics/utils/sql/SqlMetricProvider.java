@@ -12,8 +12,12 @@ import java.util.Map;
 import javax.sql.DataSource;
 import org.rtsl.openmetrics.utils.Metric;
 import org.rtsl.openmetrics.utils.MetricProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SqlMetricProvider implements MetricProvider, DataSourceAware {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SqlMetricProvider.class);
 
     private DataSource dataSource = null;
     private String query;
@@ -47,12 +51,12 @@ public class SqlMetricProvider implements MetricProvider, DataSourceAware {
                 }
             }
         } catch (Exception ex) {
-            // TODO 
+            LOGGER.warn("Exception occured during SQL query excution: ", ex);
         }
         return returnMetrics;
     }
 
-    private final Map<String, Object> resultSetToMap(ResultSet rs) throws SQLException {
+    private Map<String, Object> resultSetToMap(ResultSet rs) throws SQLException {
         ResultSetMetaData metaData = rs.getMetaData();
         int columnCount = metaData.getColumnCount();
 

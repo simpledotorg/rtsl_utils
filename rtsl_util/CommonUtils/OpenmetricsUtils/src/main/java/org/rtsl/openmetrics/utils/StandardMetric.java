@@ -83,11 +83,11 @@ public final class StandardMetric<T extends Number> implements Metric<T> {
                         currentLabelKey, METRIC_LABEL_KEY_REGEXP));
             }
             String currentLabelValue = labels.get(currentLabelKey);
-            if (!METRIC_LABEL_VALUE_PATTERN.matcher(currentLabelValue).matches()) {
-                throw new IllegalArgumentException(String.format("Invalid label value <%s> does not match regexp <%s>",
-                        currentLabelValue, METRIC_LABEL_VALUE_PATTERN));
-            }
             if (currentLabelValue != null) {
+                if (!METRIC_LABEL_VALUE_PATTERN.matcher(currentLabelValue).matches()) {
+                    throw new IllegalArgumentException(String.format("Invalid label value <%s> does not match regexp <%s>",
+                            currentLabelValue, METRIC_LABEL_VALUE_PATTERN));
+                }
                 if (!isFirst) {
                     sb.append(",");
                 }
@@ -104,6 +104,9 @@ public final class StandardMetric<T extends Number> implements Metric<T> {
     }
 
     private static String standardizeLabelValue(String rawValue) {
+        if (rawValue == null) {
+            return null;
+        }
         return rawValue.replace("\"", "\\\"").replace("\n", "\\n");
     }
 
