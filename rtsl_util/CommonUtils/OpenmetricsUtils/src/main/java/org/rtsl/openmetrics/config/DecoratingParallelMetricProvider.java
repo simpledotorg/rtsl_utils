@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.rtsl.openmetrics.utils.MetricProvider;
+import org.rtsl.openmetrics.utils.asynch.MetricCachingConsumer;
 import org.rtsl.openmetrics.utils.basic.ParallelMetricProvider;
 
 public class DecoratingParallelMetricProvider extends ParallelMetricProvider {
@@ -17,7 +18,18 @@ public class DecoratingParallelMetricProvider extends ParallelMetricProvider {
         for (MetricMetadata currentMetadata : providers.keySet()) {
             MetricProvider currentProvider = providers.get(currentMetadata);
             MetricProvider decoratedProvider = decorator.decorateMetricProvider(currentProvider, currentMetadata);
-            returnList.add(decoratedProvider);
+            if (currentMetadata.getAsynch()) {// MetricProvider is configured as asynch. Lets use some cache !
+                MetricMetadata cacheMetaData = currentMetadata.clone();
+                cacheMetaData.setAsynch(false);
+                if (cacheMetaData.getType() != null) {
+                    cacheMetaData.setType(cacheMetaData.getType() + "_cache");
+                }
+                MetricCachingConsumer cache = new MetricCachingConsumer(decoratedProvider, null);
+                MetricProvider decoratedCache = decorator.decorateMetricProvider(cache, cacheMetaData);
+                returnList.add(decoratedCache);
+            } else {
+                returnList.add(decoratedProvider);
+            }
         }
         return returnList;
     }

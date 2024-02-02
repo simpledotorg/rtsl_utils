@@ -1,6 +1,9 @@
 package org.rtsl.openmetrics.config;
 
-public class MetricMetadata {
+import java.util.HashMap;
+import java.util.Map;
+
+public class MetricMetadata implements Cloneable {
 
     private String name;
     private String type;
@@ -37,6 +40,26 @@ public class MetricMetadata {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Map<String, String> getLabels() {
+        Map<String, String> returnMap = new HashMap<>();
+        if (name != null) {
+            returnMap.put("monitoring_source_name", name);
+        }
+        if (asynch != null) {
+            returnMap.put("asynch", asynch.toString());
+        }
+        if (type != null) {
+            returnMap.put("type", type);
+        }
+        return returnMap;
+
+    }
+
+    @Override
+    protected MetricMetadata clone() throws CloneNotSupportedException {
+        return (MetricMetadata) super.clone();
     }
 
 }

@@ -2,6 +2,7 @@ package org.rtsl.openmetrics.config;
 
 import java.util.List;
 import org.rtsl.openmetrics.utils.MetricProvider;
+import org.rtsl.openmetrics.utils.wrappers.IExtraLabelsAware;
 import org.rtsl.openmetrics.utils.wrappers.IMetricProviderNameAware;
 import org.rtsl.openmetrics.utils.wrappers.IMetricProviderWrapper;
 import org.slf4j.Logger;
@@ -24,8 +25,13 @@ public class MetricProviderDecorator {
             LOGGER.info("Wrapping MetricProvider <{}> into Wrapper <{}>", currentMetricProvider, currentWrapper);
             currentWrapper.setMetricProvider(currentMetricProvider);
             if (currentWrapper instanceof IMetricProviderNameAware && metadata != null) {
-                IMetricProviderNameAware currentNameAwareWrapper = (IMetricProviderNameAware) currentWrapper;
-                currentNameAwareWrapper.setMetricProviderName(metadata.getName());
+                IMetricProviderNameAware currentAwareWrapper = (IMetricProviderNameAware) currentWrapper;
+                currentAwareWrapper.setMetricProviderName(metadata.getName());
+                //TODO : log
+            }
+            if (currentWrapper instanceof IExtraLabelsAware && metadata != null) {
+                IExtraLabelsAware currentAwareWrapper = (IExtraLabelsAware) currentWrapper;
+                currentAwareWrapper.setExtraLabels(metadata.getLabels());
                 //TODO : log
             }
             currentMetricProvider = currentWrapper;
