@@ -1,5 +1,6 @@
 package org.rtsl.openmetrics.config;
 
+import it.sauronsoftware.cron4j.Scheduler;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -14,6 +15,8 @@ import org.slf4j.LoggerFactory;
 
 public class DecoratingParallelMetricProvider implements MetricProvider {
 
+    private final Scheduler scheduler = new Scheduler();
+
     private static final Logger LOGGER = LoggerFactory.getLogger(DecoratingParallelMetricProvider.class);
 
     private final ParallelMetricProvider wrappedParallelMetricProvider;
@@ -25,6 +28,7 @@ public class DecoratingParallelMetricProvider implements MetricProvider {
         Files.createDirectories(cacheFolder.toPath());
         List<MetricProvider> wrappedMetrics = getWrappedMetrics(providers, decorator);
         wrappedParallelMetricProvider = new ParallelMetricProvider(wrappedMetrics, processingPoolSize);
+        scheduler.start();
 
     }
 
@@ -45,7 +49,7 @@ public class DecoratingParallelMetricProvider implements MetricProvider {
                 MetricCachingConsumer cache = new MetricCachingConsumer(decoratedProvider, provider);
                 MetricProvider decoratedCache = decorator.decorateMetricProvider(cache, cacheMetaData);
                 returnList.add(decoratedCache);
-                cache.run();
+                scheduler.schedule(currentMetadata.getCron(), cache);
                 // TODO : sumbit decroratedcache
             } else {
                 returnList.add(decoratedProvider);

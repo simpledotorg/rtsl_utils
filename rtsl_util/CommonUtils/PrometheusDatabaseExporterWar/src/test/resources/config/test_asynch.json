@@ -1,10 +1,11 @@
 {
     "asynch": true,
     "type": "sql",
+    "cron": "* * * * *",
     "name": "getSessionInfoAsynch",
     "query": "select application_name, count(*) as value from pg_stat_activity group by application_name",
     "metrics": [{
-            "metricName": "postgres_sessions_per_application_count",
+            "metricName": "postgres_asynchsessions_per_application_count",
             "metricValueKey": "value",
             "labelsKeys": {
                 "application_name": "application_name"
