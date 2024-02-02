@@ -1,0 +1,15 @@
+{
+    "asynch": true,
+    "type": "sql",
+    "cron": "* * * * *",
+    "name": "DHIS2_Trackedentityinstance",
+    "query": "select  trackedentityinstance.trackedentitytypeid, trackedentitytype.name, count(*) as value from trackedentityinstance left outer join trackedentitytype on trackedentityinstance.trackedentitytypeid = trackedentitytype.trackedentitytypeid group by trackedentityinstance.trackedentitytypeid, trackedentitytype.name",
+    "metrics": [{
+            "metricName": "dhis2_trackedentityinstance_count",
+            "metricValueKey": "value",
+            "labelsKeys": {
+                "trackedentitytypeid": "trackedentitytypeid",
+                "name": "name"
+            }
+        }]
+}
