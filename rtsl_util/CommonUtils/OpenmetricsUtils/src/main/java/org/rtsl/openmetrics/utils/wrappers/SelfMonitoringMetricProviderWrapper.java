@@ -53,7 +53,6 @@ public final class SelfMonitoringMetricProviderWrapper implements IMetricProvide
 
         returnList.add(new StandardMetric(metric_prefix + "_generation_time", t1, "monitoring_source", metricProviderName)); // horrible in term of perfs. Should be improved at some point
         returnList.add(new StandardMetric(metric_prefix + "_duration_seconds", durationInSecond, "monitoring_source", metricProviderName)); // horrible in term of perfs. Should be improved at some point
-        returnList.add(new StandardMetric(metric_prefix + "_duration_milliseconds", t2 - t1, "monitoring_source", metricProviderName)); // horrible in term of perfs. Should be improved at some point
         returnList.add(new StandardMetric(metric_prefix + "_metrics_count", wrappedList.size(), "monitoring_source", metricProviderName)); // horrible in term of perfs. Should be improved at some point
         returnList.add(new StandardMetric(metric_prefix + "_error_status", error_count, "monitoring_source", metricProviderName)); // horrible in term of perfs. Should be improved at some point
 
