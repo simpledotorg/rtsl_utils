@@ -77,6 +77,7 @@
 
     <bean id="mainDynamicMetricProvider" class="org.rtsl.openmetrics.config.DecoratingParallelMetricProvider">  
         <constructor-arg ref="providersMap"/>
+        <constructor-arg value="${cache.folder}"/>
         <constructor-arg>
             <bean class="org.rtsl.openmetrics.config.MetricProviderDecorator">
                 <constructor-arg>

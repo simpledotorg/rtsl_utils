@@ -30,7 +30,7 @@ public final class OpenmetricsProducerServlet extends HttpServlet {
                 resp.getOutputStream().print("\n");
             }
         } catch (Exception ex) {
-            // TODO: manage error
+            throw new ServletException(ex);
         }
     }
 
