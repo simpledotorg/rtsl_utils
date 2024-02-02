@@ -97,5 +97,17 @@
             </util:list>
         </constructor-arg>
     </bean>
-                        
+    <bean id="mainMonitored" class="org.rtsl.openmetrics.utils.wrappers.SelfMonitoringMetricProviderWrapper" >
+        <property name="metricProvider" ref="mainUnsortedMetricProvider"/>
+        <property name="metricProviderName" value="main"/>
+        
+        
+    </bean>
+               
+    <bean id="mainFinal" class="org.rtsl.openmetrics.utils.wrappers.SortingMetricProviderWrapper" >
+        <property name="metricProvider" ref="mainMonitored"/>
+    </bean>
+   
+                                    
+                                                            
 </beans>

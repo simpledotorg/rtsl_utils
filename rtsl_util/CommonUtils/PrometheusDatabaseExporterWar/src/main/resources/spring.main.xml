@@ -45,7 +45,7 @@
 
     <!-- Injects the main metric provider into the servlet class -->
     <bean class="org.rtsl.openmetrics.utils.servlet.OpenmetricsProducerServlet">
-        <property name="metricProvider" ref="mainUnsortedMetricProvider" />
+        <property name="metricProvider" ref="mainFinal" />
     </bean>
                         
 </beans>
