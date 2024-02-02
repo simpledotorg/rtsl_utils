@@ -20,7 +20,7 @@
         </encoder>
     </appender>
 
-    <root level="debug">
+    <root level="trace">
         <appender-ref ref="console"/>
         <appender-ref ref="unitTestLogs"/>
     </root>

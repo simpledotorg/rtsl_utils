@@ -17,21 +17,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FolderCrawler<KEY, TARGET> {
-
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(FolderCrawler.class);
-
+    
     private final DynamicConfigRegistry<String, KEY, TARGET> metaFactory;
     private final File folder;
-
+    
     public FolderCrawler(DynamicConfigRegistry<String, KEY, TARGET> metaFactory, File folder) {
         this.metaFactory = metaFactory;
         this.folder = folder;
         if (!folder.isDirectory()) {
             throw new InvalidParameterException("Not a directory: " + folder.getAbsolutePath());
         }
-
+        
     }
-
+    
     public Map<KEY, TARGET> getAll() throws IOException {
         LOGGER.info("Parsing all files from folder <{}>", folder.getAbsolutePath());
         Map<KEY, TARGET> returnMap = new HashMap<>();
@@ -53,7 +53,7 @@ public class FolderCrawler<KEY, TARGET> {
         }
         return returnMap;
     }
-
+    
     private static String readFile(String path, Charset encoding) throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(path));
         return new String(encoded, encoding);

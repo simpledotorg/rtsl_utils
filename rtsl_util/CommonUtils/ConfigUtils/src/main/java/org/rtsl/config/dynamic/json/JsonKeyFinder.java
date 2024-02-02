@@ -1,12 +1,14 @@
 package org.rtsl.config.dynamic.json;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,23 +36,27 @@ public class JsonKeyFinder implements Function<String, String> {
 
     @Override
     public String apply(String source) {
-        StringBuilder sb = new StringBuilder();
-        Gson gson = new Gson();
-        JsonObject jobj = new Gson().fromJson(source, JsonObject.class);
-        boolean isFirst = true;
-        for (String currentKey : jsonKeys) {
-            LOGGER.trace("Getting value for key: <{}>", currentKey);
-            String currentValue = jobj.get(currentKey).getAsString();
-            LOGGER.debug("resulting key is <{}:{}>", currentKey, currentValue);
-            sb.append(currentValue);
-            if (!isFirst) {
-                isFirst = false;
-                sb.append(separator);
+        try {
+            StringBuilder sb = new StringBuilder();
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map<String, Object> data = objectMapper.readValue(source, Map.class);
+            boolean isFirst = true;
+            for (String currentKey : jsonKeys) {
+                LOGGER.trace("Getting value for key: <{}>", currentKey);
+                String currentValue = data.getOrDefault(currentKey, "").toString();
+                LOGGER.debug("resulting key is <{}:{}>", currentKey, currentValue);
+                sb.append(currentValue);
+                if (!isFirst) {
+                    isFirst = false;
+                    sb.append(separator);
+                }
             }
+            String result = sb.toString();
+            LOGGER.info("resulting key is <{}>", result);
+            return result;
+        } catch (JsonProcessingException ex) {
+            throw new RuntimeException(ex);
         }
-        String result = sb.toString();
-        LOGGER.info("resulting key is <{}>", result);
-        return result;
     }
 
 }

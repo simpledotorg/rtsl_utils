@@ -33,7 +33,7 @@ public class TestConfigBean1 {
         this.config = config;
     }
 
-    public class InternalConfigClass {
+    public static class InternalConfigClass {
 
         private String sqlQuery;
         private List<InternalMetricsClass> metrics;
@@ -54,7 +54,7 @@ public class TestConfigBean1 {
             this.sqlQuery = sqlQuery;
         }
 
-        public class InternalMetricsClass {
+        public static class InternalMetricsClass {
 
             private String name;
             private String valueSourceColumn;
