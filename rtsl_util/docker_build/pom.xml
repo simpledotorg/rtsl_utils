@@ -18,13 +18,22 @@
             <version>0.0.0</version>
             <type>war</type>    
         </dependency>
+        <dependency>
+            <artifactId>Packages</artifactId>
+            <groupId>org.rtsl.common</groupId>
+            <version>0.0.0</version>
+            <classifier>docker_build</classifier>
+            <type>zip</type>    
+        </dependency>
+        <dependency>
+            <artifactId>Packages</artifactId>
+            <groupId>org.rtsl.common</groupId>
+            <version>0.0.0</version>
+            <classifier>docker_content</classifier>
+            <type>zip</type>    
+        </dependency>
     </dependencies>
     <build>
-        <resources>
-            <resource>
-                <directory>.</directory>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -37,22 +46,20 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                     </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptors>
-                        <descriptor>assembly.configfiles.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
                     <execution>
-                        <id>make-assembly</id>
-                        <phase>prepare-package</phase>
+                        <id>unpack-dependencies</id>
+                        <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>unpack-dependencies</goal>
                         </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/dependency</outputDirectory>
+                            <useSubDirectoryPerArtifact>false</useSubDirectoryPerArtifact>
+                            <stripVersion>true</stripVersion>
+                            <stripType>true</stripType>
+                            <stripClassifier>true</stripClassifier>
+                            <excludeTypes>war</excludeTypes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -67,7 +74,7 @@
                             <goal>build</goal>
                         </goals>
                         <configuration>
-                            <composeFile>${project.basedir}/docker-compose.yml</composeFile>
+                            <composeFile>${project.basedir}/target/dependency/docker-compose.yml</composeFile>
                             <ignorePullFailures>true</ignorePullFailures>
                         </configuration>
                     </execution>

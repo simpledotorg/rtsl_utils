@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.rtsl.common</groupId>
+        <artifactId>RtslCommonParent</artifactId>
+        <version>0.0.0</version>
+    </parent>
+    <artifactId>Packages</artifactId>
+    <groupId>org.rtsl.common</groupId>
+    <packaging>pom</packaging>
+    <version>0.0.0</version>
+    <dependencies>
+        <dependency>
+            <artifactId>PrometheusDatabaseExporterWar</artifactId>
+            <groupId>org.rtsl.common</groupId>
+            <version>0.0.0</version>
+            <type>war</type>    
+        </dependency>
+    </dependencies>
+    <build>
+        <resources>
+            <resource>
+                <directory>.</directory>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>assembly.docker_content.xml</descriptor>
+                        <descriptor>assembly.docker_build.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

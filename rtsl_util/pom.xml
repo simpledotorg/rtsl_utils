@@ -10,6 +10,7 @@
         <module>Helpers</module>
         <module>CommonUtils</module>
         <module>Webapps</module>
+        <module>packager</module>
         <module>docker_build</module>
     </modules>
     <properties>
@@ -75,7 +76,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.6.1</version>
                     <configuration>
                         <additionalDependencies>
                             <additionalDependency>
