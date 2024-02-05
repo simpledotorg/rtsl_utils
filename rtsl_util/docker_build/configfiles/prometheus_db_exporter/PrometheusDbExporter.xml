@@ -6,5 +6,5 @@
     <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.2.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.2.properties" />
     <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.3.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.3.properties" />
     <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.4.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.4.properties" />
-    <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.5.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.5.properties" />
+    <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.5.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.5.docker.properties" />
 </Context>
