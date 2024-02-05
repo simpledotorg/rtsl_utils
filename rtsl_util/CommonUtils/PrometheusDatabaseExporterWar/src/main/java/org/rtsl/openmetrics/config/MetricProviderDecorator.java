@@ -26,7 +26,7 @@ public class MetricProviderDecorator {
             currentWrapper.setMetricProvider(currentMetricProvider);
             if (currentWrapper instanceof IMetricProviderNameAware && metadata != null) {
                 IMetricProviderNameAware currentAwareWrapper = (IMetricProviderNameAware) currentWrapper;
-                currentAwareWrapper.setMetricProviderName(metadata.getName());
+                currentAwareWrapper.setMetricProviderName(metadata.getFileName());
                 //TODO : log
             }
             if (currentWrapper instanceof IExtraLabelsAware && metadata != null) {
