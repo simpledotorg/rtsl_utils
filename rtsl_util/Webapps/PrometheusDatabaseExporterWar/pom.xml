@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.rtsl.common</groupId>
-        <artifactId>CommonUtilsParent</artifactId>
+        <artifactId>WebappsParent</artifactId>
         <version>0.0.0</version>
     </parent>
     <artifactId>PrometheusDatabaseExporterWar</artifactId>
