@@ -1,0 +1,5 @@
+services:
+    prometheusdbexporter:
+        build:
+            context: .
+            dockerfile: prometheus.db.exporter.docker

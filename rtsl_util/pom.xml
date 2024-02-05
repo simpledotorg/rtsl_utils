@@ -10,6 +10,7 @@
         <module>Helpers</module>
         <module>CommonUtils</module>
         <module>Webapps</module>
+        <module>docker_build</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -2,8 +2,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-    <groupId>org.rtsl.common.helper</groupId>
-    <artifactId>HelpersParent</artifactId>
+        <groupId>org.rtsl.common.helper</groupId>
+        <artifactId>HelpersParent</artifactId>
         <version>0.0.0</version>
     </parent>
     <groupId>org.rtsl.common.helper</groupId>
@@ -11,12 +11,12 @@
     <version>0.0.0</version>
     <packaging>pom</packaging>
     <dependencies>
-        <!-- We want to ship JCL into slf4j -->
+        <!-- We need the SLF4J API -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
-		<!-- we want to ship all other logging systems into slf4j -->
+        <!-- Everything except logback should go through SLF4j instead -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
@@ -29,7 +29,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>jul-to-slf4j</artifactId>
         </dependency>
-        <!-- We want to use logback as our logging system -->
+        <!-- Then SLF4J will pipe it into logback -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
