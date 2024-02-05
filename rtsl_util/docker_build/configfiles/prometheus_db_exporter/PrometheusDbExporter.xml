@@ -1,3 +1,10 @@
 <Context path="/" docBase="/app/rtsl/prom_db_exporter/PrometheusDatabaseExporterWar-0.0.0.war">
 
+    
+    
+    <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.1.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.1.properties" />
+    <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.2.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.2.properties" />
+    <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.3.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.3.properties" />
+    <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.4.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.4.properties" />
+    <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.5.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.5.properties" />
 </Context>

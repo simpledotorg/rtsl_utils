@@ -23,6 +23,7 @@
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="url" value="${database.jdbc.url}" />
+        <property name="driverClassName" value="${database.jdbc.driverClassName}" />
     </bean>
     
     
