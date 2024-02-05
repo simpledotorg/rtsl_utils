@@ -6,3 +6,5 @@ COPY ./target/DockerBuild-0.0.0-configfiles/DockerBuild-0.0.0/configfiles/promet
 COPY ./target/DockerBuild-0.0.0-configfiles/DockerBuild-0.0.0/configfiles/prometheus_db_exporter/logback.xml /app/rtsl/prom_db_exporter/
 
 COPY ./target/DockerBuild-0.0.0-configfiles/DockerBuild-0.0.0/configfiles/prometheus_db_exporter/PrometheusDbExporter.xml /usr/local/tomcat/conf/Catalina/localhost/
+
+RUN mkdir /app/rtsl/prom_db_exporter/sources
