@@ -15,7 +15,7 @@ public class PropertyDisplayerTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertyDisplayerTest.class);
 
-    @Resource(name = "appProperties")
+    @Resource(name = "org.rtsl.common.properties.standard.rawProperties")
     Properties testProperties;
 
     @Test

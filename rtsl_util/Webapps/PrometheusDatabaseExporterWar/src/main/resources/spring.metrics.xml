@@ -24,7 +24,7 @@
     
 
     <bean id="rawPropertiesMonitoringProvider" class="org.rtsl.openmetrics.utils.properties.PropertiesMonitoringProvider" >
-        <constructor-arg index="0" ref="appProperties" />
+        <constructor-arg index="0" ref="org.rtsl.common.properties.standard.obfuscatedProperties" />
         <constructor-arg index="1">
             <map>
                 <entry key="application" value="database_exporter"/>

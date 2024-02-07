@@ -21,8 +21,9 @@
        http://www.springframework.org/schema/task/spring-task.xsd
        ">
 
-    
-    <bean id="appProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+    <import resource="classpath:org.rtsl.common.properties.standard.context.xml" />
+   
+    <bean id="org.rtsl.common.properties.standard.rawProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="ignoreResourceNotFound" value="true"/>
         <property name="localOverride" value="true"/>
         <property name="locations">
@@ -41,7 +42,6 @@
             </list>
         </property>
     </bean>
-    <context:property-placeholder ignore-unresolvable="true" properties-ref="appProperties"/>
 
     <!-- Injects the main metric provider into the servlet class -->
     <bean class="org.rtsl.openmetrics.utils.servlet.OpenmetricsProducerServlet">
