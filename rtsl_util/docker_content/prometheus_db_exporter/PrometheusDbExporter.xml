@@ -1,7 +1,16 @@
 <Context path="/" docBase="/app/rtsl/prom_db_exporter/PrometheusDatabaseExporterWar-0.0.0.war">
 
+    <Resources>
+        <PostResources className="org.apache.catalina.webresources.DirResourceSet"
+                       webAppMount="/WEB-INF/classes/config"
+                       base="/app/rtsl/prom_db_exporter/" />
+    </Resources>
+
+    <!-- FOR LOGBACK -->
+    <Environment type="java.lang.String" override="false" name="logback/context-name" value="logback_config" />
+    <Environment type="java.lang.String" override="false" name="logback/configuration-resource" value="config/logback.xml" />
     
-    
+    <!-- FOR LOADING CONFIG -->
     <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.1.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.1.properties" />
     <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.2.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.2.properties" />
     <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.3.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.3.properties" />
