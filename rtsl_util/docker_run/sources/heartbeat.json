@@ -1,0 +1,13 @@
+{
+    "asynch": false,
+    "type": "sql",
+    "name": "dbHeartbeat",
+    "query": "select 1 as value, 'database' as source;",
+    "metrics": [{
+            "metricName": "postgres_heartbeat",
+            "metricValueKey": "value",
+            "labelsKeys": {
+                "source": "source"
+            }
+        }]
+}
