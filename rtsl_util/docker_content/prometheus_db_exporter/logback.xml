@@ -21,7 +21,7 @@
         </encoder>
     </appender>
 
-    <root level="trace">
+    <root level="DEBUG">
         <appender-ref ref="console"/>
         <appender-ref ref="default"/>
     </root>

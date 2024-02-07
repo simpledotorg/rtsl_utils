@@ -1,9 +1,10 @@
 <Context path="/" docBase="/app/rtsl/prom_db_exporter/PrometheusDatabaseExporterWar-0.0.0.war">
 
     <Resources>
-        <PostResources className="org.apache.catalina.webresources.DirResourceSet"
-                       webAppMount="/WEB-INF/classes/config"
-                       base="/app/rtsl/prom_db_exporter/" />
+        <PostResources 
+            className="org.apache.catalina.webresources.FileResourceSet"
+            base="/app/rtsl/prom_db_exporter/logback.xml"
+            webAppMount="/WEB-INF/classes/config/logback.xml"/>
     </Resources>
 
     <!-- FOR LOGBACK -->
