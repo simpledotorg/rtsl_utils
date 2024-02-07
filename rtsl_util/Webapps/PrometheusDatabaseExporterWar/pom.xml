@@ -25,6 +25,11 @@
         </dependency>
         <dependency>
             <groupId>org.rtsl.common</groupId>
+            <artifactId>PropertiesUtils</artifactId>
+            <version>0.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.rtsl.common</groupId>
             <artifactId>OpenmetricsUtils</artifactId>
             <version>0.0.0</version>
         </dependency>

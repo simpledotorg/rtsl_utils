@@ -12,6 +12,7 @@
     <version>0.0.0</version>
     <packaging>pom</packaging>
     <modules>
+        <module>PropertiesUtils</module>
         <module>ConfigUtils</module>
         <module>OpenmetricsUtils</module>
     </modules> 

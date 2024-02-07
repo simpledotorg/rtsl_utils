@@ -3,12 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.rtsl.common</groupId>
+            <groupId>org.rtsl.common</groupId>
         <artifactId>CommonUtilsParent</artifactId>
         <version>0.0.0</version>
     </parent>
-    <artifactId>ConfigUtils</artifactId>
-    <groupId>org.rtsl.common</groupId>
+    <artifactId>PropertiesUtils</artifactId>
     <packaging>jar</packaging>
     <version>0.0.0</version>
     <dependencies>
@@ -17,12 +16,8 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-xml</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
         </dependency>
         <!-- test dependencies -->
         <dependency>
