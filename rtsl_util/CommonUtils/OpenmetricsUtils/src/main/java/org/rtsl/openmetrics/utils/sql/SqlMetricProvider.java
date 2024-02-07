@@ -1,5 +1,6 @@
 package org.rtsl.openmetrics.utils.sql;
 
+import java.beans.Transient;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -37,6 +38,7 @@ public class SqlMetricProvider implements MetricProvider, DataSourceAware {
     }
 
     @Override
+    @Transient
     public final List<Metric> getMetrics() {
         List<Metric> returnMetrics = new ArrayList<>();
 
@@ -52,6 +54,7 @@ public class SqlMetricProvider implements MetricProvider, DataSourceAware {
             }
         } catch (Exception ex) {
             LOGGER.warn("Exception occured during SQL query excution: ", ex);
+            throw new RuntimeException("Exception occured during SQL query excution: ", ex);
         }
         return returnMetrics;
     }

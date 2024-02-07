@@ -2,6 +2,7 @@ package org.rtsl.config.dynamic.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.function.Function;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ public class JsonFactoryFunction<K> implements Function<String, K> {
     public JsonFactoryFunction(Class<K> clazz) {
         objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
         this.clazz = clazz;
     }
 
@@ -25,7 +27,12 @@ public class JsonFactoryFunction<K> implements Function<String, K> {
         try {
             K returnObject = objectMapper.readValue(inputJsonString, clazz);
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Resulting object is : {}", objectMapper.writeValueAsString(returnObject));
+                try {
+                    LOGGER.debug("Resulting object is : {}", objectMapper.writeValueAsString(returnObject));
+
+                } catch (Exception ex) {
+                    LOGGER.warn("Cannot log resulting object. Exception is : ", ex);
+                }
             }
             return returnObject;
         } catch (JsonProcessingException ex) {
