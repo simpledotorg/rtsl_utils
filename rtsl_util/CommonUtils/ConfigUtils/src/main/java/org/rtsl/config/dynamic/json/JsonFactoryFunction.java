@@ -18,7 +18,6 @@ public class JsonFactoryFunction<K> implements Function<String, K> {
     public JsonFactoryFunction(Class<K> clazz) {
         objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
         this.clazz = clazz;
     }
 

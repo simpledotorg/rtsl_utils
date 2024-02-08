@@ -38,7 +38,6 @@ public class SqlMetricProvider implements MetricProvider, DataSourceAware {
     }
 
     @Override
-    @Transient
     public final List<Metric> getMetrics() {
         List<Metric> returnMetrics = new ArrayList<>();
 

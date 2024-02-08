@@ -31,7 +31,7 @@
     <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
         <property name="dataSource" ref="dataSource" />
         <property name="registerMbeans" value="false" />
-        <property name="poolName" value="springHikariCP" />
+        <property name="poolName" value="promDbExporter" />
         <property name="connectionTestQuery" value="SELECT 1 " />
         <property name="username" value="${database.jdbc.username}" />
         <property name="password" value="${database.jdbc.password}" />
