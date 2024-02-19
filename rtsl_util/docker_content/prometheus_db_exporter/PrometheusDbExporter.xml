@@ -1,4 +1,4 @@
-<Context path="/" docBase="/app/rtsl/prom_db_exporter/PrometheusDatabaseExporterWar-0.0.0.war">
+<Context path="/" docBase="/app/rtsl/prom_db_exporter/PrometheusDatabaseExporterWar-${project.version}.war">
 
     <Resources>
         <PostResources 
