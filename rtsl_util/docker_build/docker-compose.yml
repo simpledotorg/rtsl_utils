@@ -3,5 +3,5 @@ services:
         build:
             context: .
             dockerfile: prometheus.db.exporter.docker
-        image: rtsl/prometheusdbexporter:${project.version}
+        image: simpledotorg/prometheusdbexporter:${project.version}
             
