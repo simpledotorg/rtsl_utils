@@ -18,4 +18,5 @@ jobs:
           java-version: '21'
           distribution: 'zulu'
       - name: Run the Maven verify phase
+        working-directory: rtsl_util
         run: mvn clean install
