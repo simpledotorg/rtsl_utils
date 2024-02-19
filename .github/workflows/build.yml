@@ -24,15 +24,18 @@ jobs:
       - uses: stCarolas/setup-maven@v4.5
         with:
           maven-version: 3.9.6
-      - name: Tests Maven Version
+      - name: Sets up version
         working-directory: rtsl_util
         run: mvn versions:set -DnewVersion=${{github.ref_name}}.${{github.run_number}}
       - name: Builds Artifacts and Images
         working-directory: rtsl_util
         run: mvn clean install -DskipTests=true
-      - name: Builds Artifacts and Images
+      - name: Lists all docker images
         working-directory: rtsl_util
         run:  docker image list
+      - name: Publish Images
+        working-directory: rtsl_util
+        run:  docker push simpledotorg/prometheusdbexporter:${{github.ref_name}}.${{github.run_number}}
 
 
 
