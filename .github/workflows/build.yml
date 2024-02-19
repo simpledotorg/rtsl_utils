@@ -25,6 +25,13 @@ jobs:
       - name: Builds Artifacts and Images
         working-directory: rtsl_util
         run: mvn clean install -DskipTests=true
+      - name: Builds Artifacts and Images
+        working-directory: rtsl_util
+        run:  docker image list
+
+
+
+       
 
 
 
