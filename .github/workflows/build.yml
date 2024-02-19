@@ -16,6 +16,9 @@ jobs:
           java-version: '21'
           distribution: 'zulu'
           cache: 'maven'
+      - name: Tests Maven Version
+        working-directory: rtsl_util
+        run: mvn -version
       - name: Builds Artifacts and Images
         working-directory: rtsl_util
         run: mvn clean install
