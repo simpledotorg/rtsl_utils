@@ -16,6 +16,9 @@ jobs:
           java-version: '21'
           distribution: 'zulu'
           cache: 'maven'
+      - uses: stCarolas/setup-maven@v4.5
+        with:
+          maven-version: 3.9.6
       - name: Tests Maven Version
         working-directory: rtsl_util
         run: mvn -version
