@@ -223,6 +223,11 @@
                 <artifactId>cucumber-java</artifactId>
                 <version>7.18.0</version>
             </dependency>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-spring</artifactId>
+                <version>7.18.0</version>
+            </dependency>
             <!--#########################-->
             <!-- All Spring Dependencies -->
             <!--#########################-->
@@ -416,37 +421,37 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.7.36</version>
+                <version>2.0.13</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-ext</artifactId>
-                <version>1.7.36</version>
+                <version>2.0.13</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>jcl-over-slf4j</artifactId>
-                <version>1.7.36</version>
+                <version>2.0.13</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>log4j-over-slf4j</artifactId>
-                <version>1.7.36</version>
+                <version>2.0.13</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>jul-to-slf4j</artifactId>
-                <version>1.7.36</version>
+                <version>2.0.13</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.2.10</version>
+                <version>1.5.6</version>
             </dependency>
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-core</artifactId>
-                <version>1.2.10</version>
+                <version>1.5.6</version>
             </dependency>
             <!-- log4j2 should only use version above 2.16.0 due to critical bug -->
             <dependency>

@@ -1,17 +1,15 @@
 
 BASEDIR=$(dirname "$0")
-export TARGET_DIR=${BASEDIR}/../../../target
-
+export TARGET_DIR=${BASEDIR}/../../../../target
 
 java \
+    -DLogback.configurationFile=${BASEDIR}/logback.xml -Dfile.ending=UTF8 -Dlogback.debug=true \
     -jar ${TARGET_DIR}/Dhis2CucumberTestTool-*-jar-with-dependencies.jar \
     --plugin html:${TARGET_DIR}/cucumber-reports/test_reports.html \
     --plugin json:${TARGET_DIR}/cucumber-reports/test_reports.json \
     --plugin pretty \
     --glue "org.rtsl.dhis2.cucumber.definitions" \
+    --threads 4 \
      ${BASEDIR}/scenarios
 
 
-
-
-ls    ${BASEDIR}/scenarios
