@@ -2,8 +2,10 @@
 BASEDIR=$(dirname "$0")
 export TARGET_DIR=${BASEDIR}/../../../../target
 
+# -Dlogback.debug=true 
+
 java \
-    -DLogback.configurationFile=${BASEDIR}/logback.xml -Dfile.ending=UTF8 -Dlogback.debug=true \
+    -Dlogback.configurationFile=${BASEDIR}/logback.xml -Dfile.ending=UTF8  -Dlogback.debug=true \
     -jar ${TARGET_DIR}/Dhis2CucumberTestTool-*-jar-with-dependencies.jar \
     --plugin html:${TARGET_DIR}/cucumber-reports/test_reports.html \
     --plugin json:${TARGET_DIR}/cucumber-reports/test_reports.json \
