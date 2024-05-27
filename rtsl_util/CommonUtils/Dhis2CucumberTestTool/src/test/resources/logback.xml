@@ -1,0 +1,21 @@
+<configuration>
+
+    <appender name="unitTestLogs" class="ch.qos.logback.core.FileAppender">
+        <file>./target/logs/unit_tests.log</file>
+        <append>true</append>
+        <immediateFlush>true</immediateFlush>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <immediateFlush>true</immediateFlush>
+            <outputPatternAsHeader>false</outputPatternAsHeader>
+        </encoder>
+    </appender>
+
+    <root level="trace">
+        <appender-ref ref="unitTestLogs"/>
+    </root>
+
+
+
+</configuration>

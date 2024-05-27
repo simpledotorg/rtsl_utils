@@ -216,6 +216,14 @@
                 <version>1.4</version>
             </dependency>
             <!--#########################-->
+            <!-- Cucumber Dependencies   -->
+            <!--#########################-->
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-java</artifactId>
+                <version>7.18.0</version>
+            </dependency>
+            <!--#########################-->
             <!-- All Spring Dependencies -->
             <!--#########################-->
             <dependency>
