@@ -8,6 +8,7 @@ java \
     --plugin html:${TARGET_DIR}/cucumber-reports/test_reports.html \
     --plugin json:${TARGET_DIR}/cucumber-reports/test_reports.json \
     --plugin pretty \
+    --glue "org.rtsl.dhis2.cucumber.definitions" \
      ${BASEDIR}/scenarios
 
 
