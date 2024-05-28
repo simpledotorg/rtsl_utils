@@ -1,9 +1,16 @@
 package org.rtsl.dhis2.cucumber.definitions;
 
 import io.cucumber.java.en.Given;
+import io.cucumber.spring.CucumberContextConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.test.context.ContextConfiguration;
 
+@CucumberContextConfiguration
+@ContextConfiguration("classpath:org.rtsl.common.properties.default.context.xml")
+//@ImportResource("classpath:org.rtsl.common.properties.default.context.xml")
 public class Dhis2StepDefinitions {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Dhis2StepDefinitions.class);
