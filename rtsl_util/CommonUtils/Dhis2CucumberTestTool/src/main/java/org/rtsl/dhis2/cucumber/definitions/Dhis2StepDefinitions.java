@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.ContextConfiguration;
 
 @CucumberContextConfiguration
-@ContextConfiguration("classpath:org.rtsl.common.properties.default.context.xml")
+@ContextConfiguration("classpath:spring.main.xml")
 //@ImportResource("classpath:org.rtsl.common.properties.default.context.xml")
 public class Dhis2StepDefinitions {
 

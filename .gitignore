@@ -22,6 +22,7 @@ dist/
 # Maven
 target/
 dist/
+dependency-reduced-pom.xml
 
 # JetBrains IDE
 .idea/
