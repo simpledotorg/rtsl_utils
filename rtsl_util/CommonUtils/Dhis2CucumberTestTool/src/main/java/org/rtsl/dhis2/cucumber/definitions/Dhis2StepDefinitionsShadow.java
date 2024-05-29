@@ -1,23 +1,27 @@
 package org.rtsl.dhis2.cucumber.definitions;
 
 import io.cucumber.java.en.Given;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.beans.factory.annotation.Autowired;
 
 //@ImportResource("classpath:org.rtsl.common.properties.default.context.xml")
 public class Dhis2StepDefinitionsShadow {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Dhis2StepDefinitionsShadow.class);
 
-    static {
-        LOGGER.info("TEST");
-    }
+    @Inject
+    @Named("testAtomicInt")
+    @Autowired
+    private AtomicInteger testCounter;
 
     @Given("I have {int} cukes in my underbelly")
-    public void i_have_n_cukes_in_my_belly(int cukes) {
-        LOGGER.info("TEST");
-        LOGGER.info(LOGGER.getClass().getName());
+    public void i_have_n_cukes_in_my_underbelly(int cukes) {
+        testCounter.addAndGet(cukes);
+        LOGGER.info("TEST: <{}> <{}> <{}>", cukes, testCounter.hashCode(), this);
     }
 
 }

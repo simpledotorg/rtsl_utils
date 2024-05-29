@@ -14,7 +14,7 @@ java \
     --plugin pretty \
     --glue "org.rtsl.dhis2.cucumber.definitions" \
     --glue "io.cucumber.spring" \
-    --threads 4 \
+    --threads 1 \
      ${BASEDIR}/scenarios
 
 

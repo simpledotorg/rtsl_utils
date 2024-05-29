@@ -11,10 +11,7 @@
     <packaging>jar</packaging>
     <version>0.0.0</version>
     <build>
-        
         <plugins>
-            
-            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -36,31 +33,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!--
-                    <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <configuration>
-                            <archive>
-                                <manifest>
-                                    <mainClass>io.cucumber.core.cli.Main</mainClass>
-                                </manifest>
-                            </archive>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>make-assembly</id> 
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-            -->
         </plugins>
     </build>
     <dependencies>
@@ -74,6 +46,10 @@
             <groupId>org.rtsl.common</groupId>
             <artifactId>PropertiesUtils</artifactId>
             <version>0.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
         </dependency>
         <dependency>
             <groupId>io.cucumber</groupId>
@@ -99,7 +75,6 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
-        
         <!-- test dependencies -->
         <dependency>
             <groupId>org.rtsl.common.helper</groupId>

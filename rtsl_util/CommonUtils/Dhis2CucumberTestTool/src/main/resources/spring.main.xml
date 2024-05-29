@@ -42,5 +42,9 @@
             </list>
         </property>
     </bean>
+
          
+    <bean id="testAtomicInt" class="java.util.concurrent.atomic.AtomicInteger" scope="cucumber-glue"/>              
+                           
+                                             
 </beans>
