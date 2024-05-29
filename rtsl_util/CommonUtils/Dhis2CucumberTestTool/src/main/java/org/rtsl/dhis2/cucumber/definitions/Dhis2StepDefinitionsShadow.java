@@ -6,7 +6,6 @@ import jakarta.inject.Named;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 //@ImportResource("classpath:org.rtsl.common.properties.default.context.xml")
 public class Dhis2StepDefinitionsShadow {
@@ -15,7 +14,6 @@ public class Dhis2StepDefinitionsShadow {
 
     @Inject
     @Named("testAtomicInt")
-    @Autowired
     private AtomicInteger testCounter;
 
     @Given("I have {int} cukes in my underbelly")

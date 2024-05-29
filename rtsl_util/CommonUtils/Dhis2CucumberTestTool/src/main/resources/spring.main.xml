@@ -29,16 +29,16 @@
         <property name="locations">
             <list>
                 <value>classpath:default.properties</value>
-                <value>file:${org.rtsl.prometheus.exporter.properties}</value>
-                <value>file:${org.rtsl.prometheus.exporter.1.properties}</value>
-                <value>file:${org.rtsl.prometheus.exporter.2.properties}</value>
-                <value>file:${org.rtsl.prometheus.exporter.3.properties}</value>
-                <value>file:${org.rtsl.prometheus.exporter.4.properties}</value>
-                <value>file:${org.rtsl.prometheus.exporter.5.properties}</value>
-                <value>file:${org.rtsl.prometheus.exporter.6.properties}</value>
-                <value>file:${org.rtsl.prometheus.exporter.7.properties}</value>
-                <value>file:${org.rtsl.prometheus.exporter.8.properties}</value>
-                <value>file:${org.rtsl.prometheus.exporter.9.properties}</value>
+                <value>file:${org.rtsl.dhis2.testtool.properties}</value>
+                <value>file:${org.rtsl.dhis2.testtool.1.properties}</value>
+                <value>file:${org.rtsl.dhis2.testtool.2.properties}</value>
+                <value>file:${org.rtsl.dhis2.testtool.3.properties}</value>
+                <value>file:${org.rtsl.dhis2.testtool.4.properties}</value>
+                <value>file:${org.rtsl.dhis2.testtool.5.properties}</value>
+                <value>file:${org.rtsl.dhis2.testtool.6.properties}</value>
+                <value>file:${org.rtsl.dhis2.testtool.7.properties}</value>
+                <value>file:${org.rtsl.dhis2.testtool.8.properties}</value>
+                <value>file:${org.rtsl.dhis2.testtool.9.properties}</value>
             </list>
         </property>
     </bean>
