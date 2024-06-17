@@ -2,7 +2,7 @@
 
 # Prerequisite
 
-brew install openjdk maven
+brew install openjdk@21 maven
 
 
 # To compile the whole project
