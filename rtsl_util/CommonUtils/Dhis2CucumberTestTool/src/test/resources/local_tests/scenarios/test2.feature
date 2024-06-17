@@ -1,12 +1,6 @@
-Feature: Guess the word
+Feature: Basic Stuff
 
-  # The first example has two steps
-  Scenario: Maker starts a game
-    When the Maker starts a game
-    Then the Maker waits for a Breaker to join
+  # Test DHIS2 scenario
+  Scenario: Test DHIS2 scenario
+    Given I navigate to the DHIS2 homepage
 
-  # The second example has three steps
-  Scenario: Breaker joins a game
-    Given the Maker has started a game with the word "silky"
-    When the Breaker joins the Maker's game
-    Then the Breaker must guess a word with 5 characters

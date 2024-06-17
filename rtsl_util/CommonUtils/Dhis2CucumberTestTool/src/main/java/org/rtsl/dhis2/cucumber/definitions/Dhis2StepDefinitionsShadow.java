@@ -7,7 +7,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//@ImportResource("classpath:org.rtsl.common.properties.default.context.xml")
 public class Dhis2StepDefinitionsShadow {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Dhis2StepDefinitionsShadow.class);

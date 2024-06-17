@@ -28,6 +28,12 @@
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>io.cucumber.core.cli.Main</mainClass>
                                 </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.handlers</resource>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/spring.schemas</resource>
+                                </transformer>
                             </transformers>
                         </configuration>
                     </execution>
@@ -75,6 +81,17 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.hisp</groupId>
+            <artifactId>dhis2-java-client</artifactId>
+            <version>1.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hisp.dhis.integration.sdk</groupId>
+            <artifactId>dhis2-java-sdk</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
         <!-- test dependencies -->
         <dependency>
             <groupId>org.rtsl.common.helper</groupId>
@@ -83,5 +100,22 @@
             <type>pom</type>
             <scope>test</scope>
         </dependency>
+        <!-- SELENIUM STUFF -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>4.21.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-firefox-driver</artifactId>
+            <version>4.21.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.appium</groupId>
+            <artifactId>java-client</artifactId>
+            <version>9.2.2</version>
+        </dependency>
+
     </dependencies>
 </project>

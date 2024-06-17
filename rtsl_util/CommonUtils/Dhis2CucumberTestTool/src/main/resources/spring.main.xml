@@ -22,6 +22,10 @@
        ">
 
     <import resource="classpath:org.rtsl.common.properties.standard.context.xml" />
+    <import resource="spring.api.xml" />
+    
+    <!-- Maybe later :) /-->
+    <!-- import resource="spring.android.xml" /-->
    
     <bean id="org.rtsl.common.properties.standard.rawProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="ignoreResourceNotFound" value="true"/>
@@ -43,8 +47,18 @@
         </property>
     </bean>
 
-         
-    <bean id="testAtomicInt" class="java.util.concurrent.atomic.AtomicInteger" scope="cucumber-glue"/>              
-                           
+    <bean id="testUniqueId" class="org.rtsl.dhis2.cucumber.TestUniqueId" scope="cucumber-glue"/>      
+    <bean id="testAtomicInt" class="java.util.concurrent.atomic.AtomicInteger" scope="cucumber-glue"/>   
+    <bean id="webDriver" class="org.openqa.selenium.firefox.FirefoxDriver" scope="cucumber-glue"/>              
+     
+    <bean id="dhis2Config" class="org.hisp.dhis.Dhis2Config">
+        <constructor-arg value="${dhis2.api.url}" />
+        <constructor-arg value="${dhis2.api.username}" />
+        <constructor-arg value="${dhis2.api.password}" />
+    </bean>
+    
+    <bean id="dhisClient" class="org.hisp.dhis.Dhis2">
+        <constructor-arg ref="dhis2Config" />
+    </bean>                      
                                              
 </beans>
