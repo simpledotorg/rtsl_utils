@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util" 
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.1.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security-3.1.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util-3.1.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+       http://www.springframework.org/schema/task
+       http://www.springframework.org/schema/task/spring-task.xsd
+       ">
+
+    
+    <bean id="appProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="localOverride" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:default.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="metric1" class="org.rtsl.openmetrics.utils.StandardMetric" >
+        <constructor-arg index="0" value="testMetric" />
+        <constructor-arg index="1">
+            <map>
+                <entry key="key1" value="value1"/>
+                <entry key="key2" value="value2"/>
+            </map>
+        </constructor-arg> 
+        <property name="metricValue">
+            <bean class="java.lang.Integer">
+                <constructor-arg  value="42"  />
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="metric2" class="org.rtsl.openmetrics.utils.StandardMetric" >
+        <constructor-arg index="0" value="testMetric" />
+        <constructor-arg index="1">
+            <map>
+                <entry key="key1" value="value3"/>
+                <entry key="key2" value="value4"/>
+            </map>
+        </constructor-arg> 
+        <property name="metricValue">
+            <bean class="java.math.BigDecimal">
+                <constructor-arg  value="2481631641282565121024.0123456789"  />
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="simpleMetricsProviderInternal" class="org.rtsl.openmetrics.utils.basic.ReadOnlyMetricProvider" >
+        <constructor-arg>
+            <list>
+                <ref bean="metric1" />
+                <ref bean="metric2" />                
+            </list>
+        </constructor-arg>
+    </bean>
+    
+    <bean id="simpleMetricsProvider" class="org.rtsl.openmetrics.utils.wrappers.SelfMonitoringMetricProviderWrapper" >
+        <property name="metricProvider" ref="simpleMetricsProviderInternal"/>
+        <property name="metricProviderName" value="simpleMetricsProvider"/>
+    </bean>
+
+    <bean id="propertiesMonitoringProvider" class="org.rtsl.openmetrics.utils.properties.PropertiesMonitoringProvider" >
+        <constructor-arg index="0" ref="appProperties" />
+        <constructor-arg index="1">
+            <map>
+                <entry key="application" value="unitTests"/>
+            </map>
+        </constructor-arg> 
+    </bean>
+    
+    <bean id="simpleFileInternal" class="org.rtsl.openmetrics.utils.file.FileMetricProvider" >
+        <property name="metricFile" value="file:./src/test/resources/samples/test_file.prom" />
+    </bean>
+    
+    <bean id="simpleFile" class="org.rtsl.openmetrics.utils.wrappers.SelfMonitoringMetricProviderWrapper" >
+        <property name="metricProvider" ref="simpleFileInternal"/>
+        <property name="metricProviderName" value="simpleFile"/>
+    </bean>
+        
+    <bean id="simpleConsumer" class="org.rtsl.openmetrics.utils.file.FileWriterMetricConsumer" >
+        <property name="metricFile" value="file:./target/test_asynch_file.prom" />
+        <property name="metricProvider" ref="simpleMetricsProvider"/>
+    </bean>
+    
+
+    
+    
+ 
+    <bean id="aggregatedMonitoringProvider" class="org.rtsl.openmetrics.utils.basic.ParallelMetricProvider" >
+        <constructor-arg index="0">
+            <list>
+                <ref bean="simpleFile" />
+                <ref bean="simpleMetricsProvider" />
+                <ref bean="propertiesMonitoringProvider" />   
+                <ref bean="countersMonitoringProvider" />                
+            </list>
+        </constructor-arg>
+    </bean>
+    
+    <bean id="selfMonitorProvider" class="org.rtsl.openmetrics.utils.wrappers.SelfMonitoringMetricProviderWrapper" >
+        <property name="metricProvider" ref="aggregatedMonitoringProvider"/>
+        <property name="metricProviderName" value="selfMonitorProvider"/>
+    </bean>
+    
+    
+    <bean id="sortingProvider" class="org.rtsl.openmetrics.utils.wrappers.SortingMetricProviderWrapper" >
+        <property name="metricProvider" ref="selfMonitorProvider"/>
+    </bean>
+    
+    
+    <bean id="test" class="org.rtsl.openmetrics.utils.servlet.OpenmetricsProducerServlet">
+        <property name="metricProvider" ref="sortingProvider"/>
+    </bean>
+    
+    
+    <bean id="countersMonitoringProvider" class="org.rtsl.openmetrics.utils.basic.CountersMetricProvider" >
+        <constructor-arg index="0">
+            <map>
+                <entry key="application" value="unitTests"/>
+            </map>
+        </constructor-arg> 
+    </bean>
+    <!-- STUFF -->
+    
+                
+                    
+                        
+</beans>

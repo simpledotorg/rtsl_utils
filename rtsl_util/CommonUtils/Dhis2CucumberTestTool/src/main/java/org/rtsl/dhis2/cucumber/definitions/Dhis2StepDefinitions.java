@@ -50,6 +50,7 @@ public class Dhis2StepDefinitions {
         newFacility.setId(newFacilityId);
         this.currentFaciliyId = newFacilityId;
         LOGGER.info("created Facility: <{}> <{}>", newFacility.getId(), newFacility.getName());
+        
 
     }
 
