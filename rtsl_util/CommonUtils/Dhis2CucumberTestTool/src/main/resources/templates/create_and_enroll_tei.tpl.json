@@ -4,12 +4,6 @@
             "trackedEntityType": "MCPQUTHX1Ze",
             "orgUnit": "${data.currentFaciliyId}",
             "attributes": [
-                <#list dataTable as currentKey, currentValue>
-                        {
-                            "attribute": "${currentKey} ",
-                            "value": "${currentValue}"
-                        }<#sep>, </#sep>
-                        </#list>
             ]
         }
     ]
