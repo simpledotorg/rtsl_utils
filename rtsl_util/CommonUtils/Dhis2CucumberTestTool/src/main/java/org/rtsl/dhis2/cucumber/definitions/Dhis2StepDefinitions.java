@@ -39,6 +39,7 @@ import org.hisp.dhis.api.model.v40_2_2.TrackerImportReport;
 import org.hisp.dhis.integration.sdk.api.Dhis2Client;
 import org.hisp.dhis.model.OrgUnit;
 import org.hisp.dhis.response.object.ObjectResponse;
+import org.rtsl.dhis2.cucumber.Dhis2HttpClient;
 import org.rtsl.dhis2.cucumber.TestUniqueId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +65,10 @@ public class Dhis2StepDefinitions {
     @Inject
     @Named("testAtomicInt")
     private AtomicInteger testCounter;
+
+    @Inject
+    @Named("testClient")
+    private Dhis2HttpClient dhis2HttpClient;
 
     String currentFaciliyId = null;
 
@@ -100,6 +105,17 @@ public class Dhis2StepDefinitions {
     @Given("I register that Facility for program {string}")
     public void i_register_that_facility(String programName) throws Exception {
 
+        Map<String, Object> templateContext = Map.of(
+                "data", this,
+                "programName", programName);
+
+        String response = dhis2HttpClient.doPut(
+                "api/programs/pMIglSEqPGS?mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
+                "register_facility_to_program.tpl.json",
+                templateContext);
+
+        LOGGER.info("Response {}", response);
+        /*
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_33);
         cfg.setClassForTemplateLoading(this.getClass(), "/templates/");
         Template registerTemplate = cfg.getTemplate("register_facility_to_program.tpl.json");
@@ -121,7 +137,7 @@ public class Dhis2StepDefinitions {
 
             }
 
-        }
+        } /**/
     }
 
     @Given("I create a new Patient for this Facility with the following characteristics")
@@ -132,12 +148,12 @@ public class Dhis2StepDefinitions {
 
         // Creating a new TEI
         TrackedEntityInfo newTEI = new TrackedEntityInfo();
-        newTEI.setOrgUnit("KBILynmuWsE"); // todo: use current facility
+        newTEI.setOrgUnit(currentFaciliyId); // todo: use current facility
         newTEI.setTrackedEntityType("MCPQUTHX1Ze"); // Person
 
         // Creating new Enrollment
         EnrollmentInfo newEnrollment = new EnrollmentInfo();
-        newEnrollment.setOrgUnit("KBILynmuWsE"); // todo: use current facility
+        newEnrollment.setOrgUnit(currentFaciliyId); // todo: use current facility
         newEnrollment.setProgram("pMIglSEqPGS"); // Hypertension & Diabetes
         newEnrollment.setEnrolledAt(new Date());
         newEnrollment.setOccurredAt(new Date());

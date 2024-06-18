@@ -89,7 +89,11 @@
 
     --> 
                     
-                             
+    <bean id="testClient" class="org.rtsl.dhis2.cucumber.Dhis2HttpClient" scope="singleton">
+        <constructor-arg value="${dhis2.api.url}" />
+        <constructor-arg value="${dhis2.api.username}" />
+        <constructor-arg value="${dhis2.api.password}" />
+    </bean>                      
                                                
                                               
                                                                           
