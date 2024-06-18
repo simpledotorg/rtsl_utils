@@ -2,7 +2,7 @@
 
 # Prerequisite
 
-brew install openjdk maven
+brew install openjdk@21 maven
 
 
 # To compile the whole project
@@ -29,6 +29,9 @@ Tests results can be found here:
 cd rtsl_util/CommonUtils/Dhis2CucumberTestTool
 ls rtsl_util/CommonUtils/Dhis2CucumberTestTool/target/cucumber-reports 
 ```
+
+
+
 
 
 
