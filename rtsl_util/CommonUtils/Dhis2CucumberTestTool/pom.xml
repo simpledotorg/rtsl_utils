@@ -97,6 +97,13 @@
             <classifier>v40.2.2</classifier>
             <version>3.0.0</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.33</version>
+        </dependency>
+
         <!--
         <dependency>
             <groupId>org.hisp.dhis.integration.sdk</groupId>

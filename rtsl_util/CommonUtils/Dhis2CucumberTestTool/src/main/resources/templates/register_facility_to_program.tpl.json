@@ -1,0 +1,10 @@
+{
+    "name": "Hypertension & Diabetes",
+    "shortName": "ncd_htn",
+    "programType": "WITH_REGISTRATION",
+    "organisationUnits": [
+        {
+            "id": "${data.currentFaciliyId}"
+        }
+    ]
+}

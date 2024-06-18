@@ -3,15 +3,19 @@ Feature: Demo Dashboard Auditing
 
   Scenario: Load Test Patients and check results
     Given I create a new Facility
+    Given I register that Facility for program "YQj5qpbzQxh"
 
     #
     # Patient 1 - Dead patient
     #
     Given I create a new Patient for this Facility with the following characteristics
-              | Field | Value |
-              | Name  | Joe Bloggs  |
-              | Registration_Date  | 2024-01-16  |
-              | Has_hypertension | 'YES' |
+              | sB1IHYu2xQT | Test |
+              | YJGACwhN0St  | true |
+              | jCRIT4GMMOS  | YES  |
+              | NI0QRzJvQ0k | 32 |
+              | Ot616hCy9j7 | KOLARA |
+              | ENRjVGxVL6l | TEST |
+              | v4DnYfXn9Mu | YES |
     Given That patient visited for Hypertension on "2024-01-16" with Blood Pressure reading 145:92
     Given That patient visited for Hypertension on "2024-01-16" with Blood Pressure reading 145:92
     Given That patient visited for Hypertension on "2024-02-02" with Blood Pressure reading 140:87
