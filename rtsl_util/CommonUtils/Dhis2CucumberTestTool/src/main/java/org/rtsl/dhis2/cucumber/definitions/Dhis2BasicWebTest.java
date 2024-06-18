@@ -1,6 +1,5 @@
 package org.rtsl.dhis2.cucumber.definitions;
 
-import io.cucumber.java.en.Given;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import org.openqa.selenium.By;

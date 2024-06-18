@@ -1,39 +1,20 @@
 package org.rtsl.dhis2.cucumber.definitions;
 
-import freemarker.core.ParseException;
-import freemarker.template.Configuration;
-import freemarker.template.MalformedTemplateNameException;
-import freemarker.template.Template;
-import freemarker.template.Version;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import org.apache.hc.client5.http.classic.methods.HttpGet;
-import org.apache.hc.client5.http.classic.methods.HttpPut;
-import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
-import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.apache.hc.client5.http.io.HttpClientConnectionManager;
-import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.hisp.dhis.Dhis2;
 import org.hisp.dhis.api.model.v40_2_2.AttributeInfo;
 import org.hisp.dhis.api.model.v40_2_2.Body;
 import org.hisp.dhis.api.model.v40_2_2.EnrollmentInfo;
-import org.hisp.dhis.api.model.v40_2_2.OrganisationUnit;
-import org.hisp.dhis.api.model.v40_2_2.Program;
 import org.hisp.dhis.api.model.v40_2_2.TrackedEntityInfo;
 import org.hisp.dhis.api.model.v40_2_2.TrackerImportReport;
 import org.hisp.dhis.integration.sdk.api.Dhis2Client;
@@ -47,8 +28,6 @@ import org.slf4j.LoggerFactory;
 public class Dhis2StepDefinitions {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Dhis2StepDefinitions.class);
-
-    HttpClientConnectionManager httpClientManager;
 
     @Inject
     @Named("testUniqueId")
@@ -89,7 +68,7 @@ public class Dhis2StepDefinitions {
     }
 
     @Given("I create a new Facility")
-    public void i_create_a_new_facility() {
+    public void i_create_a_new_facility() throws Exception {
 
         OrgUnit newFacility = new OrgUnit(null, testUniqueId.get());
         newFacility.setShortName(testUniqueId.get());
@@ -100,6 +79,12 @@ public class Dhis2StepDefinitions {
         this.currentFaciliyId = newFacilityId;
         LOGGER.info("created Facility: <{}> <{}>", newFacility.getId(), newFacility.getName());
         scenario.log("Created new facility with Id:" + newFacility.getId() + " and Name:" + newFacility.getName());
+
+        // TODO : make current user able to work with this facility
+        String currentUserId = dhis2HttpClient.getCurrentUserId();
+        Map<String, Object> templateContext = Map.of("data", this);
+        dhis2HttpClient.doPatch("api/users/" + currentUserId + "?mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE", "assign_user_to_facility.tpl.json", templateContext);
+
     }
 
     @Given("I register that Facility for program {string}")
@@ -115,33 +100,25 @@ public class Dhis2StepDefinitions {
                 templateContext);
 
         LOGGER.info("Response {}", response);
-        /*
-        Configuration cfg = new Configuration(Configuration.VERSION_2_3_33);
-        cfg.setClassForTemplateLoading(this.getClass(), "/templates/");
-        Template registerTemplate = cfg.getTemplate("register_facility_to_program.tpl.json");
-        Map<String, Object> templateContext = Map.of(
-                "data", this,
-                "programName", programName);
-        StringWriter sw = new StringWriter();
-        registerTemplate.process(templateContext, sw);
-        String body = sw.toString();
-        LOGGER.info(body);
-
-        try (CloseableHttpClient httpClient = HttpClients.createDefault();) {
-            HttpPut request = new HttpPut("https://dhis2-sandbox2.simple.org/api/programs/pMIglSEqPGS?mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE");
-            request.setEntity(new StringEntity(body));
-            request.setHeader("Accept", "application/json");
-            request.setHeader("Content-Type", "application/json");
-            request.setHeader("Authorization", "Basic YWRtaW46ZGlzdHJpY3Q=");
-            try (CloseableHttpResponse response = httpClient.execute(request)) {
-
-            }
-
-        } /**/
     }
 
     @Given("I create a new Patient for this Facility with the following characteristics")
-    public void i_create_a_new_patient_for_this_facility_with_the_following_characteristics(Map<String, String> dataTable) {
+    public void i_create_a_new_patient_for_this_facility_with_the_following_characteristics(Map<String, String> dataTable) throws Exception {
+
+        Map<String, Object> templateContext = Map.of(
+                "data", this,
+                "dataTable", dataTable);
+
+        String response = dhis2HttpClient.doPost(
+                "api/tracker?async=false&mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
+                "create_and_enroll_tei.tpl.json",
+                templateContext);
+
+        LOGGER.info("Response {}", response);
+    }
+
+    //@Given("I create a new Patient for this Facility with the following characteristics")
+    public void i_create_a_new_patient_for_this_facility_with_the_following_characteristics_OLD(Map<String, String> dataTable) {
 
         LOGGER.info("Creating patient for data: <{}> ", dataTable);
         LOGGER.info("{}", new Date().toString());

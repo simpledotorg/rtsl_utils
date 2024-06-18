@@ -1,0 +1,16 @@
+[
+  {
+    "op": "add",
+    "path": "/organisationUnits",
+    "value": [
+      {
+        "id": "${data.currentFaciliyId}"
+      }
+    ]
+  },
+  {
+    "op": "add",
+    "path": "/attributeValues",
+    "value": []
+  }
+]
