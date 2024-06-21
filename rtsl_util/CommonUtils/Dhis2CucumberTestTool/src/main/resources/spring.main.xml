@@ -71,28 +71,16 @@
                   
     <bean id="dhisSdkClient" factory-bean="dhis2SdkClientBuilder" factory-method="build" />
                        
-    
-    <!-- freemarker templates 
-
-<bean id="templateFolderUrl" class="java.lang.ClassLoader" factory-method="getSystemResource" >
- <constructor-arg value="templates" />
-</bean>
-<bean id="templateFolderUri" factory-bean="templateFolderUrl" factory-method="toURI" />
-<bean id="templateFolder" class="java.io.File" >
- <constructor-arg ref="templateFolderUri" />
-</bean>
-
-
-<bean id="freemarkerConfig" class="freemarker.template.Configuration" scope="singleton">
- <property name="directoryForTemplateLoading" ref="templateFolder"/>
-</bean>
-
-    --> 
                     
     <bean id="testClient" class="org.rtsl.dhis2.cucumber.Dhis2HttpClient" scope="singleton">
         <constructor-arg value="${dhis2.api.url}" />
         <constructor-arg value="${dhis2.api.username}" />
         <constructor-arg value="${dhis2.api.password}" />
+    </bean>    
+         
+         
+    <bean id="testIdConverter" class="org.rtsl.dhis2.cucumber.Dhis2IdConverter" scope="singleton">
+        <constructor-arg ref="testClient" />
     </bean>                      
                                                
                                               

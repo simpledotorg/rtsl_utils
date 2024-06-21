@@ -11,10 +11,10 @@ Feature: Demo Dashboard Auditing
     Given I create a new Patient for this Facility with the following characteristics
               | sB1IHYu2xQT | Test |
               | YJGACwhN0St  | true |
-              | jCRIT4GMMOS  | YES  |
+              | HTN diagnosis  | YES  |
               | NI0QRzJvQ0k | 32 |
               | Ot616hCy9j7 | KOLARA |
-              | ENRjVGxVL6l | TEST |
+              | Given name | TEST |
               | v4DnYfXn9Mu | YES |
     Given That patient visited for Hypertension on "2024-01-16" with Blood Pressure reading 145:92
     Given That patient visited for Hypertension on "2024-01-16" with Blood Pressure reading 145:92

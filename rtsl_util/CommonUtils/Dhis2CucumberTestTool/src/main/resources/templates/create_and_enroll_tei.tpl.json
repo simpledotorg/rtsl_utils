@@ -4,6 +4,18 @@
             "trackedEntityType": "MCPQUTHX1Ze",
             "orgUnit": "${data.currentFaciliyId}",
             "attributes": [
+            ],
+            "enrollments": [
+                {
+                    "enrolledAt": "2019-08-19T00:00:00.000",
+                    "enrollment": "MNWZ6hnuhSw",
+                    "occurredAt": "2019-08-19T00:00:00.000",
+                    "orgUnit": "${data.currentFaciliyId}",
+                    "program": "pMIglSEqPGS",
+                    "status": "ACTIVE",
+                    "trackedEntity": "Kj6vYde4LHh",
+                    "trackedEntityType": "MCPQUTHX1Ze"
+                }
             ]
         }
     ]

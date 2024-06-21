@@ -21,6 +21,7 @@ import org.hisp.dhis.integration.sdk.api.Dhis2Client;
 import org.hisp.dhis.model.OrgUnit;
 import org.hisp.dhis.response.object.ObjectResponse;
 import org.rtsl.dhis2.cucumber.Dhis2HttpClient;
+import org.rtsl.dhis2.cucumber.Dhis2IdConverter;
 import org.rtsl.dhis2.cucumber.TestUniqueId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,10 @@ public class Dhis2StepDefinitions {
     @Named("testClient")
     private Dhis2HttpClient dhis2HttpClient;
 
+    @Inject
+    @Named("testIdConverter")
+    private Dhis2IdConverter testIdConverter;
+
     String currentFaciliyId = null;
 
     public String getCurrentFaciliyId() {
@@ -70,6 +75,7 @@ public class Dhis2StepDefinitions {
     @Given("I create a new Facility")
     public void i_create_a_new_facility() throws Exception {
 
+        // USING dhis2-java-client
         OrgUnit newFacility = new OrgUnit(null, testUniqueId.get());
         newFacility.setShortName(testUniqueId.get());
         newFacility.setOpeningDate(new Date());
@@ -102,12 +108,14 @@ public class Dhis2StepDefinitions {
         LOGGER.info("Response {}", response);
     }
 
+    @Given("I create a new TEI for this OrgUnit with the following characteristics")
     @Given("I create a new Patient for this Facility with the following characteristics")
     public void i_create_a_new_patient_for_this_facility_with_the_following_characteristics(Map<String, String> dataTable) throws Exception {
+        Map<String, String> convertedDataTable = testIdConverter.convertTeiAttributes(dataTable);
 
         Map<String, Object> templateContext = Map.of(
                 "data", this,
-                "dataTable", dataTable);
+                "dataTable", convertedDataTable);
 
         String response = dhis2HttpClient.doPost(
                 "api/tracker?async=false&mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
