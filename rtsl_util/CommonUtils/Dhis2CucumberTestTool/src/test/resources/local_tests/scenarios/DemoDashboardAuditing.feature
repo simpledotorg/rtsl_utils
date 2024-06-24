@@ -11,7 +11,7 @@ Feature: Demo Dashboard Auditing
     Given I create a new Patient for this Facility with the following characteristics
               | sB1IHYu2xQT | Test |
               | YJGACwhN0St  | true |
-              | HTN diagnosis  | YES  |
+              | HTN diagnosis | YES  |
               | NI0QRzJvQ0k | 32 |
               | Ot616hCy9j7 | KOLARA |
               | Given name | TEST |
