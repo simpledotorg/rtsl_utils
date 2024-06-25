@@ -6,6 +6,7 @@ export TARGET_DIR=${BASEDIR}/../../../../target
 #     --object-factory io.cucumber.spring.SpringFactory \
 
 java \
+    -Dorg.rtsl.dhis2.testtool.properties=${BASEDIR}/testtool.properties \
     -Dlogback.configurationFile=${BASEDIR}/logback.xml -Dfile.ending=UTF8 \
     -jar ${TARGET_DIR}/Dhis2CucumberTestTool-*.jar \
     --object-factory io.cucumber.spring.SpringFactory \
