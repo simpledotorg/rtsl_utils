@@ -92,7 +92,7 @@ public class InjectingPropertiesModifier implements Function<Properties, Propert
             LOGGER.info("Environement variables will be used for substitution");
             returnProperties.putAll(System.getenv());
             if (LOGGER.isTraceEnabled()) {
-                LOGGER.debug("Details of Environment Variables usable for substitution:");
+                LOGGER.info("Details of Environment Variables usable for substitution:");
                 PropertiesDisplayer.tabularDisplay(returnProperties);
             }
         }
