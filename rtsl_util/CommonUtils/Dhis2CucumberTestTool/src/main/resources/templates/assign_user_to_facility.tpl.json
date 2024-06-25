@@ -1,16 +1,17 @@
-[
-  {
-    "op": "add",
-    "path": "/organisationUnits",
-    "value": [
-      {
-        "id": "${data.currentFaciliyId}"
-      }
+{
+    "organisationUnit": [
+        {
+            "id": "${data.currentFaciliyId}"
+        }
+    ],
+    "dataViewOrganisationUnit": [
+        {
+            "id": "${data.currentFaciliyId}"
+        }
+    ],
+    "teiSearchOrganisationUnit": [
+        {
+            "id": "${data.currentFaciliyId}"
+        }
     ]
-  },
-  {
-    "op": "add",
-    "path": "/attributeValues",
-    "value": []
-  }
-]
+}

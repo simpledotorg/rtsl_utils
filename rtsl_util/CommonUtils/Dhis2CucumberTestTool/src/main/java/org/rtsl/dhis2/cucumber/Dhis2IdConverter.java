@@ -21,8 +21,6 @@ public final class Dhis2IdConverter {
 
     public Dhis2IdConverter(Dhis2HttpClient dhis2HttpClient) throws Exception {
         this.dhis2HttpClient = dhis2HttpClient;
-
-        getTeiAttributes();
     }
 
     private void getTeiAttributes() throws Exception {

@@ -1,5 +1,9 @@
 package org.rtsl.dhis2.cucumber.definitions;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
@@ -56,6 +60,8 @@ public class Dhis2StepDefinitions {
 
     String currentFaciliyId = null;
 
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
     public String getCurrentFaciliyId() {
         return currentFaciliyId;
     }
@@ -73,6 +79,7 @@ public class Dhis2StepDefinitions {
     }
 
     @Given("I create a new Facility")
+    @Given("I create a new OrgUnit")
     public void i_create_a_new_facility() throws Exception {
 
         // USING dhis2-java-client
@@ -83,13 +90,28 @@ public class Dhis2StepDefinitions {
         String newFacilityId = response.getResponse().getUid();
         newFacility.setId(newFacilityId);
         this.currentFaciliyId = newFacilityId;
-        LOGGER.info("created Facility: <{}> <{}>", newFacility.getId(), newFacility.getName());
-        scenario.log("Created new facility with Id:" + newFacility.getId() + " and Name:" + newFacility.getName());
+        LOGGER.info("created OrgUnit: <{}> <{}>", newFacility.getId(), newFacility.getName());
+        scenario.log("Created new OrgUnit with Id:" + newFacility.getId() + " and Name:" + newFacility.getName());
+    }
 
-        // TODO : make current user able to work with this facility
+    @Given("I assign the current user to the current orgUnit")
+    public void i_assign_the_current_user_to_the_current_org_unit() throws Exception {
+        //
+        // Links the current User to the current facility
+        // 
         String currentUserId = dhis2HttpClient.getCurrentUserId();
-        Map<String, Object> templateContext = Map.of("data", this);
-        dhis2HttpClient.doPatch("api/users/" + currentUserId + "?mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE", "assign_user_to_facility.tpl.json", templateContext);
+        String baseUserJson = dhis2HttpClient.doGet("api/users/" + currentUserId + "?fields=id,name,organisationUnits,userRoles,dataViewOrganisationUnits,teiSearchOrganisationUnits");
+        JsonNode rootNode = MAPPER.readTree(baseUserJson);
+        ObjectNode newId = MAPPER.createObjectNode();
+        newId.put("id", currentFaciliyId);
+        ArrayNode organisationUnits = (ArrayNode) rootNode.get("organisationUnits");
+        organisationUnits.add(newId);
+        ArrayNode dataViewOrganisationUnits = (ArrayNode) rootNode.get("dataViewOrganisationUnits");
+        dataViewOrganisationUnits.add(newId);
+        ArrayNode teiSearchOrganisationUnits = (ArrayNode) rootNode.get("teiSearchOrganisationUnits");
+        teiSearchOrganisationUnits.add(newId);
+        String modifiedJson = MAPPER.writeValueAsString(rootNode);
+        dhis2HttpClient.doPutWithBody("api/users/" + currentUserId + "?mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE", modifiedJson);
 
     }
 
@@ -100,7 +122,7 @@ public class Dhis2StepDefinitions {
                 "data", this,
                 "programName", programName);
 
-        String response = dhis2HttpClient.doPut(
+        String response = dhis2HttpClient.doPutWithTemplate(
                 "api/programs/pMIglSEqPGS?mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
                 "register_facility_to_program.tpl.json",
                 templateContext);

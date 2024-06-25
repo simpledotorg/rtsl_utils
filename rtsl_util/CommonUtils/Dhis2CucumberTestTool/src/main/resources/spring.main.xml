@@ -79,7 +79,7 @@
     </bean>    
          
          
-    <bean id="testIdConverter" class="org.rtsl.dhis2.cucumber.Dhis2IdConverter" scope="singleton">
+    <bean id="testIdConverter" class="org.rtsl.dhis2.cucumber.Dhis2IdConverter" init-method="getTeiAttributes" scope="singleton">
         <constructor-arg ref="testClient" />
     </bean>                      
                                                

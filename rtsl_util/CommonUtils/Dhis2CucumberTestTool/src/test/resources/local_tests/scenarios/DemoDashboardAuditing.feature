@@ -3,6 +3,7 @@ Feature: Demo Dashboard Auditing
 
   Scenario: Load Test Patients and check results
     Given I create a new Facility
+    Given I assign the current user to the current orgUnit
     Given I register that Facility for program "YQj5qpbzQxh"
 
     #
