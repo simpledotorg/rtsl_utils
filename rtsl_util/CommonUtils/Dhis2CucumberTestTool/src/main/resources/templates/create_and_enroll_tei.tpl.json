@@ -6,7 +6,7 @@
             "attributes": [
                 <#list dataTable as currentKey, currentValue>
                         {
-                            "attribute": "${currentKey} ",
+                            "attribute": "${currentKey}",
                             "value": "${currentValue}"
                         }<#sep>, </#sep>
                         </#list>
