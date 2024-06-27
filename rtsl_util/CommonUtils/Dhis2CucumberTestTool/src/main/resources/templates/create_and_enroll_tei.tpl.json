@@ -1,6 +1,7 @@
 {
     "trackedEntities": [
         {
+          "trackedEntity": "${data.currentTeiId}",
             "trackedEntityType": "MCPQUTHX1Ze",
             "orgUnit": "${data.currentFaciliyId}",
             "attributes": [
@@ -9,8 +10,19 @@
                             "attribute": "${currentKey}",
                             "value": "${currentValue}"
                         }<#sep>, </#sep>
-                        </#list>
-            ]
+                </#list>
+            ],
+          "enrollments": [
+            {
+              "enrollment": "${data.currentEnrollmentId}",
+              "trackedEntity": "${data.currentTeiId}",
+              "program": "pMIglSEqPGS",
+              "orgUnit": "${data.currentFaciliyId}",
+              "trackedEntityType": "MCPQUTHX1Ze",
+              "enrolledAt": "2024-01-16T00:00:00.000",
+              "occurredAt": "2024-01-16T00:00:00.000"
+             }
+          ]
         }
     ]
 }

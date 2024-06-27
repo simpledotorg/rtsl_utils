@@ -1,0 +1,24 @@
+{
+  "events": [
+    {
+      "event": "${data.currentEventId}",
+      "enrollment": "${data.currentEnrollmentId}",
+      "trackedEntity": "${data.currentTeiId}",
+      "dataValues": [
+        <#list dataTable as currentKey, currentValue>
+        {
+          "dataElement": "${currentKey}",
+          "value": "${currentValue}"
+        }<#sep>, </#sep>
+        </#list>
+      ],
+      "enrollmentStatus": "ACTIVE",
+      "occurredAt": "2024-01-16T00:00:00.000",
+      "orgUnit": "${data.currentFaciliyId}",
+      "program": "pMIglSEqPGS",
+      "programStage": "anb2cjLx3WM",
+      "scheduledAt": "2024-01-16T00:00:00.000",
+      "status": "COMPLETED"
+    }
+  ]
+}

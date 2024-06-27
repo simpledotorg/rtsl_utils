@@ -59,11 +59,23 @@ public class Dhis2StepDefinitions {
     private Dhis2IdConverter testIdConverter;
 
     String currentFaciliyId = null;
+    String currentEnrollmentId = null;
+    String currentTeiId = null;
+    String currentEventId = null;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public String getCurrentFaciliyId() {
         return currentFaciliyId;
+    }
+    public String getcurrentEventId() {
+        return currentEventId;
+    }
+    public String getCurrentEnrollmentId() {
+        return currentEnrollmentId;
+    }
+    public String getCurrentTeiId() {
+        return currentTeiId;
     }
 
     @Given("I have {int} cukes in my belly")
@@ -100,7 +112,7 @@ public class Dhis2StepDefinitions {
         // Links the current User to the current facility
         // 
         String currentUserId = dhis2HttpClient.getCurrentUserId();
-        String baseUserJson = dhis2HttpClient.doGet("api/users/" + currentUserId + "?fields=id,name,organisationUnits,userRoles,dataViewOrganisationUnits,teiSearchOrganisationUnits");
+        String baseUserJson = dhis2HttpClient.doGet("api/users/" + currentUserId + "?fields=id,name,organisationUnits,userGroups,userRoles,dataViewOrganisationUnits,teiSearchOrganisationUnits");
         JsonNode rootNode = MAPPER.readTree(baseUserJson);
         ObjectNode newId = MAPPER.createObjectNode();
         newId.put("id", currentFaciliyId);
@@ -134,7 +146,9 @@ public class Dhis2StepDefinitions {
     @Given("I create a new Patient for this Facility with the following characteristics")
     public void i_create_a_new_patient_for_this_facility_with_the_following_characteristics(Map<String, String> dataTable) throws Exception {
         Map<String, String> convertedDataTable = testIdConverter.convertTeiAttributes(dataTable);
-
+        this.currentEnrollmentId = dhis2HttpClient.getGenerateUniqueId();
+        this.currentTeiId = dhis2HttpClient.getGenerateUniqueId();
+        convertedDataTable.remove("enrollmentDate");
         Map<String, Object> templateContext = Map.of(
                 "data", this,
                 "dataTable", convertedDataTable);
@@ -145,6 +159,23 @@ public class Dhis2StepDefinitions {
                 templateContext);
 
         LOGGER.info("Response {}", response);
+        scenario.log("Created new TEI with Id:" + currentTeiId + " and Enrollment with Id:" + currentEnrollmentId);
+    }
+
+    @Given("That patient visited for Hypertension on {string} with Blood Pressure reading {int}:{int}")
+    public void that_patient_visited_for_hypertension_on_with_blood_pressure_reading(String string, Integer int1, Integer int2) throws Exception {
+        Map<String, Integer> convertedDataTable = Map.of("IxEwYiq1FTq", int1, "yNhtHKtKkO1", int2);
+        Map<String, Object> templateContext = Map.of(
+                "data", this,
+                "dataTable", convertedDataTable);
+        this.currentEventId = dhis2HttpClient.getGenerateUniqueId();
+        String response = dhis2HttpClient.doPost(
+                "api/tracker?async=false&mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
+                "create_event_tei.tpl.json",
+                templateContext);
+
+        LOGGER.info("Response {}", response);
+        scenario.log("Created new TEI with Id:" + currentTeiId + " and Event with Id:" + currentEventId);
     }
 
     //@Given("I create a new Patient for this Facility with the following characteristics")
