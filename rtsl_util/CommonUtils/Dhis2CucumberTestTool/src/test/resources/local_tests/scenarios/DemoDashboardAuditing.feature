@@ -21,13 +21,12 @@ Feature: Demo Dashboard Auditing
               | fI1P3Mg1zOZ   | ACTIVE    |
               | D9pz1vAbGPK   | true      |
     Given That patient visited for Hypertension on "2024-01-16" with Blood Pressure reading 145:92
-
-  Scenario: Load Test Patients Set 2
     Given That patient visited for Hypertension on "2024-01-16" with Blood Pressure reading 145:92
     Given That patient visited for Hypertension on "2024-02-02" with Blood Pressure reading 140:87
     Given That patient visited for Hypertension on "2024-05-02" with Blood Pressure reading 136:84
 #    Given That patient died on "2024-06-02"
 
+  Scenario: Load Test Patients Set 2
     #
     # Patient 2 - Not a hypertension patient
     #
