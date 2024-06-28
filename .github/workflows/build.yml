@@ -41,3 +41,4 @@ jobs:
         with:
           name: Dhis2CucumberTestTool-${{github.ref_name}}.${{github.run_number}}.jar
           path: rtsl_util/CommonUtils/Dhis2CucumberTestToolpackager/target/Dhis2CucumberTestTool-${{github.ref_name}}.${{github.run_number}}.jar
+      - run: find . -name "*.jar"
