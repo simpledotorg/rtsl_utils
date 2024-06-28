@@ -175,7 +175,7 @@ public class Dhis2StepDefinitions {
                 templateContext);
 
         LOGGER.info("Response {}", response);
-        scenario.log("Created new TEI with Id:" + currentTeiId + " and Event with Id:" + currentEventId);
+        scenario.log( "Created new event with Id:" + currentEventId+ " for the TEI with Id:" + currentTeiId);
     }
 
     //@Given("I create a new Patient for this Facility with the following characteristics")

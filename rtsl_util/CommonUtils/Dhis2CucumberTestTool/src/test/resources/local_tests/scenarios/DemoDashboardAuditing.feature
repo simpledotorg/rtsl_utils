@@ -24,9 +24,8 @@ Feature: Demo Dashboard Auditing
     Given That patient visited for Hypertension on "2024-01-16" with Blood Pressure reading 145:92
     Given That patient visited for Hypertension on "2024-02-02" with Blood Pressure reading 140:87
     Given That patient visited for Hypertension on "2024-05-02" with Blood Pressure reading 136:84
-#    Given That patient died on "2024-06-02"
+#    Given That patient died on "2024-06-02" // TODO
 
-  Scenario: Load Test Patients Set 2
     #
     # Patient 2 - Not a hypertension patient
     #
@@ -35,7 +34,7 @@ Feature: Demo Dashboard Auditing
               | Name  | Fabian Moore  |
               | Registration_Date  | 2024-03-02  |
               | Has_hypertension | 'No' |
-    Given That patient visited for Blood Sugar on "2024-01-16"
+#    Given That patient visited for Blood Sugar on "2024-01-16" // TODO
 
     #
     # Patient 3
