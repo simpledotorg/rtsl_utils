@@ -36,12 +36,8 @@ jobs:
       - name: Publish Images
         working-directory: rtsl_util
         run:  docker push simpledotorg/prometheusdbexporter:${{github.ref_name}}.${{github.run_number}}
-
-
-
-       
-
-
-
-
-        
+      - name: Archive Dhis2TestTool jar file
+        uses: actions/upload-artifact@v4
+        with:
+          name: Dhis2CucumberTestTool-${{github.ref_name}}.${{github.run_number}}.jar
+          path: rtsl_util/CommonUtils/Dhis2CucumberTestToolpackager/target/Dhis2CucumberTestTool-${{github.ref_name}}.${{github.run_number}}.jar
