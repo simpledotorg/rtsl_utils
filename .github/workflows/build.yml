@@ -40,5 +40,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Dhis2CucumberTestTool-${{github.ref_name}}.${{github.run_number}}.jar
-          path: rtsl_util/CommonUtils/Dhis2CucumberTestToolpackager/target/Dhis2CucumberTestTool-${{github.ref_name}}.${{github.run_number}}.jar
+          path: rtsl_util/CommonUtils/Dhis2CucumberTestTool/target/Dhis2CucumberTestTool-${{github.ref_name}}.${{github.run_number}}.jar
       - run: find . -name "*.jar"
