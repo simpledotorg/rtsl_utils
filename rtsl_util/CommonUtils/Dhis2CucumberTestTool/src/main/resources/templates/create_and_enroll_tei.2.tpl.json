@@ -7,9 +7,9 @@
             ],
             "enrollments": [
                 {
-                    "enrolledAt": "2019-08-19T00:00:00.000",
+                    "enrolledAt": "2024-01-16T00:00:00.000",
                     "enrollment": "MNWZ6hnuhSw",
-                    "occurredAt": "2019-08-19T00:00:00.000",
+                    "occurredAt": "2024-01-16T00:00:00.000",
                     "orgUnit": "${data.currentFaciliyId}",
                     "program": "pMIglSEqPGS",
                     "status": "ACTIVE",

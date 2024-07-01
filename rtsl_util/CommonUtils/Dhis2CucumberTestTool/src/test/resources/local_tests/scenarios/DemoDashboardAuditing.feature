@@ -30,20 +30,32 @@ Feature: Demo Dashboard Auditing
     # Patient 2 - Not a hypertension patient
     #
     Given I create a new Patient for this Facility with the following characteristics
-              | Field | Value |
-              | Name  | Fabian Moore  |
-              | Registration_Date  | 2024-03-02  |
-              | Has_hypertension | 'No' |
+      | Given name | Fabian |
+      | Family name | Moore |
+      | HTN diagnosis | No  |
+      | v4DnYfXn9Mu | YES |
+      | NI0QRzJvQ0k | 32 |
+      | Ot616hCy9j7 | KOLARA |
+      | enrollmentDate| 2024-03-02 |
+      | fI1P3Mg1zOZ   | ACTIVE    |
+      | D9pz1vAbGPK   | true      |
+      | YJGACwhN0St  | true |
 #    Given That patient visited for Blood Sugar on "2024-01-16" // TODO
 
     #
     # Patient 3
     #
     Given I create a new Patient for this Facility with the following characteristics
-              | Field | Value |
-              | Name  | Sue Perkins  |
-              | Registration_Date  | 2023-10-20  |
-              | Has_hypertension | 'YES' |
+      | Given name | Sue |
+      | Family name | Perkins |
+      | HTN diagnosis | YES  |
+      | v4DnYfXn9Mu | YES |
+      | NI0QRzJvQ0k | 32 |
+      | Ot616hCy9j7 | KOLARA |
+      | enrollmentDate| 2023-10-20 |
+      | fI1P3Mg1zOZ   | ACTIVE    |
+      | D9pz1vAbGPK   | true      |
+      | YJGACwhN0St  | true |
     Given That patient visited for Hypertension on "2023-10-20" with Blood Pressure reading 147:89
     Given That patient visited for Hypertension on "2023-11-27" with Blood Pressure reading 142:87
     Given That patient visited for Hypertension on "2024-01-04" with Blood Pressure reading 140:83
@@ -55,16 +67,21 @@ Feature: Demo Dashboard Auditing
     # Patient 3
     #
     Given I create a new Patient for this Facility with the following characteristics
-              | Field | Value |
-              | Name  | Sue Perkins  |
-              | Registration_Date  | 2023-10-20  |
-              | Has_hypertension | 'YES' |
-    Given That patient visited for Hypertension on "2023-10-20" with Blood Pressure reading 147:89
-    Given That patient visited for Hypertension on "2023-11-27" with Blood Pressure reading 142:87
-    Given That patient visited for Hypertension on "2024-01-04" with Blood Pressure reading 140:83
-    Given That patient visited for Hypertension on "2024-02-07" with Blood Pressure reading 135:84
-    Given That patient visited for Hypertension on "2024-03-03" with Blood Pressure reading 134:83
-    Given That patient visited for Hypertension on "2024-01-04" with Blood Pressure reading 147:87
+      | Given name | Kiran |
+      | Family name | Kishor |
+      | HTN diagnosis | YES  |
+      | v4DnYfXn9Mu | YES |
+      | NI0QRzJvQ0k | 32 |
+      | Ot616hCy9j7 | KOLARA |
+      | enrollmentDate| 2023-01-10 |
+      | fI1P3Mg1zOZ   | ACTIVE    |
+      | D9pz1vAbGPK   | true      |
+      | YJGACwhN0St  | true |
+    Given That patient visited for Hypertension on "2023-10-20" with Blood Pressure reading 142:95
+    Given That patient visited for Hypertension on "2023-11-27" with Blood Pressure reading 139:90
+    Given That patient visited for Hypertension on "2024-01-04" with Blood Pressure reading 132:82
+    Given That patient visited for Hypertension on "2024-02-07" with Blood Pressure reading 128:78
+    Given That patient visited for Hypertension on "2024-03-03" with Blood Pressure reading 140:88
 
     #
     # Calculate aggregates
