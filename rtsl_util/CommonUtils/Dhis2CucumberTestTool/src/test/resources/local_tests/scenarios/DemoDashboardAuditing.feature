@@ -96,7 +96,4 @@ Feature: Demo Dashboard Auditing
     Then I navigate to the DHIS2 homepage
     Then I navigate to web dashboard "ONjdoWOUDp9"
     Then I filter only on the Current Facility
-    
-
-
 

@@ -2,7 +2,7 @@
     "trackedEntities": [
         {
             "trackedEntityType": "MCPQUTHX1Ze",
-            "orgUnit": "${data.currentFaciliyId}",
+            "orgUnit": "${data.currentFacilityId}",
             "attributes": [
             ],
             "enrollments": [
@@ -10,7 +10,7 @@
                     "enrolledAt": "2024-01-16T00:00:00.000",
                     "enrollment": "MNWZ6hnuhSw",
                     "occurredAt": "2024-01-16T00:00:00.000",
-                    "orgUnit": "${data.currentFaciliyId}",
+                    "orgUnit": "${data.currentFacilityId}",
                     "program": "pMIglSEqPGS",
                     "status": "ACTIVE",
                     "trackedEntity": "Kj6vYde4LHh",

@@ -14,7 +14,7 @@
       ],
       "enrollmentStatus": "ACTIVE",
       "occurredAt": "2024-01-16T00:00:00.000",
-      "orgUnit": "${data.currentFaciliyId}",
+      "orgUnit": "${data.currentFacilityId}",
       "program": "pMIglSEqPGS",
       "programStage": "anb2cjLx3WM",
       "scheduledAt": "2024-01-16T00:00:00.000",

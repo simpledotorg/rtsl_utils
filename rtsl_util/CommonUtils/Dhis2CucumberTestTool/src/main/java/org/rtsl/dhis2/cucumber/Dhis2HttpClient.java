@@ -152,6 +152,13 @@ public class Dhis2HttpClient {
         return parsedResponse.get("id");
     }
 
+    public String getParentOrganisationUnitId(String childOrganisationUnitId) throws Exception {
+        String response = doGet("api/organisationUnits/"+childOrganisationUnitId+"?fields=parent[id]");
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode parsedResponse = objectMapper.readTree(response);
+        return parsedResponse.get("parent").get("id").asText();
+    }
+
     public String getGenerateUniqueId() throws Exception {
         String response = doGet("api/system/id");
         ObjectMapper objectMapper = new ObjectMapper();

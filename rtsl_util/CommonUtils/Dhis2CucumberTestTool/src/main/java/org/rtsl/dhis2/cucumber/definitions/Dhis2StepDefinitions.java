@@ -9,26 +9,18 @@ import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.hisp.dhis.Dhis2;
-import org.hisp.dhis.api.model.v40_2_2.AttributeInfo;
-import org.hisp.dhis.api.model.v40_2_2.Body;
-import org.hisp.dhis.api.model.v40_2_2.EnrollmentInfo;
-import org.hisp.dhis.api.model.v40_2_2.TrackedEntityInfo;
-import org.hisp.dhis.api.model.v40_2_2.TrackerImportReport;
+import org.hisp.dhis.api.model.v40_2_2.*;
 import org.hisp.dhis.integration.sdk.api.Dhis2Client;
-import org.hisp.dhis.model.OrgUnit;
-import org.hisp.dhis.response.object.ObjectResponse;
 import org.rtsl.dhis2.cucumber.Dhis2HttpClient;
 import org.rtsl.dhis2.cucumber.Dhis2IdConverter;
 import org.rtsl.dhis2.cucumber.TestUniqueId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Dhis2StepDefinitions {
 
@@ -58,22 +50,42 @@ public class Dhis2StepDefinitions {
     @Named("testIdConverter")
     private Dhis2IdConverter testIdConverter;
 
-    String currentFaciliyId = null;
+    String currentFacilityId = null;
+    String currentOrganisationUnitId = null;
+    String rootOrganisationUnitId = null;
     String currentEnrollmentId = null;
     String currentTeiId = null;
     String currentEventId = null;
+    String parentOrganisationUnitId = "";
+
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public String getCurrentFaciliyId() {
-        return currentFaciliyId;
+    public String getCurrentFacilityId() {
+        return currentFacilityId;
     }
-    public String getcurrentEventId() {
+
+    public String getParentOrganisationUnitId() {
+        return parentOrganisationUnitId;
+    }
+
+
+    public String getCurrentOrganisationUnitId() {
+        return currentOrganisationUnitId;
+    }
+
+    public String getRootOrganisationUnitId() {
+        return rootOrganisationUnitId;
+    }
+
+    public String getCurrentEventId() {
         return currentEventId;
     }
+
     public String getCurrentEnrollmentId() {
         return currentEnrollmentId;
     }
+
     public String getCurrentTeiId() {
         return currentTeiId;
     }
@@ -83,6 +95,7 @@ public class Dhis2StepDefinitions {
         testCounter.addAndGet(cukes);
         LOGGER.info("TEST: <{}> <{}> <{}>", cukes, testCounter.hashCode(), this);
     }
+
     private Scenario scenario;
 
     @Before
@@ -93,17 +106,33 @@ public class Dhis2StepDefinitions {
     @Given("I create a new Facility")
     @Given("I create a new OrgUnit")
     public void i_create_a_new_facility() throws Exception {
+        int level = 0;
+        while (level < 5) {
+            level = level + 1;
+            String organisationUnitId = dhis2HttpClient.getGenerateUniqueId();
+            if (level == 1) {
+                this.rootOrganisationUnitId = organisationUnitId;
+            } else {
+                this.parentOrganisationUnitId = currentOrganisationUnitId;
+            }
+            this.currentOrganisationUnitId = organisationUnitId;
 
-        // USING dhis2-java-client
-        OrgUnit newFacility = new OrgUnit(null, testUniqueId.get());
-        newFacility.setShortName(testUniqueId.get());
-        newFacility.setOpeningDate(new Date());
-        ObjectResponse response = dhsi2Client.saveOrgUnit(newFacility);
-        String newFacilityId = response.getResponse().getUid();
-        newFacility.setId(newFacilityId);
-        this.currentFaciliyId = newFacilityId;
-        LOGGER.info("created OrgUnit: <{}> <{}>", newFacility.getId(), newFacility.getName());
-        scenario.log("Created new OrgUnit with Id:" + newFacility.getId() + " and Name:" + newFacility.getName());
+            Map<String, Object> organisationUnitTemplateContext = Map.of(
+                    "data", this,
+                    "organisationUnitName", testUniqueId.get() +"_"+ level,
+                    "organisationUnitShortName", testUniqueId.get() +"_"+ level,
+                    "organisationUnitOpeningDate", "2024-07-01T00:00:00.000",
+                    "organisationUnitLevel", level
+            );
+            String response = dhis2HttpClient.doPost(
+                    "api/organisationUnits",
+                    "create_organisation_unit.tpl.json",
+                    organisationUnitTemplateContext);
+            LOGGER.info("Response {}", response);
+        }
+        this.currentFacilityId = currentOrganisationUnitId;
+        LOGGER.info("created OrgUnit: <{}> <{}>", currentFacilityId, testUniqueId.get() +"_"+ level);
+        scenario.log("Created new OrgUnit with Id:" + currentFacilityId + " and Name:" + testUniqueId.get() +"_"+ level);
     }
 
     @Given("I assign the current user to the current orgUnit")
@@ -115,7 +144,7 @@ public class Dhis2StepDefinitions {
         String baseUserJson = dhis2HttpClient.doGet("api/users/" + currentUserId + "?fields=id,name,organisationUnits,userGroups,userRoles,dataViewOrganisationUnits,teiSearchOrganisationUnits");
         JsonNode rootNode = MAPPER.readTree(baseUserJson);
         ObjectNode newId = MAPPER.createObjectNode();
-        newId.put("id", currentFaciliyId);
+        newId.put("id", currentFacilityId);
         ArrayNode organisationUnits = (ArrayNode) rootNode.get("organisationUnits");
         organisationUnits.add(newId);
         ArrayNode dataViewOrganisationUnits = (ArrayNode) rootNode.get("dataViewOrganisationUnits");
@@ -175,7 +204,7 @@ public class Dhis2StepDefinitions {
                 templateContext);
 
         LOGGER.info("Response {}", response);
-        scenario.log( "Created new event with Id:" + currentEventId+ " for the TEI with Id:" + currentTeiId);
+        scenario.log("Created new event with Id:" + currentEventId + " for the TEI with Id:" + currentTeiId);
     }
 
     //@Given("I create a new Patient for this Facility with the following characteristics")
@@ -186,12 +215,12 @@ public class Dhis2StepDefinitions {
 
         // Creating a new TEI
         TrackedEntityInfo newTEI = new TrackedEntityInfo();
-        newTEI.setOrgUnit(currentFaciliyId); // todo: use current facility
+        newTEI.setOrgUnit(currentFacilityId); // todo: use current facility
         newTEI.setTrackedEntityType("MCPQUTHX1Ze"); // Person
 
         // Creating new Enrollment
         EnrollmentInfo newEnrollment = new EnrollmentInfo();
-        newEnrollment.setOrgUnit(currentFaciliyId); // todo: use current facility
+        newEnrollment.setOrgUnit(currentFacilityId); // todo: use current facility
         newEnrollment.setProgram("pMIglSEqPGS"); // Hypertension & Diabetes
         newEnrollment.setEnrolledAt(new Date());
         newEnrollment.setOccurredAt(new Date());
