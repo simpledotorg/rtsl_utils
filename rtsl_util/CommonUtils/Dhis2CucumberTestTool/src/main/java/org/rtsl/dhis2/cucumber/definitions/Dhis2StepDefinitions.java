@@ -123,17 +123,27 @@ public class Dhis2StepDefinitions {
 
     @Given("I register that Facility for program {string}")
     public void i_register_that_facility(String programName) throws Exception {
-
-        Map<String, Object> templateContext = Map.of(
-                "data", this,
-                "programName", programName);
-
-        String response = dhis2HttpClient.doPutWithTemplate(
+        String baseProgramJson = dhis2HttpClient.doGet("api/programs/pMIglSEqPGS");
+        JsonNode rootNode = MAPPER.readTree(baseProgramJson);
+        ArrayNode organisationUnits = (ArrayNode) rootNode.get("organisationUnits");
+        organisationUnits.add(currentFacilityId);
+        String modifiedJson = MAPPER.writeValueAsString(rootNode);
+        dhis2HttpClient.doPutWithBody(
                 "api/programs/pMIglSEqPGS?mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
-                "register_facility_to_program.tpl.json",
-                templateContext);
+                modifiedJson);
 
-        LOGGER.info("Response {}", response);
+//        String response = dhis2HttpClient.doPost(
+//                "api/programs/pMIglSEqPGS?mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
+//                "register_facility_to_program.tpl.json",
+//                templateContext);
+
+//        "programs": [
+//        {
+//            "id": "pMIglSEqPGS"
+//        }
+//    ]
+
+//        LOGGER.info("Response {}", response);
     }
 
     @Given("I create a new TEI for this OrgUnit with the following characteristics")
