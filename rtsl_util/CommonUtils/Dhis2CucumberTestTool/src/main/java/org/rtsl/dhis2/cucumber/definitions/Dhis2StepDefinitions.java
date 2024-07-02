@@ -51,13 +51,10 @@ public class Dhis2StepDefinitions {
     private Dhis2IdConverter testIdConverter;
 
     String currentFacilityId = null;
-    String currentOrganisationUnitId = null;
-    String rootOrganisationUnitId = null;
+    String districtOrganisationUnit = null;
     String currentEnrollmentId = null;
     String currentTeiId = null;
     String currentEventId = null;
-    String parentOrganisationUnitId = "";
-
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -65,17 +62,8 @@ public class Dhis2StepDefinitions {
         return currentFacilityId;
     }
 
-    public String getParentOrganisationUnitId() {
-        return parentOrganisationUnitId;
-    }
-
-
-    public String getCurrentOrganisationUnitId() {
-        return currentOrganisationUnitId;
-    }
-
-    public String getRootOrganisationUnitId() {
-        return rootOrganisationUnitId;
+    public String getDistrictOrganisationUnit() {
+        return districtOrganisationUnit;
     }
 
     public String getCurrentEventId() {
@@ -106,33 +94,10 @@ public class Dhis2StepDefinitions {
     @Given("I create a new Facility")
     @Given("I create a new OrgUnit")
     public void i_create_a_new_facility() throws Exception {
-        int level = 0;
-        while (level < 5) {
-            level = level + 1;
-            String organisationUnitId = dhis2HttpClient.getGenerateUniqueId();
-            if (level == 1) {
-                this.rootOrganisationUnitId = organisationUnitId;
-            } else {
-                this.parentOrganisationUnitId = currentOrganisationUnitId;
-            }
-            this.currentOrganisationUnitId = organisationUnitId;
-
-            Map<String, Object> organisationUnitTemplateContext = Map.of(
-                    "data", this,
-                    "organisationUnitName", testUniqueId.get() +"_"+ level,
-                    "organisationUnitShortName", testUniqueId.get() +"_"+ level,
-                    "organisationUnitOpeningDate", "2024-07-01T00:00:00.000",
-                    "organisationUnitLevel", level
-            );
-            String response = dhis2HttpClient.doPost(
-                    "api/organisationUnits",
-                    "create_organisation_unit.tpl.json",
-                    organisationUnitTemplateContext);
-            LOGGER.info("Response {}", response);
-        }
-        this.currentFacilityId = currentOrganisationUnitId;
-        LOGGER.info("created OrgUnit: <{}> <{}>", currentFacilityId, testUniqueId.get() +"_"+ level);
-        scenario.log("Created new OrgUnit with Id:" + currentFacilityId + " and Name:" + testUniqueId.get() +"_"+ level);
+        Map<String, String> newOrganisationUnit = createFacility();
+        this.currentFacilityId = newOrganisationUnit.get("organisationUnitId");
+        LOGGER.info("created OrgUnit: <{}> <{}>", currentFacilityId, newOrganisationUnit.get("organisationUnitName"));
+        scenario.log("Created new OrgUnit with Id:" + currentFacilityId + " and Name:" + newOrganisationUnit.get("organisationUnitName"));
     }
 
     @Given("I assign the current user to the current orgUnit")
@@ -178,14 +143,9 @@ public class Dhis2StepDefinitions {
         this.currentEnrollmentId = dhis2HttpClient.getGenerateUniqueId();
         this.currentTeiId = dhis2HttpClient.getGenerateUniqueId();
         convertedDataTable.remove("enrollmentDate");
-        Map<String, Object> templateContext = Map.of(
-                "data", this,
-                "dataTable", convertedDataTable);
+        Map<String, Object> templateContext = Map.of("data", this, "dataTable", convertedDataTable);
 
-        String response = dhis2HttpClient.doPost(
-                "api/tracker?async=false&mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
-                "create_and_enroll_tei.tpl.json",
-                templateContext);
+        String response = dhis2HttpClient.doPost("api/tracker?async=false&mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE", "create_and_enroll_tei.tpl.json", templateContext);
 
         LOGGER.info("Response {}", response);
         scenario.log("Created new TEI with Id:" + currentTeiId + " and Enrollment with Id:" + currentEnrollmentId);
@@ -194,14 +154,9 @@ public class Dhis2StepDefinitions {
     @Given("That patient visited for Hypertension on {string} with Blood Pressure reading {int}:{int}")
     public void that_patient_visited_for_hypertension_on_with_blood_pressure_reading(String string, Integer int1, Integer int2) throws Exception {
         Map<String, Integer> convertedDataTable = Map.of("IxEwYiq1FTq", int1, "yNhtHKtKkO1", int2);
-        Map<String, Object> templateContext = Map.of(
-                "data", this,
-                "dataTable", convertedDataTable);
+        Map<String, Object> templateContext = Map.of("data", this, "dataTable", convertedDataTable);
         this.currentEventId = dhis2HttpClient.getGenerateUniqueId();
-        String response = dhis2HttpClient.doPost(
-                "api/tracker?async=false&mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
-                "create_event_tei.tpl.json",
-                templateContext);
+        String response = dhis2HttpClient.doPost("api/tracker?async=false&mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE", "create_event_tei.tpl.json", templateContext);
 
         LOGGER.info("Response {}", response);
         scenario.log("Created new event with Id:" + currentEventId + " for the TEI with Id:" + currentTeiId);
@@ -252,4 +207,45 @@ public class Dhis2StepDefinitions {
         return returnList;
     }
 
+    private Map<String, String> createFacility() throws Exception {
+        int organisationUnitLevel;
+        String parentOrganisationUnitId;
+        Map<String, String> newOrganisationUnit = null;
+        if (this.districtOrganisationUnit == null || this.districtOrganisationUnit.trim().isEmpty()) {
+            organisationUnitLevel = 1;
+            parentOrganisationUnitId = "";
+        } else {
+            organisationUnitLevel = 4;
+            parentOrganisationUnitId = this.districtOrganisationUnit;
+        }
+        while (organisationUnitLevel <= 5) {
+            newOrganisationUnit = createOrganisationUnit(organisationUnitLevel, parentOrganisationUnitId);
+            if (organisationUnitLevel == 3) {
+                this.districtOrganisationUnit = newOrganisationUnit.get("organisationUnitId");
+            }
+            parentOrganisationUnitId = newOrganisationUnit.get("organisationUnitId");
+            ++organisationUnitLevel;
+        }
+        return newOrganisationUnit;
+    }
+
+    private Map<String, String> createOrganisationUnit(int organisationUnitLevel, String parentOrganisationUnitId) throws Exception {
+        String newOrganisationUnitId = dhis2HttpClient.getGenerateUniqueId();
+        String newOrganisationUnitName = testUniqueId.get() + "_" + organisationUnitLevel;
+        Map<String, Object> organisationUnitTemplateContext = Map.of(
+                "data", this,
+                "organisationUnitName", newOrganisationUnitName,
+                "organisationUnitShortName", newOrganisationUnitName,
+                "organisationUnitOpeningDate", "2023-07-01T00:00:00.000",
+                "organisationUnitLevel", organisationUnitLevel,
+                "organisationUnitId", newOrganisationUnitId,
+                "parentOrganisationUnitId", parentOrganisationUnitId);
+        String response = dhis2HttpClient.doPost(
+                "api/organisationUnits",
+                "create_organisation_unit.tpl.json",
+                organisationUnitTemplateContext);
+        LOGGER.info("Response {}", response);
+        ++organisationUnitLevel;
+        return Map.of("organisationUnitId", newOrganisationUnitId, "organisationUnitName", newOrganisationUnitName);
+    }
 }
