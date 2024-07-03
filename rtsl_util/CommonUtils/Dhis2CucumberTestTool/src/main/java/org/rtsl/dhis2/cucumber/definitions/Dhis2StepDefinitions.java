@@ -15,6 +15,7 @@ import org.hisp.dhis.integration.sdk.api.Dhis2Client;
 import org.rtsl.dhis2.cucumber.Dhis2HttpClient;
 import org.rtsl.dhis2.cucumber.Dhis2IdConverter;
 import org.rtsl.dhis2.cucumber.TestUniqueId;
+import org.rtsl.dhis2.cucumber.Factories.OrganisationUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,10 @@ public class Dhis2StepDefinitions {
     @Inject
     @Named("testIdConverter")
     private Dhis2IdConverter testIdConverter;
+
+    @Inject
+    @Named("organisationUnitFactory")
+    private OrganisationUnit organisationUnitFactory;
 
     String currentFacilityId = null;
     String districtOrganisationUnit = null;
@@ -94,7 +99,7 @@ public class Dhis2StepDefinitions {
     @Given("I create a new Facility")
     @Given("I create a new OrgUnit")
     public void i_create_a_new_facility() throws Exception {
-        Map<String, String> newOrganisationUnit = createFacility();
+        Map<String, String> newOrganisationUnit = organisationUnitFactory.createFacility();
         this.currentFacilityId = newOrganisationUnit.get("organisationUnitId");
         LOGGER.info("created OrgUnit: <{}> <{}>", currentFacilityId, newOrganisationUnit.get("organisationUnitName"));
         scenario.log("Created new OrgUnit with Id:" + currentFacilityId + " and Name:" + newOrganisationUnit.get("organisationUnitName"));
@@ -208,45 +213,4 @@ public class Dhis2StepDefinitions {
         return returnList;
     }
 
-    private Map<String, String> createFacility() throws Exception {
-        int organisationUnitLevel;
-        String parentOrganisationUnitId;
-        Map<String, String> newOrganisationUnit = null;
-        if (this.districtOrganisationUnit == null || this.districtOrganisationUnit.trim().isEmpty()) {
-            organisationUnitLevel = 1;
-            parentOrganisationUnitId = "";
-        } else {
-            organisationUnitLevel = 4;
-            parentOrganisationUnitId = this.districtOrganisationUnit;
-        }
-        while (organisationUnitLevel <= 5) {
-            newOrganisationUnit = createOrganisationUnit(organisationUnitLevel, parentOrganisationUnitId);
-            if (organisationUnitLevel == 3) {
-                this.districtOrganisationUnit = newOrganisationUnit.get("organisationUnitId");
-            }
-            parentOrganisationUnitId = newOrganisationUnit.get("organisationUnitId");
-            ++organisationUnitLevel;
-        }
-        return newOrganisationUnit;
     }
-
-    private Map<String, String> createOrganisationUnit(int organisationUnitLevel, String parentOrganisationUnitId) throws Exception {
-        String newOrganisationUnitId = dhis2HttpClient.getGenerateUniqueId();
-        String newOrganisationUnitName = testUniqueId.get() + "_" + organisationUnitLevel;
-        Map<String, Object> organisationUnitTemplateContext = Map.of(
-                "data", this,
-                "organisationUnitName", newOrganisationUnitName,
-                "organisationUnitShortName", newOrganisationUnitName,
-                "organisationUnitOpeningDate", "2023-07-01T00:00:00.000",
-                "organisationUnitLevel", organisationUnitLevel,
-                "organisationUnitId", newOrganisationUnitId,
-                "parentOrganisationUnitId", parentOrganisationUnitId);
-        String response = dhis2HttpClient.doPost(
-                "api/organisationUnits",
-                "create_organisation_unit.tpl.json",
-                organisationUnitTemplateContext);
-        LOGGER.info("Response {}", response);
-        ++organisationUnitLevel;
-        return Map.of("organisationUnitId", newOrganisationUnitId, "organisationUnitName", newOrganisationUnitName);
-    }
-}
