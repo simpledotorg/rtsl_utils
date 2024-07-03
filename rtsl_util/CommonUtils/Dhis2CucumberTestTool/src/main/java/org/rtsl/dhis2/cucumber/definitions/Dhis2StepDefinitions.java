@@ -126,24 +126,15 @@ public class Dhis2StepDefinitions {
         String baseProgramJson = dhis2HttpClient.doGet("api/programs/pMIglSEqPGS");
         JsonNode rootNode = MAPPER.readTree(baseProgramJson);
         ArrayNode organisationUnits = (ArrayNode) rootNode.get("organisationUnits");
-        organisationUnits.add(currentFacilityId);
+        ObjectNode facilityId = MAPPER.createObjectNode();
+        facilityId.put("id", currentFacilityId);
+        organisationUnits.add(facilityId);
         String modifiedJson = MAPPER.writeValueAsString(rootNode);
-        dhis2HttpClient.doPutWithBody(
+        String response = dhis2HttpClient.doPutWithBody(
                 "api/programs/pMIglSEqPGS?mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
                 modifiedJson);
-
-//        String response = dhis2HttpClient.doPost(
-//                "api/programs/pMIglSEqPGS?mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
-//                "register_facility_to_program.tpl.json",
-//                templateContext);
-
-//        "programs": [
-//        {
-//            "id": "pMIglSEqPGS"
-//        }
-//    ]
-
-//        LOGGER.info("Response {}", response);
+        LOGGER.info("Response {}", response);
+        scenario.log("Current facility: " + facilityId.get("id")  + " has been assigned to the program:" + programName);
     }
 
     @Given("I create a new TEI for this OrgUnit with the following characteristics")

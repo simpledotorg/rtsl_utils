@@ -16,6 +16,7 @@ import org.apache.hc.client5.http.classic.methods.HttpPut;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,13 +64,13 @@ public class Dhis2HttpClient {
     }
     
         public String doPutWithBody(String relativeUrl, String body) throws Exception {
-        LOGGER.info("Doing PUT call on url <{}> based on template <{}>", dhis2RootUrl + relativeUrl);
+        LOGGER.info("Doing PUT call on url <{}> with body <{}>", dhis2RootUrl + relativeUrl, body);
         // Makes the call
         try (CloseableHttpClient httpClient = HttpClients.createDefault();) {
             HttpPut request = new HttpPut(dhis2RootUrl + relativeUrl);
-            request.setEntity(new StringEntity(body));
+            request.setEntity(new StringEntity(body, ContentType.APPLICATION_JSON));
             request.setHeader("Accept", "application/json");
-            request.setHeader("Content-Type", "application/json");
+            request.setHeader("Content-Type", "application/json;charset=UTF-8");
             request.setHeader("Authorization", basicAuthString);
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 // reads the answer
@@ -152,15 +153,8 @@ public class Dhis2HttpClient {
         return parsedResponse.get("id");
     }
 
-    public String getParentOrganisationUnitId(String childOrganisationUnitId) throws Exception {
-        String response = doGet("api/organisationUnits/"+childOrganisationUnitId+"?fields=parent[id]");
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode parsedResponse = objectMapper.readTree(response);
-        return parsedResponse.get("parent").get("id").asText();
-    }
-
     public String getGenerateUniqueId() throws Exception {
-        String response = doGet("api/system/id");
+        String response = doGet("api/system/id?limit=1");
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(response);
         ArrayNode ids = (ArrayNode) rootNode.get("codes");
