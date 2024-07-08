@@ -7,41 +7,27 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import org.hisp.dhis.Dhis2;
-import org.hisp.dhis.api.model.v40_2_2.*;
-import org.hisp.dhis.integration.sdk.api.Dhis2Client;
+import org.hisp.dhis.api.model.v40_2_2.AttributeInfo;
 import org.rtsl.dhis2.cucumber.Dhis2HttpClient;
 import org.rtsl.dhis2.cucumber.Dhis2IdConverter;
-import org.rtsl.dhis2.cucumber.TestUniqueId;
 import org.rtsl.dhis2.cucumber.Factories.OrganisationUnit;
+import org.rtsl.dhis2.cucumber.Factories.TrackedEntityInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Dhis2StepDefinitions {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Dhis2StepDefinitions.class);
-
-    @Inject
-    @Named("testUniqueId")
-    private TestUniqueId testUniqueId;
-
-    @Inject
-    @Named("dhisClient")
-    private Dhis2 dhsi2Client;
-
-    @Inject
-    @Named("dhisSdkClient")
-    private Dhis2Client dhisSdkClient;
-
-    @Inject
-    @Named("testAtomicInt")
-    private AtomicInteger testCounter;
 
     @Inject
     @Named("testClient")
@@ -55,8 +41,11 @@ public class Dhis2StepDefinitions {
     @Named("organisationUnitFactory")
     private OrganisationUnit organisationUnitFactory;
 
+    @Inject
+    @Named("trackedEntityInstanceFactory")
+    private TrackedEntityInstance trackedEntityInstanceFactory;
+
     String currentFacilityId = null;
-    String districtOrganisationUnit = null;
     String currentEnrollmentId = null;
     String currentTeiId = null;
     String currentEventId = null;
@@ -65,10 +54,6 @@ public class Dhis2StepDefinitions {
 
     public String getCurrentFacilityId() {
         return currentFacilityId;
-    }
-
-    public String getDistrictOrganisationUnit() {
-        return districtOrganisationUnit;
     }
 
     public String getCurrentEventId() {
@@ -81,12 +66,6 @@ public class Dhis2StepDefinitions {
 
     public String getCurrentTeiId() {
         return currentTeiId;
-    }
-
-    @Given("I have {int} cukes in my belly")
-    public void i_have_n_cukes_in_my_belly(Integer cukes) {
-        testCounter.addAndGet(cukes);
-        LOGGER.info("TEST: <{}> <{}> <{}>", cukes, testCounter.hashCode(), this);
     }
 
     private Scenario scenario;
@@ -139,21 +118,15 @@ public class Dhis2StepDefinitions {
                 "api/programs/pMIglSEqPGS?mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
                 modifiedJson);
         LOGGER.info("Response {}", response);
-        scenario.log("Current facility: " + facilityId.get("id")  + " has been assigned to the program:" + programName);
+        scenario.log("Current facility: " + facilityId.get("id") + " has been assigned to the program:" + programName);
     }
 
     @Given("I create a new TEI for this OrgUnit with the following characteristics")
-    @Given("I create a new Patient for this Facility with the following characteristics")
-    public void i_create_a_new_patient_for_this_facility_with_the_following_characteristics(Map<String, String> dataTable) throws Exception {
-        Map<String, String> convertedDataTable = testIdConverter.convertTeiAttributes(dataTable);
-        this.currentEnrollmentId = dhis2HttpClient.getGenerateUniqueId();
-        this.currentTeiId = dhis2HttpClient.getGenerateUniqueId();
-        convertedDataTable.remove("enrollmentDate");
-        Map<String, Object> templateContext = Map.of("data", this, "dataTable", convertedDataTable);
-
-        String response = dhis2HttpClient.doPost("api/tracker?async=false&mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE", "create_and_enroll_tei.tpl.json", templateContext);
-
-        LOGGER.info("Response {}", response);
+    @Given("I create a new Patient on {string} for this Facility with the following characteristics")
+    public void i_create_a_new_patient_on_for_this_facility_with_the_following_characteristics(String string, Map<String, String> dataTable) throws Exception {
+        Map<String, String> newTei = trackedEntityInstanceFactory.create(dataTable, currentFacilityId, string);
+        this.currentTeiId = newTei.get("id");
+        this.currentEnrollmentId = newTei.get("enrollmentId");
         scenario.log("Created new TEI with Id:" + currentTeiId + " and Enrollment with Id:" + currentEnrollmentId);
     }
 
@@ -168,39 +141,48 @@ public class Dhis2StepDefinitions {
         scenario.log("Created new event with Id:" + currentEventId + " for the TEI with Id:" + currentTeiId);
     }
 
-    //@Given("I create a new Patient for this Facility with the following characteristics")
-    public void i_create_a_new_patient_for_this_facility_with_the_following_characteristics_OLD(Map<String, String> dataTable) {
+    @Given("Export the analytics")
+    public void export_the_analytics() throws Exception {
+        String response = dhis2HttpClient.doPost("api/resourceTables/analytics");
+        JsonNode rootNode = MAPPER.readTree(response);
+        String analyticsJobId = rootNode.get("response").get("relativeNotifierEndpoint").asText();
+        // Sleep until job is finished
+        Thread.sleep(10000);
+        LOGGER.info("Response {}", response);
+        scenario.log("Export the analytics");
+    }
 
-        LOGGER.info("Creating patient for data: <{}> ", dataTable);
-        LOGGER.info("{}", new Date().toString());
+    @Given("Run the Hypertension data aggregation")
+    public void run_the_hypertension_data_aggregation() throws Exception {
+        String htnDataAggregateObjectId = "DySW3FNj3VR";
+        String response = dhis2HttpClient.doGet("api/aggregateDataExchanges/" + htnDataAggregateObjectId + "/exchange");
+        // Sleep until aggregation is completed
+        Thread.sleep(10000);
+        LOGGER.info("Response {}", response);
+        scenario.log("Ran data aggregation");
+    }
 
-        // Creating a new TEI
-        TrackedEntityInfo newTEI = new TrackedEntityInfo();
-        newTEI.setOrgUnit(currentFacilityId); // todo: use current facility
-        newTEI.setTrackedEntityType("MCPQUTHX1Ze"); // Person
-
-        // Creating new Enrollment
-        EnrollmentInfo newEnrollment = new EnrollmentInfo();
-        newEnrollment.setOrgUnit(currentFacilityId); // todo: use current facility
-        newEnrollment.setProgram("pMIglSEqPGS"); // Hypertension & Diabetes
-        newEnrollment.setEnrolledAt(new Date());
-        newEnrollment.setOccurredAt(new Date());
-        newEnrollment.setAttributes(getAttributes(dataTable));
-        // TODO
-
-        newTEI.setEnrollments(Arrays.asList(newEnrollment));
-
-        TrackerImportReport trackerImportReport = dhisSdkClient.post("tracker")
-                .withResource(new Body().withTrackedEntities(Arrays.asList(newTEI
-                )))
-                .withParameter("async", "false")
-                .transfer()
-                .returnAs(TrackerImportReport.class);
-        /**/
-
-        LOGGER.info("{}", trackerImportReport.getBundleReport().get().toString());
-        //dhisSdkClient.
-        // TODO
+    @Then("The value of PI {string} should be")
+    public void the_value_of_pi_should_be(String string, Map<String, String> dataTable) throws Exception {
+        String programIndicatorId = testIdConverter.getProgramIndicatorId(string);
+        String orgUnit = this.currentFacilityId;
+        String period = "LAST_12_MONTHS;THIS_MONTH";
+        String endpoint = "api/analytics.json";
+        String params = "?dimension=dx:" + programIndicatorId + "&dimension=pe:" + period + "&filter=ou:" + orgUnit;
+        String response = dhis2HttpClient.doGet(endpoint + params);
+        JsonNode rootNode = MAPPER.readTree(response);
+        ArrayNode actualPeriodValues = (ArrayNode) rootNode.get("rows");
+        Map<String, String> periodValue = new HashMap<>();
+        for (JsonNode dataValue : actualPeriodValues) {
+            String key = dataValue.get(1).asText();
+            String value = dataValue.get(2).asText();
+            periodValue.put(key, value);
+        }
+        for (String expectedPeriod : dataTable.keySet()) {
+            assertEquals(periodValue.get(expectedPeriod), dataTable.get(expectedPeriod));
+        }
+        LOGGER.info("Response {}", response);
+        scenario.log("Program Indicator: " + programIndicatorId + "for the " + period + " in Organisation Unit:" + orgUnit + "is " + actualPeriodValues);
     }
 
     private List<AttributeInfo> getAttributes(Map<String, String> data) {
@@ -213,4 +195,4 @@ public class Dhis2StepDefinitions {
         return returnList;
     }
 
-    }
+}

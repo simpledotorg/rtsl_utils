@@ -2,6 +2,7 @@ package org.rtsl.dhis2.cucumber.Factories;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import org.rtsl.dhis2.cucumber.Dhis2HttpClient;
@@ -69,15 +70,21 @@ public class OrganisationUnit {
                 "create_organisation_unit.tpl.json",
                 organisationUnitTemplateContext);
         LOGGER.info("Response {}", response);
-        ++organisationUnitLevel;
         return Map.of("organisationUnitId", newOrganisationUnitId, "organisationUnitName", newOrganisationUnitName);
     }
 
-    public String getParentId(String childId) throws Exception {
-        String response = dhis2HttpClient.doGet("api/organisationUnits/"+childId+"?fields=parent[id]");
+    public String getAncestorId(String childId, int ancestorLevel) throws Exception {
+        String response = dhis2HttpClient.doGet("api/organisationUnits/"+childId+"?fields=ancestors[id,level],level");
         ObjectMapper objectMapper = new ObjectMapper();
+        String ancestorId = "";
         JsonNode parsedResponse = objectMapper.readTree(response);
-        return parsedResponse.get("parent").get("id").asText();
+        ArrayNode ancestorsNode = (ArrayNode) parsedResponse.get("ancestors");
+        for(JsonNode ancestor : ancestorsNode){
+            if(ancestor.get("level").asInt() == (ancestorLevel)){
+                ancestorId = ancestor.get("id").asText();
+            }
+        }
+        return ancestorId;
     }
 
     public void delete(int organisationUnitLevel, String parentOrganisationUnitId) throws Exception {

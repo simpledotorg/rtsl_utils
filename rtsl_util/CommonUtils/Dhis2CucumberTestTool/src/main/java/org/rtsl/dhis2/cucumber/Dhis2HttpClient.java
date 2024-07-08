@@ -106,6 +106,20 @@ public class Dhis2HttpClient {
 
     }
 
+    public String doPost(String relativeUrl) throws Exception{
+        LOGGER.info("Doing POST call on url <{}>", dhis2RootUrl + relativeUrl);
+        try (CloseableHttpClient httpClient = HttpClients.createDefault();) {
+            HttpPost request = new HttpPost(dhis2RootUrl + relativeUrl);
+            request.setHeader("Authorization", basicAuthString);
+            try (CloseableHttpResponse response = httpClient.execute(request)) {
+                // reads the answer
+                StringBuilder sb = new StringBuilder();
+                return new String(response.getEntity().getContent().readAllBytes());
+            }
+
+        }
+    }
+
     public String doPatch(String relativeUrl, String templateName, Object templateContext) throws Exception { // TODO : factorize, possibly make a class ...
         LOGGER.debug("Doing PATCH call on url <{}> based on template <{}>", dhis2RootUrl + relativeUrl, templateName);
         // Gets the request Body
@@ -158,7 +172,7 @@ public class Dhis2HttpClient {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(response);
         ArrayNode ids = (ArrayNode) rootNode.get("codes");
-        return  ids.get(0).asText();
+        return ids.get(0).asText();
 
     }
 
