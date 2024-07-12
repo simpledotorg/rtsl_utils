@@ -13,8 +13,8 @@ import jakarta.inject.Named;
 import org.hisp.dhis.api.model.v40_2_2.AttributeInfo;
 import org.rtsl.dhis2.cucumber.Dhis2HttpClient;
 import org.rtsl.dhis2.cucumber.Dhis2IdConverter;
-import org.rtsl.dhis2.cucumber.Factories.OrganisationUnit;
-import org.rtsl.dhis2.cucumber.Factories.TrackedEntityInstance;
+import org.rtsl.dhis2.cucumber.factories.OrganisationUnit;
+import org.rtsl.dhis2.cucumber.factories.TrackedEntityInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

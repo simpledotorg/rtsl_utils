@@ -1,7 +1,7 @@
 package org.rtsl.dhis2.cucumber.definitions;
 
 import io.cucumber.java.AfterAll;
-import org.rtsl.dhis2.cucumber.Factories.OrganisationUnit;
+import org.rtsl.dhis2.cucumber.factories.OrganisationUnit;
 
 public class Hooks {
     @AfterAll
