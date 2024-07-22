@@ -1,7 +1,7 @@
 Feature: Demo Dashboard Auditing
 
 
-  Scenario: Load Test Patients and check results
+  Scenario: Check HTN - Cumulative registrations program indicator
     Given I create a new OrgUnit
     Given I assign the current user to the current orgUnit
     Given I register that Facility for program "YQj5qpbzQxh"
@@ -89,10 +89,10 @@ Feature: Demo Dashboard Auditing
       | 202401 | 3 |
       | 202312 | 0 |
 
-#  Scenario: Load Test Patients and check results in a different org unit
-#    Given I create a new OrgUnit
-#    Given I assign the current user to the current orgUnit
-#    Given I register that Facility for program "YQj5qpbzQxh"
+  Scenario: Load Test Patients and check results in a different org unit
+    Given I create a new OrgUnit
+    Given I assign the current user to the current orgUnit
+    Given I register that Facility for program "YQj5qpbzQxh"
 
 
     #
