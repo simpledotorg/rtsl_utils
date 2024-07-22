@@ -168,12 +168,15 @@ public class Dhis2HttpClient {
     }
 
     public String getGenerateUniqueId() throws Exception {
-        String response = doGet("api/system/id?limit=1");
+        ArrayNode ids = getGenerateUniqueIds(1);
+        return ids.get(0).asText();
+    }
+
+    public ArrayNode getGenerateUniqueIds(int count) throws Exception {
+        String response = doGet("api/system/id?limit=" + count);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(response);
-        ArrayNode ids = (ArrayNode) rootNode.get("codes");
-        return ids.get(0).asText();
-
+        return (ArrayNode) rootNode.get("codes");
     }
 
 }
