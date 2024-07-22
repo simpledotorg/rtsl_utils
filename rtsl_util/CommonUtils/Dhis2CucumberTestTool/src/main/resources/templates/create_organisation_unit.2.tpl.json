@@ -1,0 +1,32 @@
+{
+  "organisationUnits": [
+    {
+      "id": "${rootOrganisationUnitId}",
+      "name": "AUTO_TEST_ROOT",
+      "shortName": "auto_test",
+      "openingDate": "1945-08-15",
+      "level": 1
+    },
+    {
+      "id": "${stateOrganisationUnitId}",
+      "name": "AUTO_TEST_STATE",
+      "shortName": "auto_test_state",
+      "openingDate": "1945-08-15",
+      "level": 2,
+      "parent": {
+        "id": "${rootOrganisationUnitId}"
+      }
+    },
+    {
+      "id": "${districtOrganisationUnitId}",
+      "name": "${districtOrganisationUnitName}",
+      "shortName": "${districtOrganisationUnitShortName}",
+      "openingDate": "${districtOrganisationUnitOpeningDate}",
+      "level": 3,
+      "parent": {
+        "id": "${stateOrganisationUnitId}"
+      }
+    }
+  ]
+}
+
