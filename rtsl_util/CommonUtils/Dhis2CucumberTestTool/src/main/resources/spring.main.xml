@@ -48,8 +48,9 @@
     </bean>
 
     <bean id="testUniqueId" class="org.rtsl.dhis2.cucumber.TestUniqueId" scope="cucumber-glue"/>      
-    <bean id="organisationUnitFactory" class="org.rtsl.dhis2.cucumber.factories.OrganisationUnit" scope="cucumber-glue"/>
-    <bean id="trackedEntityInstanceFactory" class="org.rtsl.dhis2.cucumber.factories.TrackedEntityInstance" scope="cucumber-glue"/>
+    <bean id="programConstants" class="org.rtsl.dhis2.cucumber.TestUniqueId" scope="cucumber-glue"/>
+    <bean id="organisationUnit" class="org.rtsl.dhis2.cucumber.factories.OrganisationUnit" scope="cucumber-glue"/>
+    <bean id="trackedEntityInstance" class="org.rtsl.dhis2.cucumber.factories.TrackedEntityInstance" scope="cucumber-glue"/>
     <bean id="testAtomicInt" class="java.util.concurrent.atomic.AtomicInteger" scope="cucumber-glue"/>
     <bean id="webDriver" class="org.openqa.selenium.firefox.FirefoxDriver" scope="cucumber-glue"/>              
      

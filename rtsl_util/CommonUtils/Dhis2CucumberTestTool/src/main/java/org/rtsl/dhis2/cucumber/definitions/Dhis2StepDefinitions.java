@@ -38,12 +38,12 @@ public class Dhis2StepDefinitions {
     private Dhis2IdConverter testIdConverter;
 
     @Inject
-    @Named("organisationUnitFactory")
-    private OrganisationUnit organisationUnitFactory;
+    @Named("organisationUnit")
+    private OrganisationUnit organisationUnit;
 
     @Inject
-    @Named("trackedEntityInstanceFactory")
-    private TrackedEntityInstance trackedEntityInstanceFactory;
+    @Named("trackedEntityInstance")
+    private TrackedEntityInstance trackedEntityInstance;
 
     String currentFacilityId = null;
     String currentEnrollmentId = null;
@@ -78,7 +78,7 @@ public class Dhis2StepDefinitions {
     @Given("I create a new Facility")
     @Given("I create a new OrgUnit")
     public void i_create_a_new_facility() throws Exception {
-        Map<String, String> newOrganisationUnit = organisationUnitFactory.createFacility();
+        Map<String, String> newOrganisationUnit = organisationUnit.createFacility(scenario);
         this.currentFacilityId = newOrganisationUnit.get("organisationUnitId");
         LOGGER.info("created OrgUnit: <{}> <{}>", currentFacilityId, newOrganisationUnit.get("organisationUnitName"));
         scenario.log("Created new OrgUnit with Id:" + currentFacilityId + " and Name:" + newOrganisationUnit.get("organisationUnitName"));
@@ -124,7 +124,7 @@ public class Dhis2StepDefinitions {
     @Given("I create a new TEI for this OrgUnit with the following characteristics")
     @Given("I create a new Patient on {string} for this Facility with the following characteristics")
     public void i_create_a_new_patient_on_for_this_facility_with_the_following_characteristics(String string, Map<String, String> dataTable) throws Exception {
-        Map<String, String> newTei = trackedEntityInstanceFactory.create(dataTable, currentFacilityId, string);
+        Map<String, String> newTei = trackedEntityInstance.create(dataTable, currentFacilityId, string);
         this.currentTeiId = newTei.get("id");
         this.currentEnrollmentId = newTei.get("enrollmentId");
         scenario.log("Created new TEI with Id:" + currentTeiId + " and Enrollment with Id:" + currentEnrollmentId);
@@ -143,28 +143,45 @@ public class Dhis2StepDefinitions {
 
     @Given("Export the analytics")
     public void export_the_analytics() throws Exception {
-        String response = dhis2HttpClient.doPost("api/resourceTables/analytics");
-        JsonNode rootNode = MAPPER.readTree(response);
-        String analyticsJobId = rootNode.get("response").get("relativeNotifierEndpoint").asText();
-        // Sleep until job is finished
-        Thread.sleep(10000);
+        String exportAnalyticsJobId =  testIdConverter.getMetadataId("Matview Refresh");
+        String jobStatus;
+        String lastRuntimeExecution;
+        String response;
+
+        executeJob(exportAnalyticsJobId);
+        do {
+            // Loop until job is finished
+            response = dhis2HttpClient.doGet("api/jobConfigurations/"+ exportAnalyticsJobId);
+            JsonNode jobConfigurations = MAPPER.readTree(response);
+            jobStatus = jobConfigurations.get("jobStatus").asText();
+            lastRuntimeExecution = jobConfigurations.get("lastRuntimeExecution").asText();
+        }while (jobStatus.equals("RUNNING"));
         LOGGER.info("Response {}", response);
-        scenario.log("Export the analytics");
+        scenario.log("Analytics job with Id:"+ exportAnalyticsJobId + " took "+lastRuntimeExecution + " time to complete.");
     }
 
     @Given("Run the Hypertension data aggregation")
     public void run_the_hypertension_data_aggregation() throws Exception {
-        String htnDataAggregateObjectId = "DySW3FNj3VR";
-        String response = dhis2HttpClient.doGet("api/aggregateDataExchanges/" + htnDataAggregateObjectId + "/exchange");
-        // Sleep until aggregation is completed
-        Thread.sleep(10000);
+        String dataAggregationJobId =  testIdConverter.getMetadataId("Internal Data Exchange | PI Aggregation");
+        String jobStatus;
+        String lastRuntimeExecution;
+        String response;
+
+        executeJob(dataAggregationJobId);
+        do {
+            // Loop until job is finished
+            response = dhis2HttpClient.doGet("api/jobConfigurations/"+ dataAggregationJobId);
+            JsonNode jobConfigurations = MAPPER.readTree(response);
+            jobStatus = jobConfigurations.get("jobStatus").asText();
+            lastRuntimeExecution = jobConfigurations.get("lastRuntimeExecution").asText();
+        }while (jobStatus.equals("RUNNING"));
         LOGGER.info("Response {}", response);
-        scenario.log("Ran data aggregation");
+        scenario.log("Data exchange and aggregation job with Id:"+ dataAggregationJobId + " took "+ lastRuntimeExecution + " time to complete.");
     }
 
     @Then("The value of PI {string} should be")
     public void the_value_of_pi_should_be(String string, Map<String, String> dataTable) throws Exception {
-        String programIndicatorId = testIdConverter.getProgramIndicatorId(string);
+        String programIndicatorId = testIdConverter.getMetadataId(string);
         String orgUnit = this.currentFacilityId;
         String period = "LAST_12_MONTHS;THIS_MONTH";
         String endpoint = "api/analytics.json";
@@ -193,6 +210,12 @@ public class Dhis2StepDefinitions {
             returnList.add(currentAttribute);
         }
         return returnList;
+    }
+
+    private String executeJob(String jobId) throws Exception{
+        String response = dhis2HttpClient.doPost("api/jobConfigurations/"+ jobId + "/execute");
+        LOGGER.info("Response {}", response);
+        return response;
     }
 
 }

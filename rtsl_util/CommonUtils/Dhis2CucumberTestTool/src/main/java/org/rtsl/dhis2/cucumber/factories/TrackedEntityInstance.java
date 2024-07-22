@@ -8,7 +8,7 @@ import org.rtsl.dhis2.cucumber.definitions.Dhis2StepDefinitions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
-import static org.rtsl.dhis2.cucumber.Helper.convertToISODateTimeString;
+import static org.rtsl.dhis2.cucumber.Helper.toISODateTimeString;
 
 public class TrackedEntityInstance {
 
@@ -39,11 +39,11 @@ public class TrackedEntityInstance {
 
 
     public Map<String, String> create(Map<String, String> dataTable, String orgUnitId, String enrolledAt) throws Exception{
-        Map<String, String> convertedDataTable = testIdConverter.convertTeiAttributes(dataTable);
+        Map<String, String> convertedDataTable = testIdConverter.convertMetadata(dataTable);
         this.enrollmentId = dhis2HttpClient.getGenerateUniqueId();
         this.teiId = dhis2HttpClient.getGenerateUniqueId();
         this.orgUnitId = orgUnitId;
-        this.enrolledAt = convertToISODateTimeString(enrolledAt);
+        this.enrolledAt = toISODateTimeString(enrolledAt);
         Map<String, Object> templateContext = Map.of("data", this, "dataTable", convertedDataTable);
         String response = dhis2HttpClient.doPost("api/tracker?async=false&mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
                 "create_and_enroll_tei.tpl.json",

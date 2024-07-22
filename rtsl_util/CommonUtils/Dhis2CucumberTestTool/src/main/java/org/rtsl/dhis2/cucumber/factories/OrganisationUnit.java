@@ -3,6 +3,7 @@ package org.rtsl.dhis2.cucumber.factories;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import io.cucumber.java.Scenario;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import org.rtsl.dhis2.cucumber.Dhis2HttpClient;
@@ -10,17 +11,33 @@ import org.rtsl.dhis2.cucumber.TestUniqueId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.InputStream;
 import java.util.Map;
+
+import static org.rtsl.dhis2.cucumber.Helper.toISODateTimeString;
 
 
 public class OrganisationUnit {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrganisationUnit.class);
-    private static String DISTRICT_ID = "";
-    private static String ROOT_ORG_UNIT_ID = "";
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static String districtId = "";
+    private static final String PROGRAM_CONSTANT_FILENAME = "programConstants.json";
+    private static final JsonNode PROGRAM_CONSTANTS = getProgramConstants();
 
-    public String getRootOrgUnitId() {
-        return ROOT_ORG_UNIT_ID;
+    public static JsonNode getProgramConstants() {
+        try {
+            InputStream resource = OrganisationUnit.class.getClassLoader().getResourceAsStream(PROGRAM_CONSTANT_FILENAME);
+            return MAPPER.readTree(resource);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static String testRootOrganisationUnitId;
+
+    public String getTestRootOrganisationUnitId() throws Exception {
+        return testRootOrganisationUnitId;
     }
 
     @Inject
@@ -31,60 +48,97 @@ public class OrganisationUnit {
     @Named("testUniqueId")
     private TestUniqueId testUniqueId;
 
-    public Map<String, String> createFacility() throws Exception {
-        int organisationUnitLevel;
-        String parentOrganisationUnitId = DISTRICT_ID;
-
-        Map<String, String> newOrganisationUnit = null;
-        if (DISTRICT_ID == null || DISTRICT_ID.trim().isEmpty()) {
-            organisationUnitLevel = 1;
-        } else {
-            organisationUnitLevel = 4;
-        }
-        while (organisationUnitLevel <= 5) {
-            newOrganisationUnit = create(organisationUnitLevel, parentOrganisationUnitId);
-            if (organisationUnitLevel == 3) {
-                DISTRICT_ID = newOrganisationUnit.get("organisationUnitId");
-            } else if (organisationUnitLevel == 1) {
-                ROOT_ORG_UNIT_ID = newOrganisationUnit.get("organisationUnitId");
-            }
-            parentOrganisationUnitId = newOrganisationUnit.get("organisationUnitId");
-            ++organisationUnitLevel;
-        }
-        return newOrganisationUnit;
+    public TestUniqueId getTestUniqueId() {
+        return testUniqueId;
     }
 
-    public Map<String, String> create(int organisationUnitLevel, String parentOrganisationUnitId) throws Exception {
-        String newOrganisationUnitId = dhis2HttpClient.getGenerateUniqueId();
-        String newOrganisationUnitName = testUniqueId.get() + "_" + organisationUnitLevel;
+    public void createRoot() throws Exception {
+        String id = dhis2HttpClient.getGenerateUniqueIds(1).get(0).asText();
+        String rootOrganisationUnitName = getProgramConstant("rootOrganisationUnitName");
+        if (getOrganisationUnitId(rootOrganisationUnitName).isBlank()) {
+            testRootOrganisationUnitId = create(id, rootOrganisationUnitName, rootOrganisationUnitName, PROGRAM_CONSTANTS.get("openingDatesOfOrganisationUnit").asText(), 1, "");
+        }
+    }
+
+    public void createOrganisationUnitHierarchy() throws Exception {
+        testRootOrganisationUnitId = getOrganisationUnitId(getProgramConstant("rootOrganisationUnitName"));
+        if (testRootOrganisationUnitId.isBlank()) {
+            createRoot();
+        }
+        ArrayNode ids = dhis2HttpClient.getGenerateUniqueIds(2);
+        String stateOrganisationUnitName = getProgramConstant("stateNamePrefix") + testUniqueId.hashCode();
+        String stateOrganisationUnitId = ids.get(0).asText();
+        String districtOrganisationUnitName = getProgramConstant("districtNamePrefix") + testUniqueId.hashCode();
+        String districtOrganisationUnitId = ids.get(1).asText();
+
+        create(stateOrganisationUnitId, stateOrganisationUnitName, stateOrganisationUnitName, getProgramConstant("openingDatesOfOrganisationUnit"), 2, testRootOrganisationUnitId);
+        districtId = create(districtOrganisationUnitId, districtOrganisationUnitName, districtOrganisationUnitName, getProgramConstant("openingDatesOfOrganisationUnit"), 3, ids.get(0).asText());
+
+    }
+
+    public Map<String, String> createFacility(Scenario scenario) throws Exception {
+        if (districtId.isBlank()) {
+            createOrganisationUnitHierarchy();
+        }
+        ArrayNode ids = dhis2HttpClient.getGenerateUniqueIds(2);
+        String blockOrganisationUnitName = getProgramConstant("blockNamePrefix") + testUniqueId.hashCode();
+        String blockId = create(ids.get(0).asText(), blockOrganisationUnitName, blockOrganisationUnitName, getProgramConstant("openingDatesOfOrganisationUnit"), 4, districtId);
+
+        String facilityOrganisationUnitName = getProgramConstant("facilityNamePrefix") + testUniqueId.hashCode();
+        String facilityId = create(ids.get(1).asText(), facilityOrganisationUnitName, facilityOrganisationUnitName, getProgramConstant("openingDatesOfOrganisationUnit"), 5, blockId);
+        return Map.of("organisationUnitId", facilityId, "organisationUnitName", facilityOrganisationUnitName);
+    }
+
+
+    public String create(String id, String name, String shortName, String openingDate, int level, String parentId) throws Exception {
         Map<String, Object> organisationUnitTemplateContext = Map.of(
                 "data", this,
-                "organisationUnitName", newOrganisationUnitName,
-                "organisationUnitShortName", newOrganisationUnitName,
-                "organisationUnitOpeningDate", "2023-07-01T00:00:00.000",
-                "organisationUnitLevel", organisationUnitLevel,
-                "organisationUnitId", newOrganisationUnitId,
-                "parentOrganisationUnitId", parentOrganisationUnitId);
+                "organisationUnitId", id,
+                "organisationUnitName", name,
+                "organisationUnitShortName", shortName,
+                "organisationUnitOpeningDate", toISODateTimeString(openingDate),
+                "organisationUnitLevel", level,
+                "parentOrganisationUnitId", parentId);
         String response = dhis2HttpClient.doPost(
                 "api/organisationUnits",
                 "create_organisation_unit.tpl.json",
                 organisationUnitTemplateContext);
         LOGGER.info("Response {}", response);
-        return Map.of("organisationUnitId", newOrganisationUnitId, "organisationUnitName", newOrganisationUnitName);
+        return id;
     }
 
     public String getAncestorId(String childId, int ancestorLevel) throws Exception {
-        String response = dhis2HttpClient.doGet("api/organisationUnits/"+childId+"?fields=ancestors[id,level],level");
-        ObjectMapper objectMapper = new ObjectMapper();
+        String response = dhis2HttpClient.doGet("api/organisationUnits/" + childId + "?fields=ancestors[id,level],level");
         String ancestorId = "";
-        JsonNode parsedResponse = objectMapper.readTree(response);
+        JsonNode parsedResponse = MAPPER.readTree(response);
         ArrayNode ancestorsNode = (ArrayNode) parsedResponse.get("ancestors");
-        for(JsonNode ancestor : ancestorsNode){
-            if(ancestor.get("level").asInt() == (ancestorLevel)){
+        for (JsonNode ancestor : ancestorsNode) {
+            if (ancestor.get("level").asInt() == (ancestorLevel)) {
                 ancestorId = ancestor.get("id").asText();
             }
         }
         return ancestorId;
+    }
+
+    private String getProgramConstant(String key)
+    {
+        String value = PROGRAM_CONSTANTS.get(key).asText();
+        if(value == null){ value = ""; }
+        return value;
+    }
+
+    public String getOrganisationUnitId(String organisationUnitName) throws Exception {
+        String response = dhis2HttpClient.doGet("api/organisationUnits?filter=level:eq:1&fields=id,level,name");
+        JsonNode parsedResponse = MAPPER.readTree(response);
+        String rootOrganisationUnitId = "";
+        ArrayNode organisationUnits = (ArrayNode) parsedResponse.get("organisationUnits");
+        for (JsonNode organisationUnit : organisationUnits) {
+            if (organisationUnit.get("name").asText().equals(organisationUnitName)) {
+                rootOrganisationUnitId = organisationUnit.get("id").asText();
+                break;
+            }
+        }
+        return rootOrganisationUnitId;
     }
 
     public void delete(int organisationUnitLevel, String parentOrganisationUnitId) throws Exception {

@@ -8,7 +8,7 @@ public class Hooks {
     public static void afterAll() {
         System.out.println("Delete all the test org units along with it's dependencies after all scenarios");
         try {
-            new OrganisationUnit().deleteAll();
+//            new OrganisationUnit().deleteAll();
         } catch (Exception e) {
 //            TODO handle exception
         }
