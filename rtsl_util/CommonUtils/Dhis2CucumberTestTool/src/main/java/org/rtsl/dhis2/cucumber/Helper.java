@@ -6,18 +6,25 @@ import java.time.format.DateTimeFormatter;
 
 public class Helper {
 
-    public static String DATE_FORMATTER = "yyyy-MM-dd";
-    public static String convertToISODateTimeString(String dateString, String dateFormatter) throws Exception{
-        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern(dateFormatter);
-        LocalDate date = LocalDate.parse(dateString, inputFormatter);
+    public static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static DateTimeFormatter ISO_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+    public static String toISODateTimeString(String dateString, DateTimeFormatter dateFormatter) throws Exception{
+        LocalDate date = LocalDate.parse(dateString, DATE_FORMATTER);
         LocalDateTime dateTime = date.atStartOfDay();
-        DateTimeFormatter isoFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
-        return dateTime.format(isoFormatter);
+        return dateTime.format(ISO_DATE_TIME_FORMATTER);
     }
 
-    public static String convertToISODateTimeString(String dateString) throws Exception{
-        return convertToISODateTimeString(dateString, DATE_FORMATTER);
+    public static String toISODateTimeString(String dateString) throws Exception{
+        return toISODateTimeString(dateString, DATE_FORMATTER);
+    }
+
+    public static LocalDateTime current() throws Exception{
+        return LocalDateTime.now();
+    }
+
+    public static LocalDateTime toDateTime(String dateTimeString) throws Exception{
+        return LocalDateTime.parse(dateTimeString, ISO_DATE_TIME_FORMATTER);
     }
 
 }
