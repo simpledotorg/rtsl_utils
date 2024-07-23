@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.io.InputStream;
 import java.util.Map;
 
+import static org.rtsl.dhis2.cucumber.Helper.PROGRAM_CONSTANTS;
 import static org.rtsl.dhis2.cucumber.Helper.toISODateTimeString;
 
 
@@ -22,17 +23,6 @@ public class OrganisationUnit {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrganisationUnit.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static String districtId = "";
-    private static final String PROGRAM_CONSTANT_FILENAME = "programConstants.json";
-    private static final JsonNode PROGRAM_CONSTANTS = getProgramConstants();
-
-    public static JsonNode getProgramConstants() {
-        try {
-            InputStream resource = OrganisationUnit.class.getClassLoader().getResourceAsStream(PROGRAM_CONSTANT_FILENAME);
-            return MAPPER.readTree(resource);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     private static String testRootOrganisationUnitId;
 

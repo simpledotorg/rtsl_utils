@@ -39,7 +39,7 @@ public class TrackedEntityInstance {
 
 
     public Map<String, String> create(Map<String, String> dataTable, String orgUnitId, String enrolledAt) throws Exception{
-        Map<String, String> convertedDataTable = testIdConverter.convertMetadata(dataTable);
+        Map<String, String> convertedDataTable = testIdConverter.convertMetadata(dataTable, "trackedEntityAttributes");
         this.enrollmentId = dhis2HttpClient.getGenerateUniqueId();
         this.teiId = dhis2HttpClient.getGenerateUniqueId();
         this.orgUnitId = orgUnitId;

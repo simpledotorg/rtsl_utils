@@ -13,11 +13,11 @@
         </#list>
       ],
       "enrollmentStatus": "ACTIVE",
-      "occurredAt": "2024-01-16T00:00:00.000",
+      "occurredAt": "${occurredAt}",
       "orgUnit": "${data.currentFacilityId}",
       "program": "pMIglSEqPGS",
       "programStage": "anb2cjLx3WM",
-      "scheduledAt": "2024-01-16T00:00:00.000",
+      "scheduledAt": "${occurredAt}",
       "status": "COMPLETED"
     }
   ]

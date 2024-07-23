@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import jakarta.inject.Inject;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.rtsl.dhis2.cucumber.Helper.toISODateTimeString;
 
 public class Dhis2StepDefinitions {
 
@@ -106,8 +108,9 @@ public class Dhis2StepDefinitions {
     }
 
     @Given("I register that Facility for program {string}")
-    public void i_register_that_facility(String programName) throws Exception {
-        String baseProgramJson = dhis2HttpClient.doGet("api/programs/pMIglSEqPGS");
+    public void i_register_that_facility(String string) throws Exception {
+        String programName = testIdConverter.getProgramId(string);
+        String baseProgramJson = dhis2HttpClient.doGet("api/programs/" + programName);
         JsonNode rootNode = MAPPER.readTree(baseProgramJson);
         ArrayNode organisationUnits = (ArrayNode) rootNode.get("organisationUnits");
         ObjectNode facilityId = MAPPER.createObjectNode();
@@ -115,7 +118,7 @@ public class Dhis2StepDefinitions {
         organisationUnits.add(facilityId);
         String modifiedJson = MAPPER.writeValueAsString(rootNode);
         String response = dhis2HttpClient.doPutWithBody(
-                "api/programs/pMIglSEqPGS?mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
+                "api/programs/" + programName + "?mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
                 modifiedJson);
         LOGGER.info("Response {}", response);
         scenario.log("Current facility: " + facilityId.get("id") + " has been assigned to the program:" + programName);
@@ -131,19 +134,62 @@ public class Dhis2StepDefinitions {
     }
 
     @Given("That patient visited for Hypertension on {string} with Blood Pressure reading {int}:{int}")
-    public void that_patient_visited_for_hypertension_on_with_blood_pressure_reading(String string, Integer int1, Integer int2) throws Exception {
-        Map<String, Integer> convertedDataTable = Map.of("IxEwYiq1FTq", int1, "yNhtHKtKkO1", int2);
-        Map<String, Object> templateContext = Map.of("data", this, "dataTable", convertedDataTable);
-        this.currentEventId = dhis2HttpClient.getGenerateUniqueId();
-        String response = dhis2HttpClient.doPost("api/tracker?async=false&mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE", "create_event_tei.tpl.json", templateContext);
-
-        LOGGER.info("Response {}", response);
-        scenario.log("Created new event with Id:" + currentEventId + " for the TEI with Id:" + currentTeiId);
+    public void that_patient_visited_for_hypertension_on_with_blood_pressure_reading(String visitDate, Integer systole, Integer diastole) throws Exception {
+        String systoleId = testIdConverter.getDataElementId("HTN - BP systole (mmHg)");
+        String diastoleId = testIdConverter.getDataElementId("HTN - BP diastole (mmHg)");
+        Map<String, Integer> convertedDataTable = Map.of(systoleId, systole, diastoleId, diastole);
+        Map<String, Object> templateContext = Map.of("data", this, "dataTable", convertedDataTable,"occurredAt", toISODateTimeString(visitDate));
+        createEvent(templateContext);
     }
 
+    @Given("That patient visited for Diabetes on {string} with Blood Sugar type {string} and reading {int}")
+    public void thatPatientVisitedForDiabetesOnWithBloodSugarTypeAndReading(String visitDate, String typeCode, Integer reading) throws Exception {
+        thatPatientVisitedForDiabetesOnWithBloodSugarTypeAndReading(visitDate, typeCode, reading, "");
+    }
+
+    @Given("That patient visited for Diabetes on {string} with Blood Sugar type {string} and reading {int} {string}")
+    public void thatPatientVisitedForDiabetesOnWithBloodSugarTypeAndReading(String visitDate, String typeCode, Integer reading, String unitCode) throws Exception {
+        String unitId = testIdConverter.getDataElementId("HTN - Blood sugar unit");
+        String typeId = testIdConverter.getDataElementId("HTN - Type of diabetes measure?");
+        String typeName = getOptionNameFromCode(typeCode);
+        String readingId;
+        if (unitCode.isEmpty()) {
+            readingId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + typeName);
+        } else {
+            String unitName = getOptionNameFromCode(unitCode);
+            readingId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + typeName + " (" + unitName + ")");
+        }
+
+        Map<String, String> convertedDataTable = Map.of(unitId, unitCode, typeId, typeCode, readingId, reading.toString());
+        Map<String, Object> templateContext = Map.of("data", this, "dataTable", convertedDataTable, "occurredAt", toISODateTimeString(visitDate));
+        createEvent(templateContext);
+    }
+    @Given("That patient visited for Hypertension on {string} with Blood Pressure reading {int}:{int} and Blood Sugar type {string} and reading {int} {string}")
+    public void thatPatientVisitedForHypertensionOnWithBloodPressureReadingAndBloodSugarTypeAndReading(String visitDate, Integer systole, Integer diastole, String typeCode, Integer reading, String unitCode) throws Exception {
+        String systoleId = testIdConverter.getDataElementId("HTN - BP systole (mmHg)");
+        String diastoleId = testIdConverter.getDataElementId("HTN - BP diastole (mmHg)");
+        String unitId = testIdConverter.getDataElementId("HTN - Blood sugar unit");
+        String typeId = testIdConverter.getDataElementId("HTN - Type of diabetes measure?");
+        String typeName = getOptionNameFromCode(typeCode);
+        String readingId;
+        if (unitCode.isEmpty()) {
+            readingId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + typeName);
+        } else {
+            String unitName = getOptionNameFromCode(unitCode);
+            readingId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + typeName + " (" + unitName + ")");
+        }
+
+        Map<String, Object> convertedDataTable = Map.of( systoleId, systole, diastoleId, diastole, unitId, unitCode, typeId, typeCode, readingId, reading.toString());
+        Map<String, Object> templateContext = Map.of("data", this, "dataTable", convertedDataTable,"occurredAt", toISODateTimeString(visitDate));
+        createEvent(templateContext);
+    }
+    @Given("That patient visited for Hypertension on {string} with Blood Pressure reading {int}:{int} and Blood Sugar type {string} and reading {int}")
+    public void thatPatientVisitedForHypertensionOnWithBloodPressureReadingAndBloodSugarTypeAndReading(String visitDate, Integer systole, Integer diastole, String typeCode, Integer reading) throws Exception {
+        thatPatientVisitedForHypertensionOnWithBloodPressureReadingAndBloodSugarTypeAndReading(visitDate, systole, diastole, typeCode, reading, "");
+    }
     @Given("Export the analytics")
     public void export_the_analytics() throws Exception {
-        String exportAnalyticsJobId =  testIdConverter.getMetadataId("Matview Refresh");
+        String exportAnalyticsJobId = testIdConverter.getJobConfigurationId("Matview Refresh");
         String jobStatus;
         String lastRuntimeExecution;
         String response;
@@ -151,18 +197,18 @@ public class Dhis2StepDefinitions {
         executeJob(exportAnalyticsJobId);
         do {
             // Loop until job is finished
-            response = dhis2HttpClient.doGet("api/jobConfigurations/"+ exportAnalyticsJobId);
+            response = dhis2HttpClient.doGet("api/jobConfigurations/" + exportAnalyticsJobId);
             JsonNode jobConfigurations = MAPPER.readTree(response);
             jobStatus = jobConfigurations.get("jobStatus").asText();
             lastRuntimeExecution = jobConfigurations.get("lastRuntimeExecution").asText();
-        }while (jobStatus.equals("RUNNING"));
+        } while (jobStatus.equals("RUNNING"));
         LOGGER.info("Response {}", response);
-        scenario.log("Analytics job with Id:"+ exportAnalyticsJobId + " took "+lastRuntimeExecution + " time to complete.");
+        scenario.log("Analytics job with Id:" + exportAnalyticsJobId + " took " + lastRuntimeExecution + " time to complete.");
     }
 
     @Given("Run the Hypertension data aggregation")
     public void run_the_hypertension_data_aggregation() throws Exception {
-        String dataAggregationJobId =  testIdConverter.getMetadataId("Internal Data Exchange | PI Aggregation");
+        String dataAggregationJobId = testIdConverter.getJobConfigurationId("Internal Data Exchange | PI aggregation");
         String jobStatus;
         String lastRuntimeExecution;
         String response;
@@ -170,18 +216,18 @@ public class Dhis2StepDefinitions {
         executeJob(dataAggregationJobId);
         do {
             // Loop until job is finished
-            response = dhis2HttpClient.doGet("api/jobConfigurations/"+ dataAggregationJobId);
+            response = dhis2HttpClient.doGet("api/jobConfigurations/" + dataAggregationJobId);
             JsonNode jobConfigurations = MAPPER.readTree(response);
             jobStatus = jobConfigurations.get("jobStatus").asText();
             lastRuntimeExecution = jobConfigurations.get("lastRuntimeExecution").asText();
-        }while (jobStatus.equals("RUNNING"));
+        } while (jobStatus.equals("RUNNING"));
         LOGGER.info("Response {}", response);
-        scenario.log("Data exchange and aggregation job with Id:"+ dataAggregationJobId + " took "+ lastRuntimeExecution + " time to complete.");
+        scenario.log("Data exchange and aggregation job with Id:" + dataAggregationJobId + " took " + lastRuntimeExecution + " time to complete.");
     }
 
     @Then("The value of PI {string} should be")
     public void the_value_of_pi_should_be(String string, Map<String, String> dataTable) throws Exception {
-        String programIndicatorId = testIdConverter.getMetadataId(string);
+        String programIndicatorId = testIdConverter.getProgramIndicatorId(string);
         String orgUnit = this.currentFacilityId;
         String periods = "LAST_12_MONTHS;THIS_MONTH";
         String endpoint = "api/analytics.json";
@@ -196,7 +242,9 @@ public class Dhis2StepDefinitions {
             actualPeriodValues.put(key, value);
         }
         for (String period : dataTable.keySet()) {
-            assertEquals(dataTable.get(period), actualPeriodValues.get(period));
+            assertEquals(dataTable.get(period),
+                    actualPeriodValues.get(period),
+                    "Program Indicator: <" + programIndicatorId + "> for the <" + period + "> in Organisation Unit:<" + orgUnit + ">");
         }
         LOGGER.info("Response {}", response);
         scenario.log("Program Indicator: " + programIndicatorId + "for the " + periods + " in Organisation Unit:" + orgUnit + "is " + actualPeriodValues);
@@ -211,11 +259,26 @@ public class Dhis2StepDefinitions {
         }
         return returnList;
     }
-
-    private String executeJob(String jobId) throws Exception{
-        String response = dhis2HttpClient.doPost("api/jobConfigurations/"+ jobId + "/execute");
+    private String executeJob(String jobId) throws Exception {
+        String response = dhis2HttpClient.doPost("api/jobConfigurations/" + jobId + "/execute");
         LOGGER.info("Response {}", response);
         return response;
     }
+
+    private String getOptionNameFromCode(String code) throws Exception {
+        String response = dhis2HttpClient.doGet("api/options?paging=false&fields=name&filter=code:eq:" + code);
+        JsonNode rootNode = MAPPER.readTree(response);
+        return rootNode.get("options").get(0).get("name").asText();
+    }
+
+    private void createEvent(Map<String, Object> templateContext) throws Exception {
+        this.currentEventId = dhis2HttpClient.getGenerateUniqueId();
+
+        String response = dhis2HttpClient.doPost("api/tracker?async=false&mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE", "create_event_tei.tpl.json", templateContext);
+
+        LOGGER.info("Response {}", response);
+        scenario.log("Created new event with Id:" + currentEventId + " for the TEI with Id:" + currentTeiId);
+    }
+
 
 }
