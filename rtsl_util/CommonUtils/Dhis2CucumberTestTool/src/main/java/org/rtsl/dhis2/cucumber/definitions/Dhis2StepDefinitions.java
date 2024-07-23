@@ -183,23 +183,23 @@ public class Dhis2StepDefinitions {
     public void the_value_of_pi_should_be(String string, Map<String, String> dataTable) throws Exception {
         String programIndicatorId = testIdConverter.getMetadataId(string);
         String orgUnit = this.currentFacilityId;
-        String period = "LAST_12_MONTHS;THIS_MONTH";
+        String periods = "LAST_12_MONTHS;THIS_MONTH";
         String endpoint = "api/analytics.json";
-        String params = "?dimension=dx:" + programIndicatorId + "&dimension=pe:" + period + "&filter=ou:" + orgUnit;
+        String params = "?dimension=dx:" + programIndicatorId + "&dimension=pe:" + periods + "&filter=ou:" + orgUnit;
         String response = dhis2HttpClient.doGet(endpoint + params);
         JsonNode rootNode = MAPPER.readTree(response);
-        ArrayNode actualPeriodValues = (ArrayNode) rootNode.get("rows");
-        Map<String, String> periodValue = new HashMap<>();
-        for (JsonNode dataValue : actualPeriodValues) {
+        ArrayNode periodValues = (ArrayNode) rootNode.get("rows");
+        Map<String, String> actualPeriodValues = new HashMap<>();
+        for (JsonNode dataValue : periodValues) {
             String key = dataValue.get(1).asText();
             String value = dataValue.get(2).asText();
-            periodValue.put(key, value);
+            actualPeriodValues.put(key, value);
         }
-        for (String expectedPeriod : dataTable.keySet()) {
-            assertEquals(periodValue.get(expectedPeriod), dataTable.get(expectedPeriod));
+        for (String period : dataTable.keySet()) {
+            assertEquals(dataTable.get(period), actualPeriodValues.get(period));
         }
         LOGGER.info("Response {}", response);
-        scenario.log("Program Indicator: " + programIndicatorId + "for the " + period + " in Organisation Unit:" + orgUnit + "is " + actualPeriodValues);
+        scenario.log("Program Indicator: " + programIndicatorId + "for the " + periods + " in Organisation Unit:" + orgUnit + "is " + actualPeriodValues);
     }
 
     private List<AttributeInfo> getAttributes(Map<String, String> data) {

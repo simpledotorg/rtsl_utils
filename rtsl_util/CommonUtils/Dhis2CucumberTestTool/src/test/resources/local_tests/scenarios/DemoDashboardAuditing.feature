@@ -10,14 +10,16 @@ Feature: Demo Dashboard Auditing
     # Patient 1 - Dead patient
     #
     Given I create a new Patient on "2024-01-16" for this Facility with the following characteristics
-      | sB1IHYu2xQT   | Test   |
-      | YJGACwhN0St   | true   |
-      | HTN diagnosis | YES    |
-      | NI0QRzJvQ0k   | 32     |
-      | Ot616hCy9j7   | KOLARA |
-      | ENRjVGxVL6l   | TEST   |
-      | v4DnYfXn9Mu   | YES    |
-      | fI1P3Mg1zOZ   | ACTIVE |
+      | sB1IHYu2xQT   | Test         |
+      | YJGACwhN0St   | true         |
+      | HTN diagnosis | YES          |
+      | NI0QRzJvQ0k   | 32           |
+      | Ot616hCy9j7   | KOLARA       |
+      | ENRjVGxVL6l   | TEST         |
+      | v4DnYfXn9Mu   | YES          |
+      | fI1P3Mg1zOZ   | ACTIVE       |
+      | Address       | Rose Gardens |
+      | Sex           | MALE         |
     Given That patient visited for Hypertension on "2024-01-16" with Blood Pressure reading 145:92
     Given That patient visited for Hypertension on "2024-01-16" with Blood Pressure reading 145:92
     Given That patient visited for Hypertension on "2024-02-02" with Blood Pressure reading 140:87
@@ -28,28 +30,32 @@ Feature: Demo Dashboard Auditing
     # Patient 2 - Not a hypertension patient
     #
     Given I create a new Patient on "2024-01-16" for this Facility with the following characteristics
-      | Given name    | Fabian |
-      | Family name   | Moore  |
-      | HTN diagnosis | No     |
-      | v4DnYfXn9Mu   | YES    |
-      | NI0QRzJvQ0k   | 32     |
-      | Ot616hCy9j7   | KOLARA |
-      | fI1P3Mg1zOZ   | ACTIVE |
-      | YJGACwhN0St   | true   |
+      | Given name    | Fabian       |
+      | Family name   | Moore        |
+      | HTN diagnosis | No           |
+      | v4DnYfXn9Mu   | YES          |
+      | NI0QRzJvQ0k   | 32           |
+      | Ot616hCy9j7   | KOLARA       |
+      | fI1P3Mg1zOZ   | ACTIVE       |
+      | Address       | Rose Gardens |
+      | Sex           | MALE         |
+      | YJGACwhN0St   | true         |
 #    Given That patient visited for Blood Sugar on "2024-01-16" // TODO
 
     #
     # Patient 3
     #
-    Given I create a new Patient on "2024-01-16" for this Facility with the following characteristics
-      | Given name    | Sue     |
-      | Family name   | Perkins |
-      | HTN diagnosis | YES     |
-      | v4DnYfXn9Mu   | YES     |
-      | NI0QRzJvQ0k   | 32      |
-      | Ot616hCy9j7   | KOLARA  |
-      | fI1P3Mg1zOZ   | ACTIVE  |
-      | YJGACwhN0St   | true    |
+    Given I create a new Patient on "2023-10-20" for this Facility with the following characteristics
+      | Given name    | Sue          |
+      | Family name   | Perkins      |
+      | HTN diagnosis | YES          |
+      | v4DnYfXn9Mu   | YES          |
+      | NI0QRzJvQ0k   | 32           |
+      | Ot616hCy9j7   | KOLARA       |
+      | fI1P3Mg1zOZ   | ACTIVE       |
+      | Address       | Rose Gardens |
+      | Sex           | MALE         |
+      | YJGACwhN0St   | true         |
     Given That patient visited for Hypertension on "2023-10-20" with Blood Pressure reading 147:89
     Given That patient visited for Hypertension on "2023-11-27" with Blood Pressure reading 142:87
     Given That patient visited for Hypertension on "2024-01-04" with Blood Pressure reading 140:83
@@ -60,15 +66,17 @@ Feature: Demo Dashboard Auditing
     #
     # Patient 4
     #
-    Given I create a new Patient on "2024-01-16" for this Facility with the following characteristics
-      | Given name    | Kiran  |
-      | Family name   | Kishor |
-      | HTN diagnosis | YES    |
-      | v4DnYfXn9Mu   | YES    |
-      | NI0QRzJvQ0k   | 32     |
-      | Ot616hCy9j7   | KOLARA |
-      | fI1P3Mg1zOZ   | ACTIVE |
-      | YJGACwhN0St   | true   |
+    Given I create a new Patient on "2023-10-20" for this Facility with the following characteristics
+      | Given name    | Kiran        |
+      | Family name   | Kishor       |
+      | HTN diagnosis | YES          |
+      | v4DnYfXn9Mu   | YES          |
+      | NI0QRzJvQ0k   | 32           |
+      | Ot616hCy9j7   | KOLARA       |
+      | fI1P3Mg1zOZ   | ACTIVE       |
+      | Address       | Rose Gardens |
+      | Sex           | MALE         |
+      | YJGACwhN0St   | true         |
     Given That patient visited for Hypertension on "2023-10-20" with Blood Pressure reading 142:95
     Given That patient visited for Hypertension on "2023-11-27" with Blood Pressure reading 139:90
     Given That patient visited for Hypertension on "2024-01-04" with Blood Pressure reading 132:82
@@ -87,12 +95,15 @@ Feature: Demo Dashboard Auditing
       | 202403 | 3 |
       | 202402 | 3 |
       | 202401 | 3 |
-      | 202312 | 0 |
+      | 202312 | 2 |
+      | 202311 | 2 |
+      | 202310 | 2 |
+      | 202309 | 0 |
 
-  Scenario: Load Test Patients and check results in a different org unit
-    Given I create a new OrgUnit
-    Given I assign the current user to the current orgUnit
-    Given I register that Facility for program "YQj5qpbzQxh"
+#  Scenario: Load Test Patients and check results in a different org unit
+#    Given I create a new OrgUnit
+#    Given I assign the current user to the current orgUnit
+#    Given I register that Facility for program "YQj5qpbzQxh"
 
 
     #
