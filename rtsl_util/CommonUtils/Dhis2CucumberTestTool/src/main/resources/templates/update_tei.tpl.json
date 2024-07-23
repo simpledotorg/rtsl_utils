@@ -1,0 +1,17 @@
+{
+  "trackedEntities": [
+    {
+      "orgUnit": "${data.orgUnitId}",
+      "trackedEntity": "${data.teiId}",
+      "trackedEntityType": "MCPQUTHX1Ze",
+      "attributes": [
+        <#list dataTable as currentKey, currentValue>
+        {
+          "attribute": "${currentKey}",
+          "value": "${currentValue}"
+        }<#sep>, </#sep>
+        </#list>
+      ]
+    }
+  ]
+}

@@ -39,7 +39,7 @@ public class TrackedEntityInstance {
 
 
     public Map<String, String> create(Map<String, String> dataTable, String orgUnitId, String enrolledAt) throws Exception{
-        Map<String, String> convertedDataTable = testIdConverter.convertMetadata(dataTable, "trackedEntityAttributes");
+        Map<String, String> convertedDataTable = testIdConverter.convertMetadata(dataTable, "trackedEntityAttribute");
         this.enrollmentId = dhis2HttpClient.getGenerateUniqueId();
         this.teiId = dhis2HttpClient.getGenerateUniqueId();
         this.orgUnitId = orgUnitId;
@@ -51,5 +51,17 @@ public class TrackedEntityInstance {
 
         LOGGER.info("Response {}", response);
         return  Map.of("id", teiId, "enrollmentId", enrollmentId);
+    }
+
+    public void update(Map<String, String> dataTable, String orgUnitId, String teiId) throws Exception{
+        Map<String, String> convertedDataTable = testIdConverter.convertMetadata(dataTable, "trackedEntityAttribute");
+        this.teiId = teiId;
+        this.orgUnitId = orgUnitId;
+        Map<String, Object> templateContext = Map.of("data", this, "dataTable", convertedDataTable);
+        String response = dhis2HttpClient.doPost("api/tracker?async=false&mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
+                "update_tei.tpl.json",
+                templateContext);
+
+        LOGGER.info("Response {}", response);
     }
 }

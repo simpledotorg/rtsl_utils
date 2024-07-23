@@ -124,9 +124,9 @@ public class Dhis2StepDefinitions {
         scenario.log("Current facility: " + facilityId.get("id") + " has been assigned to the program:" + programName);
     }
 
-    @Given("I create a new TEI for this OrgUnit with the following characteristics")
-    @Given("I create a new Patient on {string} for this Facility with the following characteristics")
-    public void i_create_a_new_patient_on_for_this_facility_with_the_following_characteristics(String string, Map<String, String> dataTable) throws Exception {
+    @Given("I create a new TEI for this OrgUnit with the following attributes")
+    @Given("I create a new Patient on {string} for this Facility with the following attributes")
+    public void i_create_a_new_patient_on_for_this_facility_with_the_following_attributes(String string, Map<String, String> dataTable) throws Exception {
         Map<String, String> newTei = trackedEntityInstance.create(dataTable, currentFacilityId, string);
         this.currentTeiId = newTei.get("id");
         this.currentEnrollmentId = newTei.get("enrollmentId");
@@ -157,7 +157,7 @@ public class Dhis2StepDefinitions {
             readingId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + typeName);
         } else {
             String unitName = getOptionNameFromCode(unitCode);
-            readingId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + typeName + " (" + unitName + ")");
+            readingId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + typeCode + " (" + unitName + ")");
         }
 
         Map<String, String> convertedDataTable = Map.of(unitId, unitCode, typeId, typeCode, readingId, reading.toString());
@@ -176,7 +176,7 @@ public class Dhis2StepDefinitions {
             readingId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + typeName);
         } else {
             String unitName = getOptionNameFromCode(unitCode);
-            readingId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + typeName + " (" + unitName + ")");
+            readingId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + typeCode + " (" + unitName + ")");
         }
 
         Map<String, Object> convertedDataTable = Map.of( systoleId, systole, diastoleId, diastole, unitId, unitCode, typeId, typeCode, readingId, reading.toString());
@@ -248,6 +248,12 @@ public class Dhis2StepDefinitions {
         }
         LOGGER.info("Response {}", response);
         scenario.log("Program Indicator: " + programIndicatorId + "for the " + periods + " in Organisation Unit:" + orgUnit + "is " + actualPeriodValues);
+    }
+
+    @Given("Update that patient with the following attributes")
+    public void updateThatPatientWithTheFollowingAttributes(Map<String, String> dataTable) throws Exception {
+        trackedEntityInstance.update(dataTable, currentFacilityId, this.currentTeiId);
+        scenario.log("Created new TEI with Id:" + currentTeiId + " updated");
     }
 
     private List<AttributeInfo> getAttributes(Map<String, String> data) {

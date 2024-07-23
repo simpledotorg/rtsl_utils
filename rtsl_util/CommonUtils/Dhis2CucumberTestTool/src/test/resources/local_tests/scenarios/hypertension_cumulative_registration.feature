@@ -9,7 +9,7 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
     #
     # Patient 1 - Dead patient
     #
-    Given I create a new Patient on "2024-01-16" for this Facility with the following characteristics
+    Given I create a new Patient on "2024-01-16" for this Facility with the following attributes
       | GEN - Given name                      | Test         |
       | GEN - Family name                     | TEST         |
       | GEN - Sex                             | MALE         |
@@ -25,11 +25,13 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
     Given That patient visited for Hypertension on "2024-01-16" with Blood Pressure reading 145:92
     Given That patient visited for Hypertension on "2024-02-02" with Blood Pressure reading 140:87
     Given That patient visited for Hypertension on "2024-05-02" with Blood Pressure reading 136:84
+    Given Update that patient with the following attributes
+      | HTN - NCD Patient Status | DIED |
 
     #
     # Patient 2 - Not a hypertension patient
     #
-    Given I create a new Patient on "2024-01-16" for this Facility with the following characteristics
+    Given I create a new Patient on "2024-01-16" for this Facility with the following attributes
       | Given name         | Fabian       |
       | Family name        | Moore        |
       | Sex                | MALE         |
@@ -40,12 +42,12 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient visited for Diabetes on "2023-10-20" with Blood Sugar type "FBS" Given reading 130 "MG_OR_DL"
+    Given That patient visited for Diabetes on "2023-10-20" with Blood Sugar type "FBS" and reading 130 "MG_OR_DL"
 
     #
     # Patient 3
     #
-    Given I create a new Patient on "2023-10-20" for this Facility with the following characteristics
+    Given I create a new Patient on "2023-10-20" for this Facility with the following attributes
       | Given name         | Sue          |
       | Family name        | Perkins      |
       | Sex                | MALE         |
@@ -65,7 +67,7 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
     #
     # Patient 4
     #
-    Given I create a new Patient on "2023-10-20" for this Facility with the following characteristics
+    Given I create a new Patient on "2023-10-20" for this Facility with the following attributes
       | Given name         | Kiran        |
       | Family name        | Kishor       |
       | Sex                | MALE         |
@@ -87,16 +89,29 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
     When Run the Hypertension data aggregation
 
     Then The value of PI "HTN - Cumulative registrations" should be
-      | 202407 | 3 |
-      | 202406 | 3 |
-      | 202405 | 3 |
-      | 202404 | 3 |
-      | 202403 | 3 |
-      | 202402 | 3 |
-      | 202401 | 3 |
+      | 202407 | 2 |
+      | 202406 | 2 |
+      | 202405 | 2 |
+      | 202404 | 2 |
+      | 202403 | 2 |
+      | 202402 | 2 |
+      | 202401 | 2 |
       | 202312 | 2 |
       | 202311 | 2 |
       | 202310 | 2 |
+      | 202309 | 0 |
+
+    Then The value of PI "HTN - Cumulative dead patients" should be
+      | 202407 | 1 |
+      | 202406 | 1 |
+      | 202405 | 1 |
+      | 202404 | 1 |
+      | 202403 | 1 |
+      | 202402 | 1 |
+      | 202401 | 1 |
+      | 202312 | 0 |
+      | 202311 | 0 |
+      | 202310 | 0 |
       | 202309 | 0 |
 
   Scenario: Audit the program indicator: HTN - Cumulative registrations
@@ -107,7 +122,7 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
     #
     # Patient 1 - Dead patient
     #
-    Given I create a new Patient on "2024-01-16" for this Facility with the following characteristics
+    Given I create a new Patient on "2024-01-16" for this Facility with the following attributes
       | GEN - Given name                      | Test         |
       | GEN - Family name                     | TEST         |
       | GEN - Sex                             | MALE         |
@@ -123,11 +138,13 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
     Given That patient visited for Hypertension on "2024-01-16" with Blood Pressure reading 145:92
     Given That patient visited for Hypertension on "2024-02-02" with Blood Pressure reading 140:87
     Given That patient visited for Hypertension on "2024-05-02" with Blood Pressure reading 136:84
+    Given Update that patient with the following attributes
+      | HTN - NCD Patient Status | DIED |
 
     #
     # Patient 2 - Not a hypertension patient
     #
-    Given I create a new Patient on "2024-01-16" for this Facility with the following characteristics
+    Given I create a new Patient on "2024-01-16" for this Facility with the following attributes
       | Given name         | Fabian       |
       | Family name        | Moore        |
       | Sex                | MALE         |
@@ -143,7 +160,7 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
     #
     # Patient 3
     #
-    Given I create a new Patient on "2023-10-20" for this Facility with the following characteristics
+    Given I create a new Patient on "2023-10-20" for this Facility with the following attributes
       | Given name         | Sue          |
       | Family name        | Perkins      |
       | Sex                | MALE         |
@@ -164,7 +181,7 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
     #
     # Patient 4
     #
-    Given I create a new Patient on "2023-10-20" for this Facility with the following characteristics
+    Given I create a new Patient on "2023-10-20" for this Facility with the following attributes
       | Given name         | Kiran        |
       | Family name        | Kishor       |
       | Sex                | MALE         |
@@ -187,12 +204,12 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
 
     Then The value of PI "HTN - Cumulative registrations" should be
       | 202407 | 7 |
-      | 202406 | 3 |
-      | 202405 | 3 |
-      | 202404 | 3 |
-      | 202403 | 3 |
-      | 202402 | 3 |
-      | 202401 | 3 |
+      | 202406 | 2 |
+      | 202405 | 2 |
+      | 202404 | 2 |
+      | 202403 | 2 |
+      | 202402 | 2 |
+      | 202401 | 2 |
       | 202312 | 2 |
       | 202311 | 2 |
       | 202310 | 2 |
