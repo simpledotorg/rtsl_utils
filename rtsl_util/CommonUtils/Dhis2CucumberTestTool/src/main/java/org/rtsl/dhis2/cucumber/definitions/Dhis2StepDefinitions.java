@@ -208,7 +208,7 @@ public class Dhis2StepDefinitions {
 
     @Given("Run the Hypertension data aggregation")
     public void run_the_hypertension_data_aggregation() throws Exception {
-        String dataAggregationJobId = testIdConverter.getJobConfigurationId("Internal Data Exchange | PI aggregation");
+        String dataAggregationJobId = testIdConverter.getJobConfigurationId("ADEX - Hypertension dashboard");
         String jobStatus;
         String lastRuntimeExecution;
         String response;
