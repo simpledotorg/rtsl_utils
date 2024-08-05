@@ -133,60 +133,42 @@ public class Dhis2StepDefinitions {
         scenario.log("Created new TEI with Id:" + currentTeiId + " and Enrollment with Id:" + currentEnrollmentId);
     }
 
-    @Given("That patient visited for Hypertension on {string} with Blood Pressure reading {int}:{int}")
-    public void that_patient_visited_for_hypertension_on_with_blood_pressure_reading(String visitDate, Integer systole, Integer diastole) throws Exception {
-        String systoleId = testIdConverter.getDataElementId("HTN - BP systole (mmHg)");
-        String diastoleId = testIdConverter.getDataElementId("HTN - BP diastole (mmHg)");
-        Map<String, Integer> convertedDataTable = Map.of(systoleId, systole, diastoleId, diastole);
-        Map<String, Object> templateContext = Map.of("data", this, "dataTable", convertedDataTable,"occurredAt", toISODateTimeString(visitDate));
-        createEvent(templateContext);
+    @Given("That patient has a {string} event on {string} with following data")
+    public void thatPatientHasAEventOnWithFollowingData(String eventName, String eventDateString, Map<String, String> dataTable) throws Exception {
+        thatPatientHasAEventOnWhichWasScheduledOnWithFollowingData(eventName, eventDateString, eventDateString, dataTable);
     }
 
-    @Given("That patient visited for Diabetes on {string} with Blood Sugar type {string} and reading {int}")
-    public void thatPatientVisitedForDiabetesOnWithBloodSugarTypeAndReading(String visitDate, String typeCode, Integer reading) throws Exception {
-        thatPatientVisitedForDiabetesOnWithBloodSugarTypeAndReading(visitDate, typeCode, reading, "");
-    }
+    @Given("That patient has a {string} event on {string} which was scheduled on {string} with following data")
+    public void thatPatientHasAEventOnWhichWasScheduledOnWithFollowingData(String eventName, String eventDateString, String scheduledDateString,  Map<String, String> dataTable) throws Exception {
+        Map<String, String> convertedDataTable = new HashMap<>();
 
-    @Given("That patient visited for Diabetes on {string} with Blood Sugar type {string} and reading {int} {string}")
-    public void thatPatientVisitedForDiabetesOnWithBloodSugarTypeAndReading(String visitDate, String typeCode, Integer reading, String unitCode) throws Exception {
-        String unitId = testIdConverter.getDataElementId("HTN - Blood sugar unit");
-        String typeId = testIdConverter.getDataElementId("HTN - Type of diabetes measure?");
-        String typeName = getOptionNameFromCode(typeCode);
-        String readingId;
-        if (unitCode.isEmpty()) {
-            readingId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + typeName);
-        } else {
-            String unitName = getOptionNameFromCode(unitCode);
-            readingId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + typeCode + " (" + unitName + ")");
+        for (String dataElement : dataTable.keySet()) {
+            String dataElementId;
+            if (dataElement.equals("HTN - Blood sugar reading")) {
+                String unitValue = dataTable.get("HTN - Blood sugar unit");
+                String bloodSugarTypeValue = dataTable.get("HTN - Type of diabetes measure?");
+                String bloodSugarType = getOptionNameFromCode(bloodSugarTypeValue);
+                if (unitValue.isEmpty()) {
+                    dataElementId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + bloodSugarType);
+                } else {
+                    String unitName = getOptionNameFromCode(unitValue);
+                    dataElementId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + bloodSugarTypeValue + " (" + unitName + ")");
+                }
+            } else {
+                dataElementId = testIdConverter.getDataElementId(dataElement);
+            }
+            convertedDataTable.put(dataElementId, dataTable.get(dataElement));
         }
-
-        Map<String, String> convertedDataTable = Map.of(unitId, unitCode, typeId, typeCode, readingId, reading.toString());
-        Map<String, Object> templateContext = Map.of("data", this, "dataTable", convertedDataTable, "occurredAt", toISODateTimeString(visitDate));
+        Map<String, Object> templateContext = Map.of("data", this,
+                "dataTable", convertedDataTable,
+                "occurredAt", toISODateTimeString(eventDateString),
+                "scheduledAt", toISODateTimeString(scheduledDateString),
+                "programStageId", testIdConverter.getProgramStageId(eventName),
+                "eventStatus", "COMPLETED"
+        );
         createEvent(templateContext);
     }
-    @Given("That patient visited for Hypertension on {string} with Blood Pressure reading {int}:{int} and Blood Sugar type {string} and reading {int} {string}")
-    public void thatPatientVisitedForHypertensionOnWithBloodPressureReadingAndBloodSugarTypeAndReading(String visitDate, Integer systole, Integer diastole, String typeCode, Integer reading, String unitCode) throws Exception {
-        String systoleId = testIdConverter.getDataElementId("HTN - BP systole (mmHg)");
-        String diastoleId = testIdConverter.getDataElementId("HTN - BP diastole (mmHg)");
-        String unitId = testIdConverter.getDataElementId("HTN - Blood sugar unit");
-        String typeId = testIdConverter.getDataElementId("HTN - Type of diabetes measure?");
-        String typeName = getOptionNameFromCode(typeCode);
-        String readingId;
-        if (unitCode.isEmpty()) {
-            readingId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + typeName);
-        } else {
-            String unitName = getOptionNameFromCode(unitCode);
-            readingId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + typeCode + " (" + unitName + ")");
-        }
 
-        Map<String, Object> convertedDataTable = Map.of( systoleId, systole, diastoleId, diastole, unitId, unitCode, typeId, typeCode, readingId, reading.toString());
-        Map<String, Object> templateContext = Map.of("data", this, "dataTable", convertedDataTable,"occurredAt", toISODateTimeString(visitDate));
-        createEvent(templateContext);
-    }
-    @Given("That patient visited for Hypertension on {string} with Blood Pressure reading {int}:{int} and Blood Sugar type {string} and reading {int}")
-    public void thatPatientVisitedForHypertensionOnWithBloodPressureReadingAndBloodSugarTypeAndReading(String visitDate, Integer systole, Integer diastole, String typeCode, Integer reading) throws Exception {
-        thatPatientVisitedForHypertensionOnWithBloodPressureReadingAndBloodSugarTypeAndReading(visitDate, systole, diastole, typeCode, reading, "");
-    }
     @Given("Export the analytics")
     public void export_the_analytics() throws Exception {
         String exportAnalyticsJobId = testIdConverter.getJobConfigurationId("Matview Refresh");
@@ -250,10 +232,22 @@ public class Dhis2StepDefinitions {
         scenario.log("Program Indicator: " + programIndicatorId + "for the " + periods + " in Organisation Unit:" + orgUnit + "is " + actualPeriodValues);
     }
 
-    @Given("Update that patient with the following attributes")
-    public void updateThatPatientWithTheFollowingAttributes(Map<String, String> dataTable) throws Exception {
+    @Given("That patient was updated on {string} with the following attributes")
+    public void thatPatientWasUpdatedOnWithTheFollowingAttributes(String visitDate, Map<String, String> dataTable) throws Exception {
         trackedEntityInstance.update(dataTable, currentFacilityId, this.currentTeiId);
         scenario.log("Created new TEI with Id:" + currentTeiId + " updated");
+    }
+
+    @Given("That patient has a {string} event scheduled for {string}")
+    public void thatPatientHasAEventScheduledFor(String eventName, String eventDateString) throws Exception{
+        Map<String, Object> templateContext = Map.of("data", this,
+                "dataTable", new HashMap<String, String>(),
+                "occurredAt", "",
+                "scheduledAt", toISODateTimeString(eventDateString),
+                "programStageId", testIdConverter.getProgramStageId(eventName),
+                "eventStatus", "SCHEDULE"
+        );
+        createEvent(templateContext);
     }
 
     private List<AttributeInfo> getAttributes(Map<String, String> data) {
@@ -265,6 +259,7 @@ public class Dhis2StepDefinitions {
         }
         return returnList;
     }
+
     private String executeJob(String jobId) throws Exception {
         String response = dhis2HttpClient.doPost("api/jobConfigurations/" + jobId + "/execute");
         LOGGER.info("Response {}", response);
@@ -285,6 +280,4 @@ public class Dhis2StepDefinitions {
         LOGGER.info("Response {}", response);
         scenario.log("Created new event with Id:" + currentEventId + " for the TEI with Id:" + currentTeiId);
     }
-
-
 }
