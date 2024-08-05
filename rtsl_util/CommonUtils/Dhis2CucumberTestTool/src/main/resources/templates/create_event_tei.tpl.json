@@ -16,9 +16,9 @@
       "occurredAt": "${occurredAt}",
       "orgUnit": "${data.currentFacilityId}",
       "program": "pMIglSEqPGS",
-      "programStage": "anb2cjLx3WM",
-      "scheduledAt": "${occurredAt}",
-      "status": "COMPLETED"
+      "programStage": "${programStageId}",
+      "scheduledAt": "${scheduledAt}",
+      "status": "${eventStatus}"
     }
   ]
 }
