@@ -126,8 +126,8 @@ public class Dhis2StepDefinitions {
 
     @Given("I create a new TEI for this OrgUnit with the following attributes")
     @Given("I create a new Patient on {string} for this Facility with the following attributes")
-    public void i_create_a_new_patient_on_for_this_facility_with_the_following_attributes(String string, Map<String, String> dataTable) throws Exception {
-        Map<String, String> newTei = trackedEntityInstance.create(dataTable, currentFacilityId, string);
+    public void i_create_a_new_patient_on_for_this_facility_with_the_following_attributes(String eventDate, Map<String, String> dataTable) throws Exception {
+        Map<String, String> newTei = trackedEntityInstance.create(dataTable, currentFacilityId, eventDate);
         this.currentTeiId = newTei.get("id");
         this.currentEnrollmentId = newTei.get("enrollmentId");
         scenario.log("Created new TEI with Id:" + currentTeiId + " and Enrollment with Id:" + currentEnrollmentId);
@@ -148,7 +148,7 @@ public class Dhis2StepDefinitions {
                 String unitValue = dataTable.get("HTN - Blood sugar unit");
                 String bloodSugarTypeValue = dataTable.get("HTN - Type of diabetes measure?");
                 String bloodSugarType = getOptionNameFromCode(bloodSugarTypeValue);
-                if (unitValue.isEmpty()) {
+                if (unitValue == null) {
                     dataElementId = testIdConverter.getDataElementId("HTN - Blood sugar reading: " + bloodSugarType);
                 } else {
                     String unitName = getOptionNameFromCode(unitValue);

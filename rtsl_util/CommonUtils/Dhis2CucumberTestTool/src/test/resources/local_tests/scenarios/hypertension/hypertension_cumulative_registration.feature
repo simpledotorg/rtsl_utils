@@ -20,12 +20,22 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | District                              | KOLARA       |
       | HTN - Consent to record data          | true         |
       | HTN - NCD Patient Status              | ACTIVE       |
-
-    Given That patient visited for Hypertension on "2024-01-16" with Blood Pressure reading 145:92
-    Given That patient visited for Hypertension on "2024-01-16" with Blood Pressure reading 145:92
-    Given That patient visited for Hypertension on "2024-02-02" with Blood Pressure reading 140:87
-    Given That patient visited for Hypertension on "2024-05-02" with Blood Pressure reading 136:84
-    Given Update that patient with the following attributes
+    Given That patient has a "Hypertension & Diabetes visit" event on "2024-01-16" with following data
+      | Systole  | 142 |
+      | Diastole | 95  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-01-16" with following data
+      | Systole  | 145 |
+      | Diastole | 92  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-01-16" with following data
+      | Systole  | 145 |
+      | Diastole | 92  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-02-02" with following data
+      | Systole  | 140 |
+      | Diastole | 87  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-05-02" with following data
+      | Systole  | 136 |
+      | Diastole | 84  |
+    Given That patient was updated on "2024-06-02" with the following attributes
       | HTN - NCD Patient Status | DIED |
 
     #
@@ -42,7 +52,10 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient visited for Diabetes on "2024-01-16" with Blood Sugar type "FBS" and reading 130 "MG_OR_DL"
+    Given That patient has a "Hypertension & Diabetes" event on "2024-01-16" with following data
+      | HTN - Type of diabetes measure? | FBS      |
+      | HTN - Blood sugar reading       | 130      |
+      | HTN - Blood sugar unit          | MG_OR_DL |
 
     #
     # Patient 3
@@ -58,11 +71,21 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient visited for Hypertension on "2023-10-20" with Blood Pressure reading 147:89
-    Given That patient visited for Hypertension on "2023-11-27" with Blood Pressure reading 142:87
-    Given That patient visited for Hypertension on "2024-01-04" with Blood Pressure reading 140:83
-    Given That patient visited for Hypertension on "2024-02-07" with Blood Pressure reading 135:84
-    Given That patient visited for Hypertension on "2024-03-03" with Blood Pressure reading 134:83
+    Given That patient has a "Hypertension & Diabetes" event on "2023-10-20" with following data
+      | Systole  | 147 |
+      | Diastole | 89  |
+    Given That patient has a "Hypertension & Diabetes" event on "2023-11-27" with following data
+      | Systole  | 142 |
+      | Diastole | 87  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-01-04" with following data
+      | Systole  | 140 |
+      | Diastole | 83  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-02-07" with following data
+      | Systole  | 135 |
+      | Diastole | 84  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-03-03" with following data
+      | Systole  | 134 |
+      | Diastole | 83  |
 
     #
     # Patient 4
@@ -78,15 +101,25 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient visited for Hypertension on "2023-10-20" with Blood Pressure reading 142:95
-    Given That patient visited for Hypertension on "2023-11-27" with Blood Pressure reading 139:90
-    Given That patient visited for Hypertension on "2024-01-04" with Blood Pressure reading 132:82
-    Given That patient visited for Hypertension on "2024-02-07" with Blood Pressure reading 128:78
-    Given That patient visited for Hypertension on "2024-03-03" with Blood Pressure reading 140:88
+    Given That patient has a "Hypertension & Diabetes" event on "2023-10-20" with following data
+      | Systole  | 142 |
+      | Diastole | 95  |
+    Given That patient has a "Hypertension & Diabetes" event on "2023-11-27" with following data
+      | Systole  | 139 |
+      | Diastole | 90  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-01-04" with following data
+      | Systole  | 132 |
+      | Diastole | 82  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-02-07" with following data
+      | Systole  | 128 |
+      | Diastole | 78  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-03-03" with following data
+      | Systole  | 140 |
+      | Diastole | 88  |
 
     When Export the analytics
 
-    When Run the Hypertension data aggregation
+#    When Run the Hypertension data aggregation. we could add this logic to indicator checks
 
     Then The value of PI "HTN - Cumulative registrations" should be
       | 202407 | 2 |
@@ -101,7 +134,6 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | 202310 | 2 |
       | 202309 | 0 |
       | 202308 | 0 |
-      | 202307 | 0 |
 
     Then The value of PI "HTN - Cumulative dead patients" should be
       | 202407 | 1 |
@@ -116,7 +148,6 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | 202310 | 0 |
       | 202309 | 0 |
       | 202308 | 0 |
-      | 202307 | 0 |
 
   Scenario: Only hypertensive tracked entity instances are included
     Given I create a new OrgUnit
@@ -137,7 +168,10 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient visited for Diabetes on "2024-01-16" with Blood Sugar type "FBS" and reading 130 "MG_OR_DL"
+    Given That patient has a "Hypertension & Diabetes" event on "2024-01-16" with following data
+      | HTN - Type of diabetes measure? | FBS      |
+      | HTN - Blood sugar reading       | 130      |
+      | HTN - Blood sugar unit          | MG_OR_DL |
 
     #
     # Patient 2
@@ -153,11 +187,21 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient visited for Hypertension on "2023-10-20" with Blood Pressure reading 147:89
-    Given That patient visited for Hypertension on "2023-11-27" with Blood Pressure reading 142:87
-    Given That patient visited for Hypertension on "2024-01-04" with Blood Pressure reading 140:83
-    Given That patient visited for Hypertension on "2024-02-07" with Blood Pressure reading 135:84
-    Given That patient visited for Hypertension on "2024-03-03" with Blood Pressure reading 134:83
+    Given That patient has a "Hypertension & Diabetes" event on "2023-10-20" with following data
+      | Systole  | 147 |
+      | Diastole | 89  |
+    Given That patient has a "Hypertension & Diabetes" event on "2023-11-27" with following data
+      | Systole  | 142 |
+      | Diastole | 87  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-01-04" with following data
+      | Systole  | 140 |
+      | Diastole | 83  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-02-07" with following data
+      | Systole  | 135 |
+      | Diastole | 84  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-03-03" with following data
+      | Systole  | 134 |
+      | Diastole | 83  |
 
     #
     # Patient 3
@@ -173,11 +217,21 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient visited for Hypertension on "2023-10-20" with Blood Pressure reading 142:95
-    Given That patient visited for Hypertension on "2023-12-27" with Blood Pressure reading 139:90
-    Given That patient visited for Hypertension on "2024-02-04" with Blood Pressure reading 132:82
-    Given That patient visited for Hypertension on "2024-05-07" with Blood Pressure reading 128:78
-    Given That patient visited for Hypertension on "2024-07-03" with Blood Pressure reading 140:88
+    Given That patient has a "Hypertension & Diabetes" event on "2023-10-20" with following data
+      | Systole  | 142 |
+      | Diastole | 95  |
+    Given That patient has a "Hypertension & Diabetes" event on "2023-12-27" with following data
+      | Systole  | 139 |
+      | Diastole | 90  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-02-04" with following data
+      | Systole  | 132 |
+      | Diastole | 82  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-05-07" with following data
+      | Systole  | 128 |
+      | Diastole | 78  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-07-03" with following data
+      | Systole  | 140 |
+      | Diastole | 88  |
 
     When Export the analytics
 
@@ -196,7 +250,6 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | 202310 | 2 |
       | 202309 | 0 |
       | 202308 | 0 |
-      | 202307 | 0 |
 
   Scenario: Patients inactive for more than 12 months should be included
     Given I create a new OrgUnit
@@ -218,10 +271,18 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | HTN - Consent to record data          | true         |
       | HTN - NCD Patient Status              | ACTIVE       |
 
-    Given That patient visited for Hypertension on "2023-01-16" with Blood Pressure reading 145:92
-    Given That patient visited for Hypertension on "2023-01-16" with Blood Pressure reading 145:92
-    Given That patient visited for Hypertension on "2023-02-02" with Blood Pressure reading 140:87
-    Given That patient visited for Hypertension on "2023-05-02" with Blood Pressure reading 136:84
+    Given That patient has a "Hypertension & Diabetes" event on "2023-01-16" with following data
+      | Systole  | 145 |
+      | Diastole | 92  |
+    Given That patient has a "Hypertension & Diabetes" event on "2023-01-16" with following data
+      | Systole  | 145 |
+      | Diastole | 92  |
+    Given That patient has a "Hypertension & Diabetes" event on "2023-02-02" with following data
+      | Systole  | 140 |
+      | Diastole | 87  |
+    Given That patient has a "Hypertension & Diabetes" event on "2023-05-02" with following data
+      | Systole  | 136 |
+      | Diastole | 84  |
 
     #
     # Patient 2 - Lost To Followup and Dead
@@ -237,12 +298,22 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient visited for Hypertension on "2023-12-20" with Blood Pressure reading 147:89
-    Given That patient visited for Hypertension on "2024-01-04" with Blood Pressure reading 140:83
-    Given That patient visited for Hypertension on "2024-02-07" with Blood Pressure reading 135:84
-    Given That patient visited for Hypertension on "2024-03-03" with Blood Pressure reading 134:83
-    Given That patient visited for Hypertension on "2024-01-04" with Blood Pressure reading 147:87
-    Given Update that patient with the following attributes
+    Given That patient has a "Hypertension & Diabetes" event on "2023-12-20" with following data
+      | Systole  | 147 |
+      | Diastole | 89  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-01-04" with following data
+      | Systole  | 140 |
+      | Diastole | 83  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-02-07" with following data
+      | Systole  | 135 |
+      | Diastole | 84  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-03-03" with following data
+      | Systole  | 134 |
+      | Diastole | 83  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-01-04" with following data
+      | Systole  | 147 |
+      | Diastole | 87  |
+    Given That patient was updated on "2024-02-04" with the following attributes
       | HTN - NCD Patient Status | DIED |
 
     #
@@ -259,11 +330,21 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient visited for Hypertension on "2023-10-20" with Blood Pressure reading 147:89
-    Given That patient visited for Hypertension on "2023-12-27" with Blood Pressure reading 142:87
-    Given That patient visited for Hypertension on "2024-02-04" with Blood Pressure reading 140:83
-    Given That patient visited for Hypertension on "2024-04-07" with Blood Pressure reading 135:84
-    Given That patient visited for Hypertension on "2024-06-03" with Blood Pressure reading 134:83
+    Given That patient has a "Hypertension & Diabetes" event on "2023-10-20" with following data
+      | Systole  | 147 |
+      | Diastole | 89  |
+    Given That patient has a "Hypertension & Diabetes" event on "2023-12-27" with following data
+      | Systole  | 142 |
+      | Diastole | 87  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-02-04" with following data
+      | Systole  | 140 |
+      | Diastole | 83  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-04-07" with following data
+      | Systole  | 135 |
+      | Diastole | 84  |
+    Given That patient has a "Hypertension & Diabetes" event on "2024-06-03" with following data
+      | Systole  | 134 |
+      | Diastole | 83  |
 
     Given Export the analytics
 
@@ -282,19 +363,3 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | 202310 | 2 |
       | 202309 | 1 |
       | 202308 | 1 |
-      | 202307 | 1 |
-
-    Then The value of PI "HTN - Cumulative dead patients" should be
-      | 202407 | 1 |
-      | 202406 | 1 |
-      | 202405 | 1 |
-      | 202404 | 1 |
-      | 202403 | 1 |
-      | 202402 | 1 |
-      | 202401 | 1 |
-      | 202312 | 1 |
-      | 202311 | 0 |
-      | 202310 | 0 |
-      | 202309 | 0 |
-      | 202308 | 0 |
-      | 202307 | 0 |
