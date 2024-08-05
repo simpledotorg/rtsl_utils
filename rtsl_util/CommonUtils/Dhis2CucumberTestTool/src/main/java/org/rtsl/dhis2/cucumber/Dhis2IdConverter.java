@@ -16,6 +16,8 @@ public final class Dhis2IdConverter {
     private static final String GET_PROGRAM_URL = "api/programs?paging=false&fields=shortName,name,id";
     private static final String GET_DATA_ELEMENT_URL = "api/dataElements?paging=false&fields=shortName,name,id";
     private static final String GET_JOB_CONFIGURATION_URL = "api/jobConfigurations?fields=name,id";
+    private static final String GET_PROGRAM_STAGES_URL = "api/programStages?paging=false&fields=name,id";
+
 
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -36,6 +38,9 @@ public final class Dhis2IdConverter {
     private final Map<String, String> dataElementIdFromName = new HashMap<>();
     private final Map<String, String> dataElementIdFromId = new HashMap<>();
 
+    private final Map<String, String> programStageIdFromName = new HashMap<>();
+    private final Map<String, String> programStageIdFromId = new HashMap<>();
+
     public Dhis2IdConverter(Dhis2HttpClient dhis2HttpClient) throws Exception {
         this.dhis2HttpClient = dhis2HttpClient;
     }
@@ -46,6 +51,22 @@ public final class Dhis2IdConverter {
         getJobConfigurations();
         getPrograms();
         getDataElements();
+        getProgramStages();
+    }
+
+    private void getProgramStages() throws Exception {
+        String response = dhis2HttpClient.doGet(GET_PROGRAM_STAGES_URL);
+        JsonNode arrayNode = objectMapper.readTree(response).get("programStages");
+
+        if (arrayNode.isArray()) {
+            for (JsonNode jsonNode : arrayNode) {
+                String currentId = jsonNode.get("id").asText();
+                String currentName = jsonNode.get("name").asText().trim();
+                LOGGER.info("creating helper for programs {}:{}", currentId, currentName);
+                programIdFromName.put(currentName, currentId);
+                programIdFromId.put(currentId, currentId);
+            }
+        }
     }
 
     private void getDataElements() throws Exception {
@@ -55,8 +76,8 @@ public final class Dhis2IdConverter {
         if (arrayNode.isArray()) {
             for (JsonNode jsonNode : arrayNode) {
                 String currentId = jsonNode.get("id").asText();
-                String currentName = jsonNode.get("name").asText();
-                String currentShortName = jsonNode.get("shortName").asText();
+                String currentName = jsonNode.get("name").asText().trim();
+                String currentShortName = jsonNode.get("shortName").asText().trim();
                 LOGGER.info("creating helper for data elements {}:{}:{} ", currentId, currentName, currentShortName);
                 dataElementIdFromShortName.put(currentShortName, currentId);
                 dataElementIdFromName.put(currentName, currentId);
@@ -73,8 +94,8 @@ public final class Dhis2IdConverter {
         if (arrayNode.isArray()) {
             for (JsonNode jsonNode : arrayNode) {
                 String currentId = jsonNode.get("id").asText();
-                String currentName = jsonNode.get("name").asText();
-                String currentShortName = jsonNode.get("shortName").asText();
+                String currentName = jsonNode.get("name").asText().trim();
+                String currentShortName = jsonNode.get("shortName").asText().trim();
                 LOGGER.info("creating helper for programs {}:{}:{} ", currentId, currentName, currentShortName);
                 programIdFromShortName.put(currentShortName, currentId);
                 programIdFromName.put(currentName, currentId);
@@ -91,8 +112,8 @@ public final class Dhis2IdConverter {
         if (arrayNode.isArray()) {
             for (JsonNode jsonNode : arrayNode) {
                 String currentId = jsonNode.get("id").asText();
-                String currentName = jsonNode.get("name").asText();
-                String currentShortName = jsonNode.get("shortName").asText();
+                String currentName = jsonNode.get("name").asText().trim();
+                String currentShortName = jsonNode.get("shortName").asText().trim();
                 LOGGER.info("creating helper for trackedEntityAttribute {}:{}:{} ", currentId, currentName, currentShortName);
                 trackedEntityAttributeIdFromShortName.put(currentShortName, currentId);
                 trackedEntityAttributeIdFromName.put(currentName, currentId);
@@ -109,8 +130,8 @@ public final class Dhis2IdConverter {
         if (arrayNode.isArray()) {
             for (JsonNode jsonNode : arrayNode) {
                 String currentId = jsonNode.get("id").asText();
-                String currentName = jsonNode.get("name").asText();
-                String currentShortName = jsonNode.get("shortName").asText();
+                String currentName = jsonNode.get("name").asText().trim();
+                String currentShortName = jsonNode.get("shortName").asText().trim();
                 LOGGER.info("creating helper for program indicators {}:{}:{} ", currentId, currentName, currentShortName);
                 programIndicatorIdFromShortName.put(currentShortName, currentId);
                 programIndicatorIdFromName.put(currentName, currentId);
@@ -126,7 +147,7 @@ public final class Dhis2IdConverter {
         if (arrayNode.isArray()) {
             for (JsonNode jsonNode : arrayNode) {
                 String currentId = jsonNode.get("id").asText();
-                String currentName = jsonNode.get("name").asText();
+                String currentName = jsonNode.get("name").asText().trim();
                 LOGGER.info("creating helper for job configurations {}:{} ", currentId, currentName);
                 jobConfigurationIdFromName.put(currentName, currentId);
                 jobConfigurationIdFromId.put(currentId, currentId);
@@ -224,6 +245,20 @@ public final class Dhis2IdConverter {
         return candidateString;
     }
 
+    public String getProgramStageId(String candidateString) {
+        if (programIdFromId.get(candidateString) != null) {
+            LOGGER.debug("String <{}> is already a metadata id. Using it as it is.", candidateString);
+            return candidateString;
+        }
+        String returnId = programIdFromName.get(candidateString);
+        if (returnId != null) {
+            LOGGER.debug("String <{}> is the metadata name for id <{}>", candidateString, returnId);
+            return returnId;
+        }
+        LOGGER.debug("String <{}> is not known as either an Id, Name or ShortName for metadata. This is likely going to create a problem", candidateString);
+        return candidateString;
+    }
+
     public Map<String, String> convertMetadata(Map<String, String> inputData, String metadata) {
         Map<String, String> returnMap = new HashMap<>();
 
@@ -251,6 +286,11 @@ public final class Dhis2IdConverter {
             case "program":
                 for (String currentKey : inputData.keySet()) {
                     returnMap.put(getProgramId(currentKey), inputData.get(currentKey));
+                }
+                break;
+            case "programStage":
+                for (String currentKey : inputData.keySet()) {
+                    returnMap.put(getProgramStageId(currentKey), inputData.get(currentKey));
                 }
                 break;
         }
