@@ -26,7 +26,7 @@ public class Helper {
     public static DateTimeFormatter ISO_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
     public static String toISODateTimeString(String dateString, DateTimeFormatter dateFormatter) throws Exception {
-        LocalDate date = LocalDate.parse(dateString, DATE_FORMATTER);
+        LocalDate date = LocalDate.parse(dateString, dateFormatter);
         LocalDateTime dateTime = date.atStartOfDay();
 
         return dateTime.format(ISO_DATE_TIME_FORMATTER);
