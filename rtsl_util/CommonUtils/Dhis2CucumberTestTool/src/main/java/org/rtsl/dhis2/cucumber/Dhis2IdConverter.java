@@ -16,7 +16,7 @@ public final class Dhis2IdConverter {
     private static final String GET_PROGRAM_URL = "api/programs?paging=false&fields=shortName,name,id";
     private static final String GET_DATA_ELEMENT_URL = "api/dataElements?paging=false&fields=shortName,name,id";
     private static final String GET_JOB_CONFIGURATION_URL = "api/jobConfigurations?fields=name,id";
-    private static final String GET_PROGRAM_STAGES_URL = "api/programStages?paging=false&fields=name,id";
+    private static final String GET_PROGRAM_STAGE_URL = "api/programStages?paging=false&fields=name,id";
 
 
 
@@ -55,7 +55,7 @@ public final class Dhis2IdConverter {
     }
 
     private void getProgramStages() throws Exception {
-        String response = dhis2HttpClient.doGet(GET_PROGRAM_STAGES_URL);
+        String response = dhis2HttpClient.doGet(GET_PROGRAM_STAGE_URL);
         JsonNode arrayNode = objectMapper.readTree(response).get("programStages");
 
         if (arrayNode.isArray()) {
@@ -63,8 +63,8 @@ public final class Dhis2IdConverter {
                 String currentId = jsonNode.get("id").asText();
                 String currentName = jsonNode.get("name").asText().trim();
                 LOGGER.info("creating helper for programs {}:{}", currentId, currentName);
-                programIdFromName.put(currentName, currentId);
-                programIdFromId.put(currentId, currentId);
+                programStageIdFromName.put(currentName, currentId);
+                programStageIdFromId.put(currentId, currentId);
             }
         }
     }
@@ -246,11 +246,11 @@ public final class Dhis2IdConverter {
     }
 
     public String getProgramStageId(String candidateString) {
-        if (programIdFromId.get(candidateString) != null) {
+        if (programStageIdFromId.get(candidateString) != null) {
             LOGGER.debug("String <{}> is already a metadata id. Using it as it is.", candidateString);
             return candidateString;
         }
-        String returnId = programIdFromName.get(candidateString);
+        String returnId = programStageIdFromName.get(candidateString);
         if (returnId != null) {
             LOGGER.debug("String <{}> is the metadata name for id <{}>", candidateString, returnId);
             return returnId;
