@@ -1,11 +1,13 @@
 package org.rtsl.dhis2.cucumber;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,9 +56,7 @@ public class Dhis2HttpClient {
             request.setHeader("Content-Type", "application/json");
             request.setHeader("Authorization", basicAuthString);
             try (CloseableHttpResponse response = httpClient.execute(request)) {
-                // reads the answer
-                StringBuilder sb = new StringBuilder();
-                return new String(response.getEntity().getContent().readAllBytes());
+                return handleResponse(response);
             }
 
         }
@@ -73,9 +73,7 @@ public class Dhis2HttpClient {
             request.setHeader("Content-Type", "application/json;charset=UTF-8");
             request.setHeader("Authorization", basicAuthString);
             try (CloseableHttpResponse response = httpClient.execute(request)) {
-                // reads the answer
-                StringBuilder sb = new StringBuilder();
-                return new String(response.getEntity().getContent().readAllBytes());
+                return handleResponse(response);
             }
 
         }
@@ -97,9 +95,7 @@ public class Dhis2HttpClient {
             request.setHeader("Content-Type", "application/json");
             request.setHeader("Authorization", basicAuthString);
             try (CloseableHttpResponse response = httpClient.execute(request)) {
-                // reads the answer
-                StringBuilder sb = new StringBuilder();
-                return new String(response.getEntity().getContent().readAllBytes());
+                return handleResponse(response);
             }
 
         }
@@ -112,9 +108,7 @@ public class Dhis2HttpClient {
             HttpPost request = new HttpPost(dhis2RootUrl + relativeUrl);
             request.setHeader("Authorization", basicAuthString);
             try (CloseableHttpResponse response = httpClient.execute(request)) {
-                // reads the answer
-                StringBuilder sb = new StringBuilder();
-                return new String(response.getEntity().getContent().readAllBytes());
+                return handleResponse(response);
             }
 
         }
@@ -135,9 +129,7 @@ public class Dhis2HttpClient {
             request.setHeader("Content-Type", "application/json-patch+json");
             request.setHeader("Authorization", basicAuthString);
             try (CloseableHttpResponse response = httpClient.execute(request)) {
-                // reads the answer
-                StringBuilder sb = new StringBuilder();
-                return new String(response.getEntity().getContent().readAllBytes());
+                return handleResponse(response);
             }
 
         }
@@ -152,9 +144,7 @@ public class Dhis2HttpClient {
             request.setHeader("Content-Type", "application/json");
             request.setHeader("Authorization", basicAuthString);
             try (CloseableHttpResponse response = httpClient.execute(request)) {
-                // reads the answer
-                StringBuilder sb = new StringBuilder();
-                return new String(response.getEntity().getContent().readAllBytes());
+                return handleResponse(response);
             }
 
         }
@@ -177,6 +167,25 @@ public class Dhis2HttpClient {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(response);
         return (ArrayNode) rootNode.get("codes");
+    }
+
+    private String handleResponse(CloseableHttpResponse response) throws Exception {
+        int statusCode = response.getCode();
+        StringBuilder sb = new StringBuilder();
+        String responseBody = new String(response.getEntity().getContent().readAllBytes());
+        if (statusCode >= 200 && statusCode < 300) {
+            LOGGER.info("Request was successful. Status Code: {}", statusCode);
+        } else if (statusCode >= 400 && statusCode < 500) {
+            LOGGER.error("Client error occurred. Status Code: {}. Response: {}", statusCode, responseBody);
+            throw new RuntimeException("Client error: " + statusCode + ". Response: " + responseBody);
+        } else if (statusCode >= 500) {
+            LOGGER.error("Server error occurred. Status Code: {}. Response: {}", statusCode, responseBody);
+            throw new RuntimeException("Server error: " + statusCode + ". Response: " + responseBody);
+        } else {
+            LOGGER.warn("Unexpected response. Status Code: {}. Response: {}", statusCode, responseBody);
+            throw new RuntimeException("Unexpected response: " + statusCode + ". Response: " + responseBody);
+        }
+        return responseBody;
     }
 
 }
