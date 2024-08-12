@@ -3,6 +3,7 @@
     {
       "orgUnit": "${data.orgUnitId}",
       "trackedEntity": "${data.teiId}",
+      "occurredAt": "${data.occurredAt}",
       "trackedEntityType": "MCPQUTHX1Ze",
       "attributes": [
         <#list dataTable as currentKey, currentValue>

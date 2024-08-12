@@ -7,7 +7,9 @@ import org.rtsl.dhis2.cucumber.Dhis2IdConverter;
 import org.rtsl.dhis2.cucumber.definitions.Dhis2StepDefinitions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.Map;
+
 import static org.rtsl.dhis2.cucumber.Helper.toISODateTimeString;
 
 public class TrackedEntityInstance {
@@ -25,20 +27,19 @@ public class TrackedEntityInstance {
     String teiId = null;
     String orgUnitId = null;
     String enrolledAt = null;
-
+    private String occurredAt = null;
     public String getEnrollmentId() {
         return enrollmentId;
     }
-
     public String getTeiId() {
         return teiId;
     }
     public String getOrgUnitId() { return orgUnitId; }
 
     public String getEnrolledAt() { return enrolledAt; }
+    public String getOccurredAt() { return occurredAt; }
 
-
-    public Map<String, String> create(Map<String, String> dataTable, String orgUnitId, String enrolledAt) throws Exception{
+    public Map<String, String> create(Map<String, String> dataTable, String orgUnitId, String enrolledAt) throws Exception {
         Map<String, String> convertedDataTable = testIdConverter.convertMetadata(dataTable, "trackedEntityAttribute");
         this.enrollmentId = dhis2HttpClient.getGenerateUniqueId();
         this.teiId = dhis2HttpClient.getGenerateUniqueId();
@@ -50,13 +51,14 @@ public class TrackedEntityInstance {
                 templateContext);
 
         LOGGER.info("Response {}", response);
-        return  Map.of("id", teiId, "enrollmentId", enrollmentId);
+        return Map.of("id", teiId, "enrollmentId", enrollmentId);
     }
 
-    public void update(Map<String, String> dataTable, String orgUnitId, String teiId) throws Exception{
+    public void update(Map<String, String> dataTable, String orgUnitId, String teiId, String occurredAt) throws Exception {
         Map<String, String> convertedDataTable = testIdConverter.convertMetadata(dataTable, "trackedEntityAttribute");
         this.teiId = teiId;
         this.orgUnitId = orgUnitId;
+        this.occurredAt = toISODateTimeString(occurredAt);
         Map<String, Object> templateContext = Map.of("data", this, "dataTable", convertedDataTable);
         String response = dhis2HttpClient.doPost("api/tracker?async=false&mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE",
                 "update_tei.tpl.json",
