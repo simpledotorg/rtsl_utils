@@ -1,4 +1,5 @@
-Feature: Audit the program indicator: HTN - Cumulative registrations
+@programIndicator
+Feature: Audit HTN - Cumulative registrations
 
 
   Scenario: All the tracked entity instances except the dead ones are included
@@ -118,10 +119,11 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | Diastole | 88  |
 
     When Export the analytics
+    When Run the Hypertension data aggregation
 
 #    When Run the Hypertension data aggregation. we could add this logic to indicator checks
 
-    Then The value of PI "HTN - Cumulative registrations" should be
+    Then The value of "PI" "HTN - Cumulative registrations" should be
       | 202407 | 2 |
       | 202406 | 2 |
       | 202405 | 2 |
@@ -135,7 +137,21 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
       | 202309 | 0 |
       | 202308 | 0 |
 
-    Then The value of PI "HTN - Cumulative dead patients" should be
+    Then The value of "Data Element" "HTN - Cumulative registrations" should be
+      | 202407 | 2 |
+      | 202406 | 2 |
+      | 202405 | 2 |
+      | 202404 | 2 |
+      | 202403 | 2 |
+      | 202402 | 2 |
+      | 202401 | 2 |
+      | 202312 | 2 |
+      | 202311 | 2 |
+      | 202310 | 2 |
+      | 202309 | 0 |
+      | 202308 | 0 |
+
+    Then The value of "PI" "HTN - Cumulative dead patients" should be
       | 202407 | 1 |
       | 202406 | 1 |
       | 202405 | 1 |
@@ -237,7 +253,7 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
 
     When Run the Hypertension data aggregation
 
-    Then The value of PI "HTN - Cumulative registrations" should be
+    Then The value of "PI" "HTN - Cumulative registrations" should be
       | 202407 | 2 |
       | 202406 | 2 |
       | 202405 | 2 |
@@ -350,7 +366,7 @@ Feature: Audit the program indicator: HTN - Cumulative registrations
 
     Given Run the Hypertension data aggregation
 
-    Then The value of PI "HTN - Cumulative registrations" should be
+    Then The value of "PI" "HTN - Cumulative registrations" should be
       | 202407 | 2 |
       | 202406 | 2 |
       | 202405 | 2 |
