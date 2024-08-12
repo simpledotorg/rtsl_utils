@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import jakarta.inject.Inject;
@@ -14,11 +13,13 @@ import jakarta.inject.Named;
 import org.hisp.dhis.api.model.v40_2_2.AttributeInfo;
 import org.rtsl.dhis2.cucumber.Dhis2HttpClient;
 import org.rtsl.dhis2.cucumber.Dhis2IdConverter;
+import org.rtsl.dhis2.cucumber.Period;
 import org.rtsl.dhis2.cucumber.factories.OrganisationUnit;
 import org.rtsl.dhis2.cucumber.factories.TrackedEntityInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -139,7 +140,7 @@ public class Dhis2StepDefinitions {
     }
 
     @Given("That patient has a {string} event on {string} which was scheduled on {string} with following data")
-    public void thatPatientHasAEventOnWhichWasScheduledOnWithFollowingData(String eventName, String eventDateString, String scheduledDateString,  Map<String, String> dataTable) throws Exception {
+    public void thatPatientHasAEventOnWhichWasScheduledOnWithFollowingData(String eventName, String eventDateString, String scheduledDateString, Map<String, String> dataTable) throws Exception {
         Map<String, String> convertedDataTable = new HashMap<>();
 
         for (String dataElement : dataTable.keySet()) {
@@ -175,6 +176,7 @@ public class Dhis2StepDefinitions {
         String jobStatus;
         String lastRuntimeExecution;
         String response;
+        String lastExecutedStatus;
 
         executeJob(exportAnalyticsJobId);
         do {
@@ -183,8 +185,12 @@ public class Dhis2StepDefinitions {
             JsonNode jobConfigurations = MAPPER.readTree(response);
             jobStatus = jobConfigurations.get("jobStatus").asText();
             lastRuntimeExecution = jobConfigurations.get("lastRuntimeExecution").asText();
+            lastExecutedStatus = jobConfigurations.get("lastExecutedStatus").asText();
         } while (jobStatus.equals("RUNNING"));
         LOGGER.info("Response {}", response);
+        if (lastExecutedStatus.equals("STOPPED"))
+            throw new Exception("Analytics job with Id:" + exportAnalyticsJobId + " stopped. Please check the job configurations");
+
         scenario.log("Analytics job with Id:" + exportAnalyticsJobId + " took " + lastRuntimeExecution + " time to complete.");
     }
 
@@ -193,6 +199,7 @@ public class Dhis2StepDefinitions {
         String dataAggregationJobId = testIdConverter.getJobConfigurationId("ADEX - Hypertension dashboard");
         String jobStatus;
         String lastRuntimeExecution;
+        String lastExecutedStatus;
         String response;
 
         executeJob(dataAggregationJobId);
@@ -202,44 +209,38 @@ public class Dhis2StepDefinitions {
             JsonNode jobConfigurations = MAPPER.readTree(response);
             jobStatus = jobConfigurations.get("jobStatus").asText();
             lastRuntimeExecution = jobConfigurations.get("lastRuntimeExecution").asText();
+            lastExecutedStatus = jobConfigurations.get("lastExecutedStatus").asText();
+
         } while (jobStatus.equals("RUNNING"));
         LOGGER.info("Response {}", response);
+        if (lastExecutedStatus.equals("STOPPED"))
+            throw new Exception("Data exchange and aggregation job with Id:" + dataAggregationJobId + " stopped. Please check the job configurations");
         scenario.log("Data exchange and aggregation job with Id:" + dataAggregationJobId + " took " + lastRuntimeExecution + " time to complete.");
+
     }
 
-    @Then("The value of PI {string} should be")
-    public void the_value_of_pi_should_be(String string, Map<String, String> dataTable) throws Exception {
-        String programIndicatorId = testIdConverter.getProgramIndicatorId(string);
-        String orgUnit = this.currentFacilityId;
-        String periods = "LAST_12_MONTHS;THIS_MONTH";
-        String endpoint = "api/analytics.json";
-        String params = "?dimension=dx:" + programIndicatorId + "&dimension=pe:" + periods + "&filter=ou:" + orgUnit;
-        String response = dhis2HttpClient.doGet(endpoint + params);
-        JsonNode rootNode = MAPPER.readTree(response);
-        ArrayNode periodValues = (ArrayNode) rootNode.get("rows");
-        Map<String, String> actualPeriodValues = new HashMap<>();
-        for (JsonNode dataValue : periodValues) {
-            String key = dataValue.get(1).asText();
-            String value = dataValue.get(2).asText();
-            actualPeriodValues.put(key, value);
-        }
+    @Then("The value of {string} {string} should be")
+    public void theValueOfShouldBe(String dimension, String dimensionName, Map<String, String> dataTable) throws Exception {
+        String dimensionId = switch (dimension) {
+            case "Program Indicator", "PI" -> testIdConverter.getProgramIndicatorId(dimensionName);
+            case "Data Element" -> testIdConverter.getDataElementId(dimensionName);
+            default -> throw new IllegalStateException("Unexpected value: " + dimension);
+        };
+        Map<String, String> actualPeriodValues = getAnalyticData(dimensionId, dimensionName);
         for (String period : dataTable.keySet()) {
             assertEquals(dataTable.get(period),
                     actualPeriodValues.get(period),
-                    "Program Indicator: <" + programIndicatorId + "> for the <" + period + "> in Organisation Unit:<" + orgUnit + ">");
+                    dimensionName+": <" + dimensionId + "> for the <" + period + "> in Organisation Unit:<" + this.currentFacilityId + ">");
         }
-        LOGGER.info("Response {}", response);
-        scenario.log("Program Indicator: " + programIndicatorId + "for the " + periods + " in Organisation Unit:" + orgUnit + "is " + actualPeriodValues);
     }
-
     @Given("That patient was updated on {string} with the following attributes")
     public void thatPatientWasUpdatedOnWithTheFollowingAttributes(String visitDate, Map<String, String> dataTable) throws Exception {
-        trackedEntityInstance.update(dataTable, currentFacilityId, this.currentTeiId);
+        trackedEntityInstance.update(dataTable, currentFacilityId, this.currentTeiId, visitDate);
         scenario.log("Created new TEI with Id:" + currentTeiId + " updated");
     }
 
     @Given("That patient has a {string} event scheduled for {string}")
-    public void thatPatientHasAEventScheduledFor(String eventName, String eventDateString) throws Exception{
+    public void thatPatientHasAEventScheduledFor(String eventName, String eventDateString) throws Exception {
         Map<String, Object> templateContext = Map.of("data", this,
                 "dataTable", new HashMap<String, String>(),
                 "occurredAt", "",
@@ -279,5 +280,24 @@ public class Dhis2StepDefinitions {
 
         LOGGER.info("Response {}", response);
         scenario.log("Created new event with Id:" + currentEventId + " for the TEI with Id:" + currentTeiId);
+    }
+
+    private Map<String, String> getAnalyticData(String dimensionIdentifier, String dimensionName) throws Exception {
+        String orgUnit = this.currentFacilityId;
+        String periods = "LAST_12_MONTHS;THIS_MONTH";
+        String endpoint = "api/analytics.json";
+        String params = "?dimension=dx:" + dimensionIdentifier + "&dimension=pe:" + periods + "&dimension=ou:" + orgUnit+"&tableLayout=true&columns=dx;ou&rows=pe";
+        String response = dhis2HttpClient.doGet(endpoint + params);
+        JsonNode rootNode = MAPPER.readTree(response);
+        ArrayNode periodValues = (ArrayNode) rootNode.get("rows");
+        Map<String, String> actualPeriodValues = new HashMap<>();
+        for (JsonNode dataValue : periodValues) {
+            String key = dataValue.get(0).asText();
+            String value = dataValue.get(4).asText().isEmpty() ? "0" : dataValue.get(4).asText();
+            actualPeriodValues.put(key, value);
+        }
+        LOGGER.info("Response {}", response);
+        scenario.log(dimensionName + ": " + dimensionIdentifier + " for the `" + periods + "` in Organisation Unit:" + orgUnit + "is " + actualPeriodValues);
+        return actualPeriodValues;
     }
 }
