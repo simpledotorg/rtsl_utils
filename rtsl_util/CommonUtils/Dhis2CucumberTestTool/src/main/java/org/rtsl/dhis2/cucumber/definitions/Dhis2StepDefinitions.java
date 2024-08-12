@@ -127,7 +127,8 @@ public class Dhis2StepDefinitions {
 
     @Given("I create a new TEI for this OrgUnit with the following attributes")
     @Given("I create a new Patient on {string} for this Facility with the following attributes")
-    public void i_create_a_new_patient_on_for_this_facility_with_the_following_attributes(String eventDate, Map<String, String> dataTable) throws Exception {
+    public void iCreateANewPatientOnForThisFacilityWithTheFollowingAttributes(String relativeEventDate, Map<String, String> dataTable) throws Exception {
+        String eventDate = Period.toDateString(relativeEventDate);
         Map<String, String> newTei = trackedEntityInstance.create(dataTable, currentFacilityId, eventDate);
         this.currentTeiId = newTei.get("id");
         this.currentEnrollmentId = newTei.get("enrollmentId");
@@ -135,14 +136,15 @@ public class Dhis2StepDefinitions {
     }
 
     @Given("That patient has a {string} event on {string} with following data")
-    public void thatPatientHasAEventOnWithFollowingData(String eventName, String eventDateString, Map<String, String> dataTable) throws Exception {
-        thatPatientHasAEventOnWhichWasScheduledOnWithFollowingData(eventName, eventDateString, eventDateString, dataTable);
+    public void thatPatientHasAEventOnWithFollowingData(String eventName, String relativeEventDate, Map<String, String> dataTable) throws Exception {
+        thatPatientHasAEventOnWhichWasScheduledOnWithFollowingData(eventName, relativeEventDate, relativeEventDate, dataTable);
     }
 
     @Given("That patient has a {string} event on {string} which was scheduled on {string} with following data")
-    public void thatPatientHasAEventOnWhichWasScheduledOnWithFollowingData(String eventName, String eventDateString, String scheduledDateString, Map<String, String> dataTable) throws Exception {
+    public void thatPatientHasAEventOnWhichWasScheduledOnWithFollowingData(String eventName, String relativeEventDate, String relativeScheduledDate, Map<String, String> dataTable) throws Exception {
+        String eventDateString = Period.toDateString(relativeEventDate);
+        String scheduledDateString = Period.toDateString(relativeScheduledDate);
         Map<String, String> convertedDataTable = new HashMap<>();
-
         for (String dataElement : dataTable.keySet()) {
             String dataElementId;
             if (dataElement.equals("HTN - Blood sugar reading")) {
@@ -227,14 +229,16 @@ public class Dhis2StepDefinitions {
             default -> throw new IllegalStateException("Unexpected value: " + dimension);
         };
         Map<String, String> actualPeriodValues = getAnalyticData(dimensionId, dimensionName);
-        for (String period : dataTable.keySet()) {
-            assertEquals(dataTable.get(period),
+        for (String relativePeriod : dataTable.keySet()) {
+            String period = Period.toMonthString(relativePeriod);
+            assertEquals(dataTable.get(relativePeriod),
                     actualPeriodValues.get(period),
-                    dimensionName+": <" + dimensionId + "> for the <" + period + "> in Organisation Unit:<" + this.currentFacilityId + ">");
+                    dimensionName+": <" + dimensionId + "> for the <" + period + "(" + relativePeriod +")"+"> in Organisation Unit:<" + this.currentFacilityId + ">");
         }
     }
     @Given("That patient was updated on {string} with the following attributes")
-    public void thatPatientWasUpdatedOnWithTheFollowingAttributes(String visitDate, Map<String, String> dataTable) throws Exception {
+    public void thatPatientWasUpdatedOnWithTheFollowingAttributes(String relativeVisitDate, Map<String, String> dataTable) throws Exception {
+        String visitDate = Period.toDateString(relativeVisitDate);
         trackedEntityInstance.update(dataTable, currentFacilityId, this.currentTeiId, visitDate);
         scenario.log("Created new TEI with Id:" + currentTeiId + " updated");
     }
