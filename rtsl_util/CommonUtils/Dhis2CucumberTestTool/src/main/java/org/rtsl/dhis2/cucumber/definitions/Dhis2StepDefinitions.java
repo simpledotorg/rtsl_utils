@@ -221,21 +221,31 @@ public class Dhis2StepDefinitions {
 
     }
 
-    @Then("The value of {string} {string} should be")
-    public void theValueOfShouldBe(String dimension, String dimensionName, Map<String, String> dataTable) throws Exception {
-        String dimensionId = switch (dimension) {
-            case "Program Indicator", "PI" -> testIdConverter.getProgramIndicatorId(dimensionName);
-            case "Data Element" -> testIdConverter.getDataElementId(dimensionName);
-            default -> throw new IllegalStateException("Unexpected value: " + dimension);
-        };
-        Map<String, String> actualPeriodValues = getAnalyticData(dimensionId, dimensionName);
+    @Then("The value of {string}:{string} with period type {string} should be")
+    public void theValueOfShouldBe(String dimensionItemType, String dimensionItemName, String periodType, Map<String, String> dataTable) throws Exception {
+        String dimensionItemId = getDimensionItemId(dimensionItemType, dimensionItemName);
+        Map<String, String> actualPeriodValues = getAnalyticData(dimensionItemId, dimensionItemName, periodType);
         for (String relativePeriod : dataTable.keySet()) {
-            String period = Period.toMonthString(relativePeriod);
+            String period = periodType.equalsIgnoreCase("months") ? Period.toMonthString(relativePeriod) :  Period.toQuarterString(relativePeriod);
             assertEquals(dataTable.get(relativePeriod),
                     actualPeriodValues.get(period),
-                    dimensionName+": <" + dimensionId + "> for the <" + period + "(" + relativePeriod +")"+"> in Organisation Unit:<" + this.currentFacilityId + ">");
+                    dimensionItemName+": <" + dimensionItemId + "> for the <" + period + "(" + relativePeriod +")"+"> in Organisation Unit:<" + this.currentFacilityId + ">." +
+                            "\nNote: Ensure you have aggregated the data after exporting the analytics.\n");
         }
     }
+
+    private String getDimensionItemId(String dimensionItemType, String dimensionItemName) {
+        switch (dimensionItemType) {
+            case "Program Indicator", "PI" -> {
+                return testIdConverter.getProgramIndicatorId(dimensionItemName);
+            }
+            case "Data Element" -> {
+                return testIdConverter.getDataElementId(dimensionItemName);
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + dimensionItemType);
+        }
+    }
+
     @Given("That patient was updated on {string} with the following attributes")
     public void thatPatientWasUpdatedOnWithTheFollowingAttributes(String relativeVisitDate, Map<String, String> dataTable) throws Exception {
         String visitDate = Period.toDateString(relativeVisitDate);
@@ -286,11 +296,11 @@ public class Dhis2StepDefinitions {
         scenario.log("Created new event with Id:" + currentEventId + " for the TEI with Id:" + currentTeiId);
     }
 
-    private Map<String, String> getAnalyticData(String dimensionIdentifier, String dimensionName) throws Exception {
+    private Map<String, String> getAnalyticData(String dimensionItemId, String dimensionItemName, String periodType) throws Exception {
         String orgUnit = this.currentFacilityId;
-        String periods = "LAST_12_MONTHS;THIS_MONTH";
+        String periods = periodType.equalsIgnoreCase("months") ? "LAST_12_MONTHS;THIS_MONTH" : "LAST_4_QUARTERS;THIS_QUARTER";
         String endpoint = "api/analytics.json";
-        String params = "?dimension=dx:" + dimensionIdentifier + "&dimension=pe:" + periods + "&dimension=ou:" + orgUnit+"&tableLayout=true&columns=dx;ou&rows=pe";
+        String params = "?dimension=dx:" + dimensionItemId + "&dimension=pe:" + periods + "&dimension=ou:" + orgUnit+"&tableLayout=true&columns=dx;ou&rows=pe";
         String response = dhis2HttpClient.doGet(endpoint + params);
         JsonNode rootNode = MAPPER.readTree(response);
         ArrayNode periodValues = (ArrayNode) rootNode.get("rows");
@@ -301,7 +311,7 @@ public class Dhis2StepDefinitions {
             actualPeriodValues.put(key, value);
         }
         LOGGER.info("Response {}", response);
-        scenario.log(dimensionName + ": " + dimensionIdentifier + " for the `" + periods + "` in Organisation Unit:" + orgUnit + "is " + actualPeriodValues);
+        scenario.log(dimensionItemName + ": " + dimensionItemId + " for the `" + periods + "` in Organisation Unit:" + orgUnit + "is " + actualPeriodValues);
         return actualPeriodValues;
     }
 }

@@ -117,9 +117,9 @@ Feature: Audit HTN - Cumulative registrations
 
 #    When Run the Hypertension data aggregation. we could add this logic to indicator checks
 
-    Then The value of "PI" "HTN - Cumulative registrations" should be
+    Then The value of "PI":"HTN - Cumulative registrations" with period type "Months" should be
       | thisMonth    | 2 |
-      | 1_MonthAgo    | 2 |
+      | 1_MonthAgo   | 2 |
       | 2_MonthsAgo  | 2 |
       | 3_MonthsAgo  | 2 |
       | 4_MonthsAgo  | 2 |
@@ -132,9 +132,9 @@ Feature: Audit HTN - Cumulative registrations
       | 11_MonthsAgo | 0 |
       | 12_MonthsAgo | 0 |
 
-    Then The value of "PI" "HTN - Cumulative dead patients" should be
+    Then The value of "PI":"HTN - Cumulative dead patients" with period type "Months" should be
       | thisMonth    | 1 |
-      | 1_MonthAgo    | 1 |
+      | 1_MonthAgo   | 1 |
       | 2_MonthsAgo  | 1 |
       | 3_MonthsAgo  | 1 |
       | 4_MonthsAgo  | 1 |
@@ -235,9 +235,9 @@ Feature: Audit HTN - Cumulative registrations
 
     When Run the Hypertension data aggregation
 
-    Then The value of "PI" "HTN - Cumulative registrations" should be
+    Then The value of "PI":"HTN - Cumulative registrations" with period type "Months" should be
       | thisMonth    | 2 |
-      | 1_MonthAgo    | 2 |
+      | 1_MonthAgo   | 2 |
       | 2_MonthsAgo  | 2 |
       | 3_MonthsAgo  | 2 |
       | 4_MonthsAgo  | 2 |
@@ -346,9 +346,9 @@ Feature: Audit HTN - Cumulative registrations
 
     Given Run the Hypertension data aggregation
 
-    Then The value of "PI" "HTN - Cumulative registrations" should be
+    Then The value of "Program Indicator":"HTN - Cumulative registrations" with period type "Months" should be
       | thisMonth    | 2 |
-      | 1_MonthAgo    | 2 |
+      | 1_MonthAgo   | 2 |
       | 2_MonthsAgo  | 2 |
       | 3_MonthsAgo  | 2 |
       | 4_MonthsAgo  | 2 |

@@ -16,6 +16,7 @@ public class Period {
     private static LocalDate today = LocalDate.now();
     final static DateTimeFormatter YEAR_MONTH_FORMATTER = DateTimeFormatter.ofPattern("yyyyMM");
     final static DateTimeFormatter YEAR_QUARTER_FORMATTER = new DateTimeFormatterBuilder().appendValue(ChronoField.YEAR).appendLiteral('Q').appendValue(IsoFields.QUARTER_OF_YEAR).toFormatter();
+
     public static LocalDate getToday() {
         return today;
     }
@@ -49,17 +50,8 @@ public class Period {
     }
 
     public static String lastMonth() {
-        return lastMonth(1);
+        return toMonthString(today.minusMonths(1));
     }
-
-    public static String lastMonth(int count) {
-        return toMonthString(today.minusMonths(count));
-    }
-
-    public static LocalDate monthsAgo(int count) {
-        return today.minusMonths(count);
-    }
-
     public static ArrayList<String> lastTwelveMonths() {
         return lastNMonths(12);
     }
@@ -118,41 +110,10 @@ public class Period {
 
     public static int lastYear() {
         return today.getYear() - 1;
-
     }
 
     public static String toDateString(String relativeDate) {
-        return today.minusMonths(monthsAgo(relativeDate)).toString();
-    }
-
-    private static Integer monthsAgo(String relativeDate)
-    {
-        if (relativeDate.equals("thisMonth"))
-            return 0;
-        else
-        {
-            return Integer.parseInt(relativeDate.split("_")[0]);
-        }
-    }
-
-    public static LocalDate toDate(String relativeDate) {
-        return today.minusMonths(monthsAgo(relativeDate));
-    }
-
-    public static ArrayList<Integer> lastFiveYears() {
-        return lastNYears(5);
-    }
-
-    public static ArrayList<Integer> lastTenYears() {
-        return lastNYears(10);
-    }
-
-    public static ArrayList<Integer> lastNYears(int count) {
-        ArrayList<Integer> years = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            years.add(today.getYear() - i);
-        }
-        return years;
+        return today.minusMonths(numberOfMonthsAgo(relativeDate)).toString();
     }
 
     public static String toMonthString(LocalDate date) {
@@ -160,14 +121,26 @@ public class Period {
     }
 
     public static String toMonthString(String relativeDate) {
-        return Period.toDate(relativeDate).format(YEAR_MONTH_FORMATTER);
-    }
-
-    public static String toMonthString(LocalDateTime dateTime) {
-        return dateTime.format(YEAR_MONTH_FORMATTER);
+        return LocalDate.parse(toDateString(relativeDate)).format(YEAR_MONTH_FORMATTER);
     }
 
     public static String toQuarterString(LocalDate date) {
         return date.format(YEAR_QUARTER_FORMATTER);
+    }
+
+    public static String toQuarterString(String relativeDate) {
+       return today.minusMonths(numberOfMonthsAgo(relativeDate)).format(YEAR_QUARTER_FORMATTER);
+    }
+
+    private static Integer numberOfMonthsAgo(String relativeDate) {
+        if (relativeDate.equals("thisMonth") || relativeDate.equals("thisQuarter"))
+            return 0;
+        else {
+            String[] relativeDateArray = relativeDate.split("_");
+            if (relativeDateArray[1].equals("MonthsAgo"))
+                return Integer.parseInt(relativeDateArray[0]);
+            else
+                return 3 * Integer.parseInt(relativeDateArray[0]);
+        }
     }
 }
