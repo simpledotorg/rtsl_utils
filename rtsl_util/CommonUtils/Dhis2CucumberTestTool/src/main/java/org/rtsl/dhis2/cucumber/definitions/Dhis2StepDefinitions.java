@@ -254,7 +254,8 @@ public class Dhis2StepDefinitions {
     }
 
     @Given("That patient has a {string} event scheduled for {string}")
-    public void thatPatientHasAEventScheduledFor(String eventName, String eventDateString) throws Exception {
+    public void thatPatientHasAEventScheduledFor(String eventName, String relativeEventDate) throws Exception {
+        String eventDateString = Period.toDateString(relativeEventDate);
         Map<String, Object> templateContext = Map.of("data", this,
                 "dataTable", new HashMap<String, String>(),
                 "occurredAt", "",

@@ -7,7 +7,7 @@ Feature: Hypertension Data Audit
     #
     # Patient 1 - Dead
     #
-    Given I create a new Patient on "2024-01-16" for this Facility with the following attributes
+    Given I create a new Patient on "7_MonthsAgo" for this Facility with the following attributes
       | Given name         | Joe          |
       | Family name        | Bloggs       |
       | Sex                | MALE         |
@@ -18,21 +18,21 @@ Feature: Hypertension Data Audit
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient has a "Hypertension & Diabetes visit" event on "2024-01-16" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 145 |
       | Diastole | 92  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "2024-03-02" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 87  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "2024-05-02" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | Systole  | 136 |
       | Diastole | 84  |
-    Given That patient was updated on "2024-01-16" with the following attributes
+    Given That patient was updated on "7_MonthsAgo" with the following attributes
       | NCD Patient Status | DIED |
     #
     # Patient 2 - Not a hypertension patient
     #
-    Given I create a new Patient on "2024-03-20" for this Facility with the following attributes
+    Given I create a new Patient on "5_MonthsAgo" for this Facility with the following attributes
       | Given name         | Fabian       |
       | Family name        | Moore        |
       | Sex                | MALE         |
@@ -43,13 +43,13 @@ Feature: Hypertension Data Audit
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient has a "Hypertension & Diabetes visit" event on "2024-03-20" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | HTN - Type of diabetes measure? | HBA1C |
       | HTN - Blood sugar reading       | 9     |
     #
     #  Patient 3 - Patient under care, patient under care registered before the past 3 months and controlled
     #
-    Given I create a new Patient on "2023-10-20" for this Facility with the following attributes
+    Given I create a new Patient on "10_MonthsAgo" for this Facility with the following attributes
       | Given name         | Sue          |
       | Family name        | Perkins      |
       | Sex                | MALE         |
@@ -60,28 +60,28 @@ Feature: Hypertension Data Audit
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient has a "Hypertension & Diabetes visit" event on "2023-10-20" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "10_MonthsAgo" with following data
       | Systole  | 147 |
       | Diastole | 89  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "2023-11-27" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "9_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 87  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "2024-01-04" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 83  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "2024-02-07" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
       | Systole  | 135 |
       | Diastole | 84  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "2024-03-03" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | Systole  | 134 |
       | Diastole | 83  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "2024-05-10" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | Systole  | 137 |
       | Diastole | 86  |
     #
     #  Patient 4 - Patient under care, patient under care registered before the past 3 months and controlled
     #
-    Given I create a new Patient on "2023-01-10" for this Facility with the following attributes
+    Given I create a new Patient on "19_MonthsAgo" for this Facility with the following attributes
       | Given name         | Kiran        |
       | Family name        | Kishor       |
       | Sex                | MALE         |
@@ -92,19 +92,19 @@ Feature: Hypertension Data Audit
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient has a "Hypertension & Diabetes visit" event on "2023-01-10" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "19_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 95  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "2023-02-08" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "18_MonthsAgo" with following data
       | Systole  | 139 |
       | Diastole | 90  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "2023-03-12" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "17_MonthsAgo" with following data
       | Systole  | 132 |
       | Diastole | 82  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "2023-04-15" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "16_MonthsAgo" with following data
       | Systole  | 128 |
       | Diastole | 72  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "2023-05-12" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "15_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 88  |
 #  Patient 5

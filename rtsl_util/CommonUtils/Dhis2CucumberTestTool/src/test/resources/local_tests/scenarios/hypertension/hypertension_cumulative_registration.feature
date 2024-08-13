@@ -115,7 +115,7 @@ Feature: Audit HTN - Cumulative registrations
     When Export the analytics
     When Run the Hypertension data aggregation
 
-#    When Run the Hypertension data aggregation. we could add this logic to indicator checks
+# TODO  Move `When Run the Hypertension data aggregation` behind the scene?
 
     Then The value of "PI":"HTN - Cumulative registrations" with period type "Months" should be
       | thisMonth    | 2 |
