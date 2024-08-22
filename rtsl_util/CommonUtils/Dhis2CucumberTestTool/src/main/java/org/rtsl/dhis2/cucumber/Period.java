@@ -137,7 +137,7 @@ public class Period {
             return 0;
         else {
             String[] relativeDateArray = relativeDate.split("_");
-            if (relativeDateArray[1].equals("MonthsAgo"))
+            if (relativeDateArray[1].equals("MonthsAgo") || relativeDateArray[1].equals("MonthAgo"))
                 return Integer.parseInt(relativeDateArray[0]);
             else
                 return 3 * Integer.parseInt(relativeDateArray[0]);
