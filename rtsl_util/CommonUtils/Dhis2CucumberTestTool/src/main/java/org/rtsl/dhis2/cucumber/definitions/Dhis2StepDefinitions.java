@@ -168,6 +168,7 @@ public class Dhis2StepDefinitions {
 
     @Given("Export the analytics")
     public void export_the_analytics() throws Exception {
+        clearCache();
         String exportAnalyticsJobId = testIdConverter.getJobConfigurationId("Matview Refresh");
         String jobStatus;
         String lastRuntimeExecution;
@@ -306,7 +307,14 @@ public class Dhis2StepDefinitions {
             actualPeriodValues.put(key, value);
         }
         LOGGER.info("Response {}", response);
-        scenario.log(dimensionItemName + ": " + dimensionItemId + " for the `" + periods + "` in Organisation Unit:" + orgUnit + "is " + actualPeriodValues);
+        scenario.log(dimensionItemName + ": " + dimensionItemId + " for the `" + periods + "` in Organisation Unit:" + orgUnit + " is " + actualPeriodValues);
         return actualPeriodValues;
+    }
+
+    private void clearCache() throws Exception {
+        String endpoint = "api/maintenance?cacheClear=true&appReload=true";
+        String response = dhis2HttpClient.doPost(endpoint);
+        LOGGER.info("Response {}", response);
+        scenario.log("Cleared cache");
     }
 }
