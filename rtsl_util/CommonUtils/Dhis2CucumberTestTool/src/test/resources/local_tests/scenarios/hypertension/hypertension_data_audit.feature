@@ -7,7 +7,8 @@ Feature: Hypertension Data Audit
     #
     # Patient 1 - Dead
     #
-    Given I create a new Patient on "7_MonthsAgo" for this Facility with the following attributes
+
+    Given I create a new Patient on "7_MonthsAgo_BeginningOfMonth" for this Facility with the following attributes
       | Given name         | Joe          |
       | Family name        | Bloggs       |
       | Sex                | MALE         |
@@ -27,7 +28,7 @@ Feature: Hypertension Data Audit
     Given That patient has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | Systole  | 136 |
       | Diastole | 84  |
-    Given That patient was updated on "7_MonthsAgo" with the following attributes
+    Given That patient was updated on "2_MonthsAgo" with the following attributes
       | NCD Patient Status | DIED |
     #
     # Patient 2 - Not a hypertension patient
@@ -108,7 +109,7 @@ Feature: Hypertension Data Audit
       | Systole  | 140 |
       | Diastole | 88  |
     #
-    #  Patient 5
+    #  Patient 5 - Patient under care, patient under care registered before the past 3 months and uncontrolled
     #
     Given I create a new Patient on "8_MonthsAgo" for this Facility with the following attributes
       | Given name         | Lilly        |
@@ -136,11 +137,11 @@ Feature: Hypertension Data Audit
     Given That patient has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | Systole  | 138 |
       | Diastole | 87  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "2_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 91  |
   #
-  #  Patient 6
+  #  Patient 6 - Patient under care, patient under care registered before the past 3 months and no visit in last 3 months
   #
     Given I create a new Patient on "12_MonthsAgo" for this Facility with the following attributes
       | Given name         | Ajesh        |
@@ -172,7 +173,7 @@ Feature: Hypertension Data Audit
       | Systole  | 136 |
       | Diastole | 82  |
   #
-  #  Patient 7
+  #  Patient 7 - Patient under care, patient under care registered before the past 3 months and controlled
   #
     Given I create a new Patient on "4_MonthsAgo" for this Facility with the following attributes
       | Given name         | Bianca       |
@@ -212,7 +213,7 @@ Feature: Hypertension Data Audit
       | Systole  | 152 |
       | Diastole | 98  |
   #
-  #  Patient 9
+  #  Patient 9 - Patient under care, patient under care registered before the past 3 months and controlled
   #
     Given I create a new Patient on "6_MonthsAgo" for this Facility with the following attributes
       | Given name         | Karlo        |
@@ -241,7 +242,7 @@ Feature: Hypertension Data Audit
       | Systole  | 125 |
       | Diastole | 77  |
   #
-  #  Patient 10
+  #  Patient 10 - Patient under care, patient under care registered before the past 3 months and controlled
   #
     Given I create a new Patient on "8_MonthsAgo" for this Facility with the following attributes
       | Given name         | Adrien       |
@@ -260,11 +261,11 @@ Feature: Hypertension Data Audit
     Given That patient has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 143 |
       | Diastole | 93  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "4_MonthsAgo" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | Systole  | 138 |
       | Diastole | 83  |
   #
-  #  Patient 11 -  Patient that is ‘Visit with no BP’, registered as ‘no visit’ at the latest visit
+  #  Patient 11 -  Patient under care, patient under care registered before the past 3 months and no visit
   #
     Given I create a new Patient on "9_MonthsAgo" for this Facility with the following attributes
       | Given name         | Iverna       |
@@ -302,7 +303,7 @@ Feature: Hypertension Data Audit
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 130      |
       | HTN - Blood sugar unit          | MG_OR_DL |
-    Given That patient has a "Hypertension & Diabetes visit" event on "1_MonthsAgo" with following data
+    Given That patient has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 100      |
       | HTN - Blood sugar unit          | MG_OR_DL |
@@ -351,20 +352,6 @@ Feature: Hypertension Data Audit
       | 2_MonthsAgo  | 0 |
       | 1_MonthAgo   | 0 |
       | thisMonth    | 0 |
-    Then The value of "PI":"HTN - Patients under care registered before the past 3 months." with period type "Months" should be
-      | 12_MonthsAgo | 0 |
-      | 11_MonthsAgo | 0 |
-      | 10_MonthsAgo | 0 |
-      | 9_MonthsAgo  | 0 |
-      | 8_MonthsAgo  | 0 |
-      | 7_MonthsAgo  | 2 |
-      | 6_MonthsAgo  | 3 |
-      | 5_MonthsAgo  | 5 |
-      | 4_MonthsAgo  | 5 |
-      | 3_MonthsAgo  | 6 |
-      | 2_MonthsAgo  | 6 |
-      | 1_MonthAgo   | 6 |
-      | thisMonth    | 7 |
     Then The value of "PI":"HTN - Patients under care with controlled BP at latest visit in past 3 months and registered before the past 3 months" with period type "Months" should be
       | 12_MonthsAgo | 0 |
       | 11_MonthsAgo | 0 |
@@ -373,12 +360,13 @@ Feature: Hypertension Data Audit
       | 8_MonthsAgo  | 0 |
       | 7_MonthsAgo  | 0 |
       | 6_MonthsAgo  | 3 |
-      | 5_MonthsAgo  | 3 |
+      | 5_MonthsAgo  | 4 |
       | 4_MonthsAgo  | 4 |
-      | 3_MonthsAgo  | 4 |
-      | 2_MonthsAgo  | 5 |
-      | 1_MonthAgo   | 5 |
-      | thisMonth    | 2 |
+      | 3_MonthsAgo  | 5 |
+      | 2_MonthsAgo  | 3 |
+      | 1_MonthAgo   | 4 |
+      | thisMonth    | 3 |
+
     Then The value of "PI":"HTN - Patients under care with no visit in past 3 months registered before the past 3 months" with period type "Months" should be
       | 12_MonthsAgo | 2 |
       | 11_MonthsAgo | 2 |
@@ -392,7 +380,7 @@ Feature: Hypertension Data Audit
       | 3_MonthsAgo  | 1 |
       | 2_MonthsAgo  | 2 |
       | 1_MonthAgo   | 2 |
-      | thisMonth    | 2 |
+      | thisMonth    | 3 |
     Then The value of "PI":"HTN - Patients under care with uncontrolled BP at latest visit in past 3 months registered before the past 3 months" with period type "Months" should be
       | 12_MonthsAgo | 0 |
       | 11_MonthsAgo | 0 |
@@ -407,20 +395,6 @@ Feature: Hypertension Data Audit
       | 2_MonthsAgo  | 1 |
       | 1_MonthAgo   | 1 |
       | thisMonth    | 1 |
-    Then The value of "PI":"HTN - Patients with controlled BP at latest visit in this quarter" with period type "Quarters" should be
-      | 12_MonthsAgo | 0 |
-      | 11_MonthsAgo | 0 |
-      | 10_MonthsAgo | 0 |
-      | 9_MonthsAgo  | 0 |
-      | 8_MonthsAgo  | 0 |
-      | 7_MonthsAgo  | 0 |
-      | 6_MonthsAgo  | 3 |
-      | 5_MonthsAgo  | 4 |
-      | 4_MonthsAgo  | 4 |
-      | 3_MonthsAgo  | 5 |
-      | 2_MonthsAgo  | 3 |
-      | 1_MonthAgo   | 3 |
-      | thisMonth    | 3 |
     Then The value of "PI":"HTN - Patients with no visit in last 12 months" with period type "Months" should be
       | 12_MonthsAgo | 0 |
       | 11_MonthsAgo | 0 |
@@ -435,18 +409,6 @@ Feature: Hypertension Data Audit
       | 2_MonthsAgo  | 2 |
       | 1_MonthAgo   | 2 |
       | thisMonth    | 2 |
-    Then The value of "PI":"HTN - Patients with no visit in this quarter" with period type "Quarters" should be
-      | 4_QuartersAgo | 1 |
-      | 3_QuartersAgo | 1 |
-      | 2_QuartersAgo | 0 |
-      | 1_QuarterAgo  | 0 |
-      | thisQuarter   | 1 |
-    Then The value of "PI":"HTN - Patients with uncontrolled BP from latest visit in this quarter" with period type "Quarters" should be
-      | 4_QuartersAgo | 0 |
-      | 3_QuartersAgo | 0 |
-      | 2_QuartersAgo | 2 |
-      | 1_QuarterAgo  | 0 |
-      | thisQuarter   | 0 |
     Then The value of "PI":"HTN - Patients with controlled BP at latest visit in this quarter" with period type "Quarters" should be
       | 4_QuartersAgo | 0 |
       | 3_QuartersAgo | 0 |
@@ -459,3 +421,30 @@ Feature: Hypertension Data Audit
       | 2_QuartersAgo | 4 |
       | 1_QuarterAgo  | 1 |
       | thisQuarter   | 1 |
+    Then The value of "PI":"HTN - Patients with no visit in this quarter" with period type "Quarters" should be
+      | 4_QuartersAgo | 1 |
+      | 3_QuartersAgo | 1 |
+      | 2_QuartersAgo | 0 |
+      | 1_QuarterAgo  | 0 |
+      | thisQuarter   | 1 |
+    Then The value of "PI":"HTN - Patients with uncontrolled BP from latest visit in this quarter" with period type "Quarters" should be
+      | 4_QuartersAgo | 0 |
+      | 3_QuartersAgo | 1 |
+      | 2_QuartersAgo | 1 |
+      | 1_QuarterAgo  | 0 |
+      | thisQuarter   | 0 |
+
+    Then The value of "PI":"HTN - Patients under care registered before the past 3 months." with period type "Months" should be
+      | 12_MonthsAgo | 2 |
+      | 11_MonthsAgo | 2 |
+      | 10_MonthsAgo | 2 |
+      | 9_MonthsAgo  | 3 |
+      | 8_MonthsAgo  | 3 |
+      | 7_MonthsAgo  | 4 |
+      | 6_MonthsAgo  | 5 |
+      | 5_MonthsAgo  | 7 |
+      | 4_MonthsAgo  | 6 |
+      | 3_MonthsAgo  | 6 |
+      | 2_MonthsAgo  | 6 |
+      | 1_MonthAgo   | 7 |
+      | thisMonth    | 7 |
