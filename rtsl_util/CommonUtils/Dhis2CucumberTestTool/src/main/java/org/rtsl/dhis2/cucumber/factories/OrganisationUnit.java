@@ -26,7 +26,7 @@ public class OrganisationUnit {
 
     private static String testRootOrganisationUnitId;
 
-    public String getTestRootOrganisationUnitId() throws Exception {
+    public static String getTestRootOrganisationUnitId() throws Exception {
         return testRootOrganisationUnitId;
     }
 

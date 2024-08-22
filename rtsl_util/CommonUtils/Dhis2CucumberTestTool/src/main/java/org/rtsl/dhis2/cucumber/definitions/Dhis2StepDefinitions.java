@@ -18,8 +18,6 @@ import org.rtsl.dhis2.cucumber.factories.OrganisationUnit;
 import org.rtsl.dhis2.cucumber.factories.TrackedEntityInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -89,23 +87,19 @@ public class Dhis2StepDefinitions {
 
     @Given("I assign the current user to the current orgUnit")
     public void i_assign_the_current_user_to_the_current_org_unit() throws Exception {
-        //
-        // Links the current User to the current facility
-        // 
         String currentUserId = dhis2HttpClient.getCurrentUserId();
         String baseUserJson = dhis2HttpClient.doGet("api/users/" + currentUserId + "?fields=id,name,organisationUnits,userGroups,userRoles,dataViewOrganisationUnits,teiSearchOrganisationUnits");
         JsonNode rootNode = MAPPER.readTree(baseUserJson);
-        ObjectNode newId = MAPPER.createObjectNode();
-        newId.put("id", currentFacilityId);
         ArrayNode organisationUnits = (ArrayNode) rootNode.get("organisationUnits");
-        organisationUnits.add(newId);
+        ObjectNode testRootId = MAPPER.createObjectNode().put("id", OrganisationUnit.getTestRootOrganisationUnitId());
+        organisationUnits.add(testRootId);
         ArrayNode dataViewOrganisationUnits = (ArrayNode) rootNode.get("dataViewOrganisationUnits");
-        dataViewOrganisationUnits.add(newId);
+        dataViewOrganisationUnits.add(testRootId);
         ArrayNode teiSearchOrganisationUnits = (ArrayNode) rootNode.get("teiSearchOrganisationUnits");
-        teiSearchOrganisationUnits.add(newId);
+        teiSearchOrganisationUnits.add(testRootId);
         String modifiedJson = MAPPER.writeValueAsString(rootNode);
         dhis2HttpClient.doPutWithBody("api/users/" + currentUserId + "?mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE", modifiedJson);
-
+        scenario.log("Current user: " + currentUserId + " has given access to the facility:" + currentFacilityId);
     }
 
     @Given("I register that Facility for program {string}")
@@ -229,7 +223,7 @@ public class Dhis2StepDefinitions {
             String period = periodType.equalsIgnoreCase("months") ? Period.toMonthString(relativePeriod) :  Period.toQuarterString(relativePeriod);
             assertEquals(dataTable.get(relativePeriod),
                     actualPeriodValues.get(period),
-                    dimensionItemName+": <" + dimensionItemId + "> for the <" + period + "(" + relativePeriod +")"+"> in Organisation Unit:<" + this.currentFacilityId + ">." +
+                    dimensionItemName + ": <" + dimensionItemId + "> for the <" + period + "(" + relativePeriod + ")" + "> in Organisation Unit:<" + this.currentFacilityId + ">." +
                             "\nNote: Ensure you have aggregated the data after exporting the analytics.\n");
         }
     }
@@ -301,7 +295,7 @@ public class Dhis2StepDefinitions {
         String orgUnit = this.currentFacilityId;
         String periods = periodType.equalsIgnoreCase("months") ? "LAST_12_MONTHS;THIS_MONTH" : "LAST_4_QUARTERS;THIS_QUARTER";
         String endpoint = "api/analytics.json";
-        String params = "?dimension=dx:" + dimensionItemId + "&dimension=pe:" + periods + "&dimension=ou:" + orgUnit+"&tableLayout=true&columns=dx;ou&rows=pe";
+        String params = "?dimension=dx:" + dimensionItemId + "&dimension=pe:" + periods + "&dimension=ou:" + orgUnit + "&tableLayout=true&columns=dx;ou&rows=pe";
         String response = dhis2HttpClient.doGet(endpoint + params);
         JsonNode rootNode = MAPPER.readTree(response);
         ArrayNode periodValues = (ArrayNode) rootNode.get("rows");
