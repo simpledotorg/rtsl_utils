@@ -172,7 +172,7 @@ public class Dhis2HttpClient {
     private String handleResponse(CloseableHttpResponse response) throws Exception {
         int statusCode = response.getCode();
         StringBuilder sb = new StringBuilder();
-        String responseBody = new String(response.getEntity().getContent().readAllBytes());
+        String responseBody = response.getEntity()  == null ? "" :new String(response.getEntity().getContent().readAllBytes());
         if (statusCode >= 200 && statusCode < 300) {
             LOGGER.info("Request was successful. Status Code: {}", statusCode);
         } else if (statusCode >= 400 && statusCode < 500) {
