@@ -35,13 +35,15 @@ The configuration can be done through a properties file containing the following
 | Property      | Type  | Default Value| Description |
 | ----------- | ----------- |----------- |----------- |
 | database.jdbc.driverClassName | String | org.postgresql.Driver | JDBC driver class. Can be left to default if using postgresql |
-| database.jdbc.url | String |  | jdbc:postgresql://localhost:5432/dhis?ApplicationName=PrometheusDatabaseExporterWar |
+| database.jdbc.url | String | jdbc:postgresql://localhost:5432/dhis?ApplicationName=PrometheusDatabaseExporterWar | JDBC Url. It can be a good idea to keep ApplicationName in the final JDBC url |
 | database.jdbc.username | String |  | username (**mandatory**) |
 | database.jdbc.password | String |  | password (**mandatory**) |
 | database.jdbc.maxPoolSize | int | 10 | number of DB connections the app is going to maintain. It is useful for multithreading |
 | config.parallel.thread.pool.size | int | 10 | number of maximum concurrent threads |
 | config.root.folder | String |  | path to the folder containing the json descriptors|
 | cache.folder | String |  | Path to the folder that will be used as a local cache for asynch metrics.  |
+
+## Docker Image
 
 
 # Metrics Descriptor syntax
