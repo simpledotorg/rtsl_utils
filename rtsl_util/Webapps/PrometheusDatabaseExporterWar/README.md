@@ -62,3 +62,71 @@ This will generate the following metric
 postgres_heartbeat{source="database"} 1
 ```
 
+### getSessionInfo (Synchronous)
+
+Another Simple descriptor can be this one, that gets a count of DB sessions per by application_name (in Postgresql)
+
+It will return one metric per application_name present in the currently connected sessions.
+
+```json
+{
+    "asynch": false,
+    "type": "sql",
+    "name": "getSessionInfo",
+    "query": "select application_name, count(*) as value from pg_stat_activity group by application_name",
+    "metrics": [{
+            "metricName": "postgres_sessions_per_application_count",
+            "metricValueKey": "value",
+            "labelsKeys": {
+                "application_name": "application_name"
+            }
+        }]
+}
+```
+
+
+This will generate the following metrics (obviously depending on the application 
+```
+postgres_sessions_per_application_count{application_name="Patroni"} 1
+postgres_sessions_per_application_count{application_name=""} 5
+postgres_sessions_per_application_count{application_name="Metabase v0.47.10 [19167a88-5ba7-42ce-8800-7e0443652b59]"} 1
+postgres_sessions_per_application_count{application_name="PrometheusDatabaseExporterWar"} 2
+```
+
+
+
+### Tracked Entities (Asynchronous)
+
+A more complex query can be found below. It is DHIS2 specific and counts the number of tracked entities by type.
+
+
+It will return one metric per application_name present in the currently connected sessions.
+
+```json
+{
+    "asynch": true,
+    "type": "sql",
+    "cron": "* * * * *",
+    "name": "DHIS2_Trackedentityinstance",
+    "query": "select  trackedentityinstance.trackedentitytypeid, trackedentitytype.name, count(*) as value from trackedentityinstance left outer join trackedentitytype on trackedentityinstance.trackedentitytypeid = trackedentitytype.trackedentitytypeid group by trackedentityinstance.trackedentitytypeid, trackedentitytype.name",
+    "metrics": [{
+            "metricName": "dhis2_trackedentityinstance_count",
+            "metricValueKey": "value",
+            "labelsKeys": {
+                "trackedentitytypeid": "trackedentitytypeid",
+                "name": "name"
+            }
+        }]
+}
+```
+
+
+This will generate the following metrics (obviously depending on the application 
+```
+postgres_sessions_per_application_count{application_name="Patroni"} 1
+postgres_sessions_per_application_count{application_name=""} 5
+postgres_sessions_per_application_count{application_name="Metabase v0.47.10 [19167a88-5ba7-42ce-8800-7e0443652b59]"} 1
+postgres_sessions_per_application_count{application_name="PrometheusDatabaseExporterWar"} 2
+```
+
+
