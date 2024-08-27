@@ -99,8 +99,7 @@ postgres_sessions_per_application_count{application_name="PrometheusDatabaseExpo
 
 A more complex query can be found below. It is DHIS2 specific and counts the number of tracked entities by type.
 
-
-It will return one metric per application_name present in the currently connected sessions.
+It is configured to be run every minute. The real time query will be against a local file containing cached values.
 
 ```json
 {
@@ -120,13 +119,10 @@ It will return one metric per application_name present in the currently connecte
 }
 ```
 
-
-This will generate the following metrics (obviously depending on the application 
+Following the same logic, it will generate metrics looking like this:
 ```
-postgres_sessions_per_application_count{application_name="Patroni"} 1
-postgres_sessions_per_application_count{application_name=""} 5
-postgres_sessions_per_application_count{application_name="Metabase v0.47.10 [19167a88-5ba7-42ce-8800-7e0443652b59]"} 1
-postgres_sessions_per_application_count{application_name="PrometheusDatabaseExporterWar"} 2
+dhis2_trackedentityinstance_count{name="Patient", trackedentitytypeid="XXXXXXXXX"} 45623
+dhis2_trackedentityinstance_count{name="Other", trackedentitytypeid="YYYYYYYYY"} 45
 ```
 
 
