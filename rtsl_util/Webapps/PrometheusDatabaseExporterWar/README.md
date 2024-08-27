@@ -8,6 +8,8 @@ This application purpose is to allow generating metrics at the prometheus format
 
 The application is packaged as a Java War. This allows to build it agnostically of the deployment environment. In case we want to change the packaging, it should be done easily as classes that are not related to configuration are abstracted in a dependency jar (OpenMetricsUtils)
 
+Note that everything related to the packaging is already done in the docker image created by this build
+
 ## Logs
 
 Logging is done through logback. Nothing in the code refers logback explicitly, logback.xml file location is supposed to be injected through environment variables (or java arguments if you must)
