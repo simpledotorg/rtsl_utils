@@ -309,6 +309,7 @@ Feature: Hypertension Data Audit
       | HTN - Blood sugar unit          | MG_OR_DL |
     When Export the analytics
 #    When Run the Hypertension data aggregation
+    When Clears cache
 
     Then The value of "PI":"HTN - Cumulative dead patients" with period type "Months" should be
       | 12_MonthsAgo | 0 |

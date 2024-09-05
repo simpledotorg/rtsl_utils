@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import jakarta.inject.Inject;
@@ -168,7 +169,6 @@ public class Dhis2StepDefinitions {
 
     @Given("Export the analytics")
     public void export_the_analytics() throws Exception {
-        clearCache();
         String exportAnalyticsJobId = testIdConverter.getJobConfigurationId("Matview Refresh");
         String jobStatus;
         String lastRuntimeExecution;
@@ -209,6 +209,7 @@ public class Dhis2StepDefinitions {
             lastExecutedStatus = jobConfigurations.get("lastExecutedStatus").asText();
 
         } while (jobStatus.equals("RUNNING"));
+        clearsCache();
         LOGGER.info("Response {}", response);
         if (lastExecutedStatus.equals("STOPPED"))
             throw new Exception("Data exchange and aggregation job with Id:" + dataAggregationJobId + " stopped. Please check the job configurations");
@@ -314,7 +315,8 @@ public class Dhis2StepDefinitions {
         return actualPeriodValues;
     }
 
-    private void clearCache() throws Exception {
+    @Given("Clears cache")
+    public void clearsCache() throws Exception {
         String endpoint = "api/maintenance?cacheClear=true&appReload=true";
         String response = dhis2HttpClient.doPost(endpoint);
         LOGGER.info("Response {}", response);

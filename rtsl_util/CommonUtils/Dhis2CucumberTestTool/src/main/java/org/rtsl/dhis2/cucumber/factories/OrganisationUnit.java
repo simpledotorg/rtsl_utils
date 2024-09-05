@@ -10,14 +10,8 @@ import org.rtsl.dhis2.cucumber.Dhis2HttpClient;
 import org.rtsl.dhis2.cucumber.TestUniqueId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.InputStream;
 import java.util.Map;
-
-import static org.rtsl.dhis2.cucumber.Helper.PROGRAM_CONSTANTS;
 import static org.rtsl.dhis2.cucumber.Helper.toISODateTimeString;
-
-
 public class OrganisationUnit {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrganisationUnit.class);
@@ -25,9 +19,24 @@ public class OrganisationUnit {
     private static String districtId = "";
 
     private static String testRootOrganisationUnitId;
+    private final String rootOrganisationUnitName;
+    private final String openingDate;
+    private final String stateNamePrefix;
+    private final String districtNamePrefix;
+    private final String blockNamePrefix;
+    private final String facilityNamePrefix;
 
     public static String getTestRootOrganisationUnitId() throws Exception {
         return testRootOrganisationUnitId;
+    }
+
+    OrganisationUnit(String rootOrganisationUnitName, String stateNamePrefix, String districtNamePrefix, String blockNamePrefix, String facilityNamePrefix, String openingDate) {
+        this.rootOrganisationUnitName = rootOrganisationUnitName;
+        this.openingDate = openingDate;
+        this.stateNamePrefix = stateNamePrefix;
+        this.districtNamePrefix = districtNamePrefix;
+        this.blockNamePrefix = blockNamePrefix;
+        this.facilityNamePrefix = facilityNamePrefix;
     }
 
     @Inject
@@ -41,28 +50,26 @@ public class OrganisationUnit {
     public TestUniqueId getTestUniqueId() {
         return testUniqueId;
     }
-
     public void createRoot() throws Exception {
         String id = dhis2HttpClient.getGenerateUniqueIds(1).get(0).asText();
-        String rootOrganisationUnitName = getProgramConstant("rootOrganisationUnitName");
-        if (getOrganisationUnitId(rootOrganisationUnitName).isBlank()) {
-            testRootOrganisationUnitId = create(id, rootOrganisationUnitName, rootOrganisationUnitName, PROGRAM_CONSTANTS.get("openingDatesOfOrganisationUnit").asText(), 1, "");
+        if (getOrganisationUnitId(this.rootOrganisationUnitName).isBlank()) {
+            testRootOrganisationUnitId = create(id, this.rootOrganisationUnitName, this.rootOrganisationUnitName, this.openingDate, 1, "");
         }
     }
 
     public void createOrganisationUnitHierarchy() throws Exception {
-        testRootOrganisationUnitId = getOrganisationUnitId(getProgramConstant("rootOrganisationUnitName"));
+        testRootOrganisationUnitId = getOrganisationUnitId(this.rootOrganisationUnitName);
         if (testRootOrganisationUnitId.isBlank()) {
             createRoot();
         }
         ArrayNode ids = dhis2HttpClient.getGenerateUniqueIds(2);
-        String stateOrganisationUnitName = getProgramConstant("stateNamePrefix") + testUniqueId.hashCode();
+        String stateOrganisationUnitName = this.stateNamePrefix + testUniqueId.hashCode();
         String stateOrganisationUnitId = ids.get(0).asText();
-        String districtOrganisationUnitName = getProgramConstant("districtNamePrefix") + testUniqueId.hashCode();
+        String districtOrganisationUnitName = districtNamePrefix + testUniqueId.hashCode();
         String districtOrganisationUnitId = ids.get(1).asText();
 
-        create(stateOrganisationUnitId, stateOrganisationUnitName, stateOrganisationUnitName, getProgramConstant("openingDatesOfOrganisationUnit"), 2, testRootOrganisationUnitId);
-        districtId = create(districtOrganisationUnitId, districtOrganisationUnitName, districtOrganisationUnitName, getProgramConstant("openingDatesOfOrganisationUnit"), 3, ids.get(0).asText());
+        create(stateOrganisationUnitId, stateOrganisationUnitName, stateOrganisationUnitName, this.openingDate, 2, testRootOrganisationUnitId);
+        districtId = create(districtOrganisationUnitId, districtOrganisationUnitName, districtOrganisationUnitName, this.openingDate, 3, ids.get(0).asText());
 
     }
 
@@ -71,11 +78,11 @@ public class OrganisationUnit {
             createOrganisationUnitHierarchy();
         }
         ArrayNode ids = dhis2HttpClient.getGenerateUniqueIds(2);
-        String blockOrganisationUnitName = getProgramConstant("blockNamePrefix") + testUniqueId.hashCode();
-        String blockId = create(ids.get(0).asText(), blockOrganisationUnitName, blockOrganisationUnitName, getProgramConstant("openingDatesOfOrganisationUnit"), 4, districtId);
+        String blockOrganisationUnitName = this.blockNamePrefix + testUniqueId.hashCode();
+        String blockId = create(ids.get(0).asText(), blockOrganisationUnitName, blockOrganisationUnitName, this.openingDate, 4, districtId);
 
-        String facilityOrganisationUnitName = getProgramConstant("facilityNamePrefix") + testUniqueId.hashCode();
-        String facilityId = create(ids.get(1).asText(), facilityOrganisationUnitName, facilityOrganisationUnitName, getProgramConstant("openingDatesOfOrganisationUnit"), 5, blockId);
+        String facilityOrganisationUnitName = this.facilityNamePrefix + testUniqueId.hashCode();
+        String facilityId = create(ids.get(1).asText(), facilityOrganisationUnitName, facilityOrganisationUnitName, this.openingDate, 5, blockId);
         return Map.of("organisationUnitId", facilityId, "organisationUnitName", facilityOrganisationUnitName);
     }
 
@@ -86,7 +93,7 @@ public class OrganisationUnit {
                 "organisationUnitId", id,
                 "organisationUnitName", name,
                 "organisationUnitShortName", shortName,
-                "organisationUnitOpeningDate", toISODateTimeString(openingDate),
+                "organisationUnitOpeningDate", toISODateTimeString(this.openingDate),
                 "organisationUnitLevel", level,
                 "parentOrganisationUnitId", parentId);
         String response = dhis2HttpClient.doPost(
@@ -108,13 +115,6 @@ public class OrganisationUnit {
             }
         }
         return ancestorId;
-    }
-
-    private String getProgramConstant(String key)
-    {
-        String value = PROGRAM_CONSTANTS.get(key).asText();
-        if(value == null){ value = ""; }
-        return value;
     }
 
     public String getOrganisationUnitId(String organisationUnitName) throws Exception {

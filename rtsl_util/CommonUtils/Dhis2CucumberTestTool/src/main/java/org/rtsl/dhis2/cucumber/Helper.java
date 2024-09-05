@@ -10,18 +10,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Helper {
-    private static final String PROGRAM_CONSTANT_FILENAME = "programConstants.json";
-    public static final JsonNode PROGRAM_CONSTANTS = getProgramConstants();
-
-    public static JsonNode getProgramConstants() {
-        try {
-            InputStream resource = OrganisationUnit.class.getClassLoader().getResourceAsStream(PROGRAM_CONSTANT_FILENAME);
-            return new ObjectMapper().readTree(resource);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static DateTimeFormatter ISO_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
