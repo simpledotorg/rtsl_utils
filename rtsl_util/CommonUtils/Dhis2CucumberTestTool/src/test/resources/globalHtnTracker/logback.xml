@@ -1,0 +1,20 @@
+<configuration>
+
+    <appender name="unitTestLogs" class="ch.qos.logback.core.FileAppender">
+        <file>${TARGET_DIR}/cucumber-reports/test_reports.log</file>
+        <append>true</append>
+        <immediateFlush>true</immediateFlush>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <outputPatternAsHeader>false</outputPatternAsHeader>
+        </encoder>
+    </appender>
+
+    <root level="trace">
+        <appender-ref ref="unitTestLogs"/>
+    </root>
+
+
+
+</configuration>
