@@ -234,6 +234,9 @@ public class Dhis2StepDefinitions {
             case "Program Indicator", "PI" -> {
                 return testIdConverter.getProgramIndicatorId(dimensionItemName);
             }
+            case "Indicator" -> {
+                return testIdConverter.getIndicatorId(dimensionItemName);
+            }
             case "Data Element" -> {
                 return testIdConverter.getDataElementId(dimensionItemName);
             }
