@@ -322,4 +322,22 @@ public class Dhis2StepDefinitions {
         LOGGER.info("Response {}", response);
         scenario.log("Cleared cache");
     }
+    @And("The user has access to the above orgUnit")
+    public void theUserHasAccessToTheAboveOrgUnit() {
+
+    }
+
+    @And("I sign in as a user with the user-role {string}")
+    public void iSignInAsAUserWithTheUserRole(String arg0) {
+
+    }
+
+    @And("The user fills out the dataset form:{string} for the period {string} and for the orgUnit {string} with following data:")
+    public void theUserFillsOutTheDatasetFormForThePeriodAndForTheOrgUnitWithFollowingData(String arg0, String arg1, String arg2) {
+
+    }
+
+    @Given("I create a new orgUnit at level {int}")
+    public void iCreateANewOrgUnitAtLevel(int arg0) {
+    }
 }
