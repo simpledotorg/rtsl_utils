@@ -14,7 +14,7 @@
       ],
       "enrollmentStatus": "ACTIVE",
       "occurredAt": "${occurredAt}",
-      "orgUnit": "${data.currentFacilityId}",
+      "orgUnit": "${data.currentOrgUnitId}",
       "program": "pMIglSEqPGS",
       "programStage": "${programStageId}",
       "scheduledAt": "${scheduledAt}",

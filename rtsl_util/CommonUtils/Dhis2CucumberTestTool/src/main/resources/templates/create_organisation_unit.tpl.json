@@ -1,12 +1,12 @@
 {
-  "id": "${organisationUnitId}",
-  "name": "${organisationUnitName}",
-  "shortName": "${organisationUnitShortName}",
-  "openingDate": "${organisationUnitOpeningDate}",
-  "level": "${organisationUnitLevel}"
-  <#if organisationUnitLevel != 1>
-  ,"parent": {
-      "id": "${parentOrganisationUnitId}"
-    }
+  "id": "${orgUnit.id}",
+  "name": "${orgUnit.name}",
+  "shortName": "${orgUnit.shortName}",
+  "openingDate": "${orgUnit.openingDate}",
+  "level": "${orgUnit.level}"
+  <#if orgUnit.level != "1">
+  , "parent": {
+    "id": "${orgUnit.parentId}"
+  }
   </#if>
 }

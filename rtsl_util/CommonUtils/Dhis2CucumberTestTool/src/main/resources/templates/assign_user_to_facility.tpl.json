@@ -1,17 +1,17 @@
 {
     "organisationUnit": [
         {
-            "id": "${data.currentFacilityId}"
+            "id": "${data.currentOrgUnitId}"
         }
     ],
     "dataViewOrganisationUnit": [
         {
-            "id": "${data.currentFacilityId}"
+            "id": "${data.currentOrgUnitId}"
         }
     ],
     "teiSearchOrganisationUnit": [
         {
-            "id": "${data.currentFacilityId}"
+            "id": "${data.currentOrgUnitId}"
         }
     ]
 }

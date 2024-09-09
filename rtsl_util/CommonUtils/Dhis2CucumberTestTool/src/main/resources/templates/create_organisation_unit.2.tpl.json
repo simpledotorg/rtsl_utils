@@ -1,32 +1,18 @@
 {
   "organisationUnits": [
+    <#list orgUnits as orgUnit>
     {
-      "id": "${rootOrganisationUnitId}",
-      "name": "AUTO_TEST_ROOT",
-      "shortName": "auto_test",
-      "openingDate": "1945-08-15",
-      "level": 1
-    },
-    {
-      "id": "${stateOrganisationUnitId}",
-      "name": "AUTO_TEST_STATE",
-      "shortName": "auto_test_state",
-      "openingDate": "1945-08-15",
-      "level": 2,
+
+      "id": "${orgUnit.id}",
+      "name": "${orgUnit.name}",
+      "shortName": "${orgUnit.shortName}",
+      "openingDate": "${orgUnit.openingDate}",
+      "level": "${orgUnit.level}",
       "parent": {
-        "id": "${rootOrganisationUnitId}"
-      }
-    },
-    {
-      "id": "${districtOrganisationUnitId}",
-      "name": "${districtOrganisationUnitName}",
-      "shortName": "${districtOrganisationUnitShortName}",
-      "openingDate": "${districtOrganisationUnitOpeningDate}",
-      "level": 3,
-      "parent": {
-        "id": "${stateOrganisationUnitId}"
-      }
-    }
+        "id": "${orgUnit.parentId}"
+    }}
+    <#sep>, </#sep>
+    </#list>
   ]
 }
 
