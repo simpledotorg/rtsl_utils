@@ -1,13 +1,11 @@
 package org.rtsl.dhis2.cucumber;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import java.io.StringWriter;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -157,12 +155,12 @@ public class Dhis2HttpClient {
         return parsedResponse.get("id");
     }
 
-    public String getGenerateUniqueId() throws Exception {
-        ArrayNode ids = getGenerateUniqueIds(1);
+    public String getUniqueDhis2Id() throws Exception {
+        ArrayNode ids = getUniqueDhis2Id(1);
         return ids.get(0).asText();
     }
 
-    public ArrayNode getGenerateUniqueIds(int count) throws Exception {
+    public ArrayNode getUniqueDhis2Id(int count) throws Exception {
         String response = doGet("api/system/id?limit=" + count);
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(response);
