@@ -41,8 +41,8 @@ public class TrackedEntityInstance {
 
     public Map<String, String> create(Map<String, String> dataTable, String orgUnitId, String enrolledAt) throws Exception {
         Map<String, String> convertedDataTable = testIdConverter.convertMetadata(dataTable, "trackedEntityAttribute");
-        this.enrollmentId = dhis2HttpClient.getGenerateUniqueId();
-        this.teiId = dhis2HttpClient.getGenerateUniqueId();
+        this.enrollmentId = dhis2HttpClient.getUniqueDhis2Id();
+        this.teiId = dhis2HttpClient.getUniqueDhis2Id();
         this.orgUnitId = orgUnitId;
         this.enrolledAt = toISODateTimeString(enrolledAt);
         Map<String, Object> templateContext = Map.of("data", this, "dataTable", convertedDataTable);
