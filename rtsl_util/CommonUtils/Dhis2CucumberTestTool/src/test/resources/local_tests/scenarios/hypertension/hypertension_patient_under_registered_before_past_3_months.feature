@@ -1,14 +1,14 @@
 Feature: Audit the program indicator: HTN - Patients under care registered before the past 3 months
 
-  Scenario: All patients must be hypertensive
+  Scenario: All TEIs must be hypertensive
     Given I create a new OrgUnit
     Given I assign the current user to the current orgUnit
     Given I register that Facility for program "Hypertension & Diabetes"
     
     #
-    # Patient 1 - Not a hypertension patient
+    # Patient 1 - Not a hypertension TEI
     #
-    Given I create a new Patient on "7_MonthsAgo" for this Facility with the following attributes
+    Given I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
       | Given name         | Fabian       |
       | Family name        | Moore        |
       | Sex                | MALE         |
@@ -19,19 +19,19 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 206      |
       | HTN - Blood sugar unit          | MG_OR_DL |
-    Given That patient has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 134      |
       | HTN - Blood sugar unit          | MG_OR_DL |
-    Given That patient has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 130      |
       | HTN - Blood sugar unit          | MG_OR_DL |
-    Given That patient has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 133      |
       | HTN - Blood sugar unit          | MG_OR_DL |
@@ -39,7 +39,7 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
     #
     # Patient 2
     #
-    Given I create a new Patient on "7_MonthsAgo" for this Facility with the following attributes
+    Given I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
       | Given name         | Sue          |
       | Family name        | Perkins      |
       | Sex                | MALE         |
@@ -51,19 +51,19 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
 
-    Given That patient has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 147 |
       | Diastole | 89  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 87  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 83  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | Systole  | 135 |
       | Diastole | 84  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | Systole  | 134 |
       | Diastole | 83  |
 
@@ -84,14 +84,14 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | 11_MonthsAgo | 0 |
       | 12_MonthsAgo | 0 |
 
-  Scenario: All dead patients are excluded
+  Scenario: All dead TEIs are excluded
     Given I create a new OrgUnit
     Given I assign the current user to the current orgUnit
     Given I register that Facility for program "Hypertension & Diabetes"
     #
     # Patient 1 -Dead
     #
-    Given I create a new Patient on "6_MonthsAgo" for this Facility with the following attributes
+    Given I create a new TEI on "6_MonthsAgo" for this Facility with the following attributes
       | Given name         | Fabian       |
       | Family name        | Moore        |
       | Sex                | MALE         |
@@ -102,34 +102,34 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 200      |
       | HTN - Blood sugar unit          | MG_OR_DL |
 
 
-    Given That patient has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 130      |
       | HTN - Blood sugar unit          | MG_OR_DL |
 
-    Given That patient has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 130      |
       | HTN - Blood sugar unit          | MG_OR_DL |
 
-    Given That patient has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 130      |
       | HTN - Blood sugar unit          | MG_OR_DL |
 
-    Given That patient was updated on "1_MonthAgo" with the following attributes
+    Given That TEI was updated on "1_MonthAgo" with the following attributes
       | HTN - NCD Patient Status | DIED |
 
     #
     # Patient 2
     #
-    Given I create a new Patient on "7_MonthsAgo" for this Facility with the following attributes
+    Given I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
       | Given name         | Sue          |
       | Family name        | Perkins      |
       | Sex                | MALE         |
@@ -141,19 +141,19 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
 
-    Given That patient has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 147 |
       | Diastole | 89  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 87  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 83  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | Systole  | 135 |
       | Diastole | 84  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | Systole  | 134 |
       | Diastole | 83  |
 
@@ -174,14 +174,14 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | 11_MonthsAgo | 0 |
       | 12_MonthsAgo | 0 |
 
-  Scenario: All patients must be registered before 3 months
+  Scenario: All TEIs must be registered before 3 months
     Given I create a new OrgUnit
     Given I assign the current user to the current orgUnit
     Given I register that Facility for program "Hypertension & Diabetes"
     #
     # Patient 1
     #
-    Given I create a new Patient on "10_MonthsAgo" for this Facility with the following attributes
+    Given I create a new TEI on "10_MonthsAgo" for this Facility with the following attributes
       | Given name         | Fabian       |
       | Family name        | Moore        |
       | Sex                | MALE         |
@@ -192,29 +192,29 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient has a "Hypertension & Diabetes visit" event on "10_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "10_MonthsAgo" with following data
       | Systole  | 147 |
       | Diastole | 95  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "8_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "8_MonthsAgo" with following data
       | Systole  | 147 |
       | Diastole | 89  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 87  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 83  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | Systole  | 135 |
       | Diastole | 84  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | Systole  | 134 |
       | Diastole | 83  |
 
     #
     # Patient 2
     #
-    Given I create a new Patient on "7_MonthsAgo" for this Facility with the following attributes
+    Given I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
       | Given name         | Sue          |
       | Family name        | Perkins      |
       | Sex                | MALE         |
@@ -226,19 +226,19 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
 
-    Given That patient has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 147 |
       | Diastole | 89  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 87  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 83  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | Systole  | 135 |
       | Diastole | 84  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | Systole  | 134 |
       | Diastole | 83  |
 
@@ -259,14 +259,14 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | 11_MonthsAgo | 0 |
       | 12_MonthsAgo | 0 |
 
-  Scenario: All patients who have their last visit before 12 months must be excluded
+  Scenario: All TEIs who have their last visit before 12 months must be excluded
     Given I create a new OrgUnit
     Given I assign the current user to the current orgUnit
     Given I register that Facility for program "Hypertension & Diabetes"
     #
     # Patient 1
     #
-    Given I create a new Patient on "7_MonthsAgo" for this Facility with the following attributes
+    Given I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
       | Given name         | Fabian       |
       | Family name        | Moore        |
       | Sex                | MALE         |
@@ -278,23 +278,23 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
 
-    Given That patient has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 87  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 83  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | Systole  | 135 |
       | Diastole | 84  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | Systole  | 134 |
       | Diastole | 83  |
 
     #
     # Patient 2
     #
-    Given I create a new Patient on "7_MonthsAgo" for this Facility with the following attributes
+    Given I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
       | Given name         | Joey         |
       | Family name        | Joseph       |
       | Sex                | MALE         |
@@ -306,26 +306,26 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
 
-    Given That patient has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 147 |
       | Diastole | 89  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 87  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 83  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | Systole  | 135 |
       | Diastole | 84  |
-    Given That patient has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | Systole  | 134 |
       | Diastole | 83  |
 
     #
     # Patient 3
     #
-    Given I create a new Patient on "18_MonthsAgo" for this Facility with the following attributes
+    Given I create a new TEI on "18_MonthsAgo" for this Facility with the following attributes
       | Given name         | Fabian       |
       | Family name        | Moore        |
       | Sex                | MALE         |
@@ -336,7 +336,7 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That patient has a "Hypertension & Diabetes visit" event on "18_MonthsAgo" with following data
+    Given That TEI has a "Hypertension & Diabetes visit" event on "18_MonthsAgo" with following data
       | Systole  | 147 |
       | Diastole | 89  |
 

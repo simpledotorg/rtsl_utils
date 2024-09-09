@@ -149,13 +149,13 @@ public class Dhis2StepDefinitions {
         scenario.log("Created new TEI with Id:" + currentTeiId + " and Enrollment with Id:" + currentEnrollmentId);
     }
 
-    @Given("That patient has a {string} event on {string} with following data")
-    public void thatPatientHasAEventOnWithFollowingData(String eventName, String relativeEventDate, Map<String, String> dataTable) throws Exception {
-        thatPatientHasAEventOnWhichWasScheduledOnWithFollowingData(eventName, relativeEventDate, relativeEventDate, dataTable);
+    @Given("That TEI has a {string} event on {string} with following data")
+    public void thatTeiHasAEventOnWithFollowingData(String eventName, String relativeEventDate, Map<String, String> dataTable) throws Exception {
+        thatTeiHasAEventOnWhichWasScheduledOnWithFollowingData(eventName, relativeEventDate, relativeEventDate, dataTable);
     }
 
-    @Given("That patient has a {string} event on {string} which was scheduled on {string} with following data")
-    public void thatPatientHasAEventOnWhichWasScheduledOnWithFollowingData(String eventName, String relativeEventDate, String relativeScheduledDate, Map<String, String> dataTable) throws Exception {
+    @Given("That TEI has a {string} event on {string} which was scheduled on {string} with following data")
+    public void thatTeiHasAEventOnWhichWasScheduledOnWithFollowingData(String eventName, String relativeEventDate, String relativeScheduledDate, Map<String, String> dataTable) throws Exception {
         String eventDateString = Period.toDateString(relativeEventDate);
         String scheduledDateString = Period.toDateString(relativeScheduledDate);
         Map<String, String> convertedDataTable = new HashMap<>();
@@ -228,7 +228,6 @@ public class Dhis2StepDefinitions {
             lastExecutedStatus = jobConfigurations.get("lastExecutedStatus").asText();
 
         } while (jobStatus.equals("RUNNING"));
-        clearsCache();
         LOGGER.info("Response {}", response);
         if (lastExecutedStatus.equals("STOPPED"))
             throw new Exception("Data exchange and aggregation job with Id:" + dataAggregationJobId + " stopped. Please check the job configurations");
@@ -264,15 +263,15 @@ public class Dhis2StepDefinitions {
         }
     }
 
-    @Given("That patient was updated on {string} with the following attributes")
-    public void thatPatientWasUpdatedOnWithTheFollowingAttributes(String relativeVisitDate, Map<String, String> dataTable) throws Exception {
+    @Given("That TEI was updated on {string} with the following attributes")
+    public void thatTeiWasUpdatedOnWithTheFollowingAttributes(String relativeVisitDate, Map<String, String> dataTable) throws Exception {
         String visitDate = Period.toDateString(relativeVisitDate);
         trackedEntityInstance.update(dataTable, currentOrgUnitId, this.currentTeiId, visitDate);
         scenario.log("Created new TEI with Id:" + currentTeiId + " updated");
     }
 
-    @Given("That patient has a {string} event scheduled for {string}")
-    public void thatPatientHasAEventScheduledFor(String eventName, String relativeEventDate) throws Exception {
+    @Given("That TEI has a {string} event scheduled for {string}")
+    public void thatTeiHasAEventScheduledFor(String eventName, String relativeEventDate) throws Exception {
         String eventDateString = Period.toDateString(relativeEventDate);
         Map<String, Object> templateContext = Map.of("data", this,
                 "dataTable", new HashMap<String, String>(),
