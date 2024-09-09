@@ -19,6 +19,7 @@ import org.rtsl.dhis2.cucumber.factories.OrganisationUnit;
 import org.rtsl.dhis2.cucumber.factories.TrackedEntityInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,15 +48,15 @@ public class Dhis2StepDefinitions {
     @Named("trackedEntityInstance")
     private TrackedEntityInstance trackedEntityInstance;
 
-    String currentFacilityId = null;
+    String currentOrgUnitId = null;
     String currentEnrollmentId = null;
     String currentTeiId = null;
     String currentEventId = null;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public String getCurrentFacilityId() {
-        return currentFacilityId;
+    public String getCurrentOrgUnitId() {
+        return currentOrgUnitId;
     }
 
     public String getCurrentEventId() {
@@ -79,38 +80,54 @@ public class Dhis2StepDefinitions {
 
     @Given("I create a new Facility")
     @Given("I create a new OrgUnit")
-    public void i_create_a_new_facility() throws Exception {
-        Map<String, String> newOrganisationUnit = organisationUnit.createFacility(scenario);
-        this.currentFacilityId = newOrganisationUnit.get("organisationUnitId");
-        LOGGER.info("created OrgUnit: <{}> <{}>", currentFacilityId, newOrganisationUnit.get("organisationUnitName"));
-        scenario.log("Created new OrgUnit with Id:" + currentFacilityId + " and Name:" + newOrganisationUnit.get("organisationUnitName"));
+    public void iCreateANewOrganisationUnitAtLevel() throws Exception {
+        iCreateANewOrganisationUnitAtLevel(5);
+    }
+
+    @Given("I create a new organisationUnit at level {int}")
+    public void iCreateANewOrganisationUnitAtLevel(int level) throws Exception {
+        Map<String, String> newOrganisationUnit = organisationUnit.createOrganisationUnit(level);
+        this.currentOrgUnitId = newOrganisationUnit.get("organisationUnitId");
+        LOGGER.info("created OrgUnit: <{}> <{}>", currentOrgUnitId, newOrganisationUnit.get("organisationUnitName"));
+        scenario.log("Created new OrgUnit with Id:" + currentOrgUnitId + " and Name:" + newOrganisationUnit.get("organisationUnitName"));
+    }
+
+    @And("I have access to an organisation unit at level {int}")
+    public void iHaveAccessToAnOrganisationUnitAtLevel(int level) throws Exception {
+        iCreateANewOrganisationUnitAtLevel(level);
+        iAssignTheCurrentUserToTheCurrentOrgUnit();
     }
 
     @Given("I assign the current user to the current orgUnit")
-    public void i_assign_the_current_user_to_the_current_org_unit() throws Exception {
+    public void iAssignTheCurrentUserToTheCurrentOrgUnit() throws Exception {
         String currentUserId = dhis2HttpClient.getCurrentUserId();
         String baseUserJson = dhis2HttpClient.doGet("api/users/" + currentUserId + "?fields=id,name,organisationUnits,userGroups,userRoles,dataViewOrganisationUnits,teiSearchOrganisationUnits");
         JsonNode rootNode = MAPPER.readTree(baseUserJson);
         ArrayNode organisationUnits = (ArrayNode) rootNode.get("organisationUnits");
-        ObjectNode testRootId = MAPPER.createObjectNode().put("id", OrganisationUnit.getTestRootOrganisationUnitId());
+
+        ObjectNode testRootId = MAPPER.createObjectNode().put("id", OrganisationUnit.getLevel1Id());
         organisationUnits.add(testRootId);
+
         ArrayNode dataViewOrganisationUnits = (ArrayNode) rootNode.get("dataViewOrganisationUnits");
         dataViewOrganisationUnits.add(testRootId);
+
         ArrayNode teiSearchOrganisationUnits = (ArrayNode) rootNode.get("teiSearchOrganisationUnits");
         teiSearchOrganisationUnits.add(testRootId);
+
         String modifiedJson = MAPPER.writeValueAsString(rootNode);
         dhis2HttpClient.doPutWithBody("api/users/" + currentUserId + "?mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE", modifiedJson);
-        scenario.log("Current user: " + currentUserId + " has given access to the facility:" + currentFacilityId);
+        scenario.log("Current user: " + currentUserId + " has given access to the facility:" + currentOrgUnitId);
     }
 
     @Given("I register that Facility for program {string}")
-    public void i_register_that_facility(String string) throws Exception {
+    @Given("I register that organisation unit for program {string}")
+    public void iRegisterThatOrganisationUnit(String string) throws Exception {
         String programName = testIdConverter.getProgramId(string);
         String baseProgramJson = dhis2HttpClient.doGet("api/programs/" + programName);
         JsonNode rootNode = MAPPER.readTree(baseProgramJson);
         ArrayNode organisationUnits = (ArrayNode) rootNode.get("organisationUnits");
         ObjectNode facilityId = MAPPER.createObjectNode();
-        facilityId.put("id", currentFacilityId);
+        facilityId.put("id", currentOrgUnitId);
         organisationUnits.add(facilityId);
         String modifiedJson = MAPPER.writeValueAsString(rootNode);
         String response = dhis2HttpClient.doPutWithBody(
@@ -121,10 +138,12 @@ public class Dhis2StepDefinitions {
     }
 
     @Given("I create a new TEI for this OrgUnit with the following attributes")
-    @Given("I create a new Patient on {string} for this Facility with the following attributes")
-    public void iCreateANewPatientOnForThisFacilityWithTheFollowingAttributes(String relativeEventDate, Map<String, String> dataTable) throws Exception {
+    @Given("I create a new TEI on {string} for this Facility with the following attributes")
+    @Given("I create a new TEI on {string} at this organisation unit with the following attributes")
+    @And("I create a new Patient on {string} at this organisation unit with the following attributes")
+    public void iCreateANewPatientOnAtOrganisationUnitWithTheFollowingAttributes(String relativeEventDate, Map<String, String> dataTable) throws Exception {
         String eventDate = Period.toDateString(relativeEventDate);
-        Map<String, String> newTei = trackedEntityInstance.create(dataTable, currentFacilityId, eventDate);
+        Map<String, String> newTei = trackedEntityInstance.create(dataTable, currentOrgUnitId, eventDate);
         this.currentTeiId = newTei.get("id");
         this.currentEnrollmentId = newTei.get("enrollmentId");
         scenario.log("Created new TEI with Id:" + currentTeiId + " and Enrollment with Id:" + currentEnrollmentId);
@@ -168,7 +187,7 @@ public class Dhis2StepDefinitions {
     }
 
     @Given("Export the analytics")
-    public void export_the_analytics() throws Exception {
+    public void exportTheAnalytics() throws Exception {
         String exportAnalyticsJobId = testIdConverter.getJobConfigurationId("Matview Refresh");
         String jobStatus;
         String lastRuntimeExecution;
@@ -192,7 +211,7 @@ public class Dhis2StepDefinitions {
     }
 
     @Given("Run the Hypertension data aggregation")
-    public void run_the_hypertension_data_aggregation() throws Exception {
+    public void runTheHypertensionDataAggregation() throws Exception {
         String dataAggregationJobId = testIdConverter.getJobConfigurationId("ADEX - Hypertension dashboard");
         String jobStatus;
         String lastRuntimeExecution;
@@ -225,7 +244,7 @@ public class Dhis2StepDefinitions {
             String period = periodType.equalsIgnoreCase("months") ? Period.toMonthString(relativePeriod) :  Period.toQuarterString(relativePeriod);
             assertEquals(dataTable.get(relativePeriod),
                     actualPeriodValues.get(period),
-                    dimensionItemName + ": <" + dimensionItemId + "> for the <" + period + "(" + relativePeriod + ")" + "> in Organisation Unit:<" + this.currentFacilityId + ">." +
+                    dimensionItemName + ": <" + dimensionItemId + "> for the <" + period + "(" + relativePeriod + ")" + "> in Organisation Unit:<" + this.currentOrgUnitId + ">." +
                             "\nNote: Ensure you have aggregated the data after exporting the analytics.\n");
         }
     }
@@ -248,7 +267,7 @@ public class Dhis2StepDefinitions {
     @Given("That patient was updated on {string} with the following attributes")
     public void thatPatientWasUpdatedOnWithTheFollowingAttributes(String relativeVisitDate, Map<String, String> dataTable) throws Exception {
         String visitDate = Period.toDateString(relativeVisitDate);
-        trackedEntityInstance.update(dataTable, currentFacilityId, this.currentTeiId, visitDate);
+        trackedEntityInstance.update(dataTable, currentOrgUnitId, this.currentTeiId, visitDate);
         scenario.log("Created new TEI with Id:" + currentTeiId + " updated");
     }
 
@@ -263,6 +282,12 @@ public class Dhis2StepDefinitions {
                 "eventStatus", "SCHEDULE"
         );
         createEvent(templateContext);
+    }
+
+    @Given("I am signed in as a user with role {string}")
+    public void iAmSignedInAsAUserWithRole(String role) {
+        //TODO: Extend this function to support other user roles
+        scenario.log("Signed in as a Superuser user with access to update the metadata");
     }
 
     private List<AttributeInfo> getAttributes(Map<String, String> data) {
@@ -288,7 +313,7 @@ public class Dhis2StepDefinitions {
     }
 
     private void createEvent(Map<String, Object> templateContext) throws Exception {
-        this.currentEventId = dhis2HttpClient.getGenerateUniqueId();
+        this.currentEventId = dhis2HttpClient.getUniqueDhis2Id();
 
         String response = dhis2HttpClient.doPost("api/tracker?async=false&mergeMode=MERGE&importStrategy=CREATE_AND_UPDATE", "create_event_tei.tpl.json", templateContext);
 
@@ -297,7 +322,7 @@ public class Dhis2StepDefinitions {
     }
 
     private Map<String, String> getAnalyticData(String dimensionItemId, String dimensionItemName, String periodType) throws Exception {
-        String orgUnit = this.currentFacilityId;
+        String orgUnit = this.currentOrgUnitId;
         String periods = periodType.equalsIgnoreCase("months") ? "LAST_12_MONTHS;THIS_MONTH" : "LAST_4_QUARTERS;THIS_QUARTER";
         String endpoint = "api/analytics.json";
         String params = "?dimension=dx:" + dimensionItemId + "&dimension=pe:" + periods + "&dimension=ou:" + orgUnit + "&tableLayout=true&columns=dx;ou&rows=pe";
