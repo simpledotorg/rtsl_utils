@@ -111,9 +111,6 @@ Feature: Audit HTN - Cumulative registrations
       | Diastole | 88  |
 
     When Export the analytics
-    When Run the Hypertension data aggregation
-
-# TODO  Move `When Run the Hypertension data aggregation` behind the scene?
 
     Then The value of "PI":"HTN - Cumulative registrations" with period type "Months" should be
       | thisMonth    | 2 |
@@ -341,7 +338,7 @@ Feature: Audit HTN - Cumulative registrations
 
     When Export the analytics
 
-    When Run the Hypertension data aggregation
+
 
     Then The value of "Program Indicator":"HTN - Cumulative registrations" with period type "Months" should be
       | thisMonth    | 2 |
