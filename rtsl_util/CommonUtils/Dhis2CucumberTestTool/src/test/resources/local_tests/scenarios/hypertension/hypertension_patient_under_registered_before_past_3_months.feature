@@ -8,7 +8,7 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
     #
     # Patient 1 - Not a hypertension TEI
     #
-    And I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
+    And I create a new TEI on "7_MonthsAgo" at this organisation unit with the following attributes
       | Given name         | Fabian       |
       | Family name        | Moore        |
       | Sex                | MALE         |
@@ -39,7 +39,7 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
     #
     # Patient 2
     #
-    And I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
+    And I create a new TEI on "7_MonthsAgo" at this organisation unit with the following attributes
       | Given name         | Sue          |
       | Family name        | Perkins      |
       | Sex                | MALE         |
@@ -129,7 +129,7 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
     #
     # Patient 2
     #
-    And I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
+    And I create a new TEI on "7_MonthsAgo" at this organisation unit with the following attributes
       | Given name         | Sue          |
       | Family name        | Perkins      |
       | Sex                | MALE         |
@@ -214,7 +214,7 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
     #
     # Patient 2
     #
-    And I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
+    And I create a new TEI on "7_MonthsAgo" at this organisation unit with the following attributes
       | Given name         | Sue          |
       | Family name        | Perkins      |
       | Sex                | MALE         |
@@ -266,7 +266,7 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
     #
     # Patient 1
     #
-    And I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
+    And I create a new TEI on "7_MonthsAgo" at this organisation unit with the following attributes
       | Given name         | Fabian       |
       | Family name        | Moore        |
       | Sex                | MALE         |
@@ -294,7 +294,7 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
     #
     # Patient 2
     #
-    And I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
+    And I create a new TEI on "10_MonthsAgo" at this organisation unit with the following attributes
       | Given name         | Joey         |
       | Family name        | Joseph       |
       | Sex                | MALE         |
@@ -306,16 +306,16 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
 
-    And That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "10_MonthsAgo" with following data
       | Systole  | 147 |
       | Diastole | 89  |
-    And That TEI has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "8_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 87  |
-    And That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 83  |
-    And That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | Systole  | 135 |
       | Diastole | 84  |
     And That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
@@ -344,15 +344,16 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
 
     # NOTE the PI name has a '.' at the end.
     Then The value of "PI":"HTN - Patients under care registered before the past 3 months." with period type "Months" should be
+      | thisMonth    | 2 |
       | 1_MonthAgo   | 2 |
       | 2_MonthsAgo  | 2 |
       | 3_MonthsAgo  | 2 |
       | 4_MonthsAgo  | 2 |
-      | 5_MonthsAgo  | 0 |
-      | 6_MonthsAgo  | 0 |
+      | 5_MonthsAgo  | 1 |
+      | 6_MonthsAgo  | 1 |
       | 7_MonthsAgo  | 1 |
-      | 8_MonthsAgo  | 1 |
-      | 9_MonthsAgo  | 1 |
-      | 10_MonthsAgo | 1 |
-      | 11_MonthsAgo | 1 |
-      | 12_MonthsAgo | 1 |
+      | 8_MonthsAgo  | 0 |
+      | 9_MonthsAgo  | 0 |
+      | 10_MonthsAgo | 0 |
+      | 11_MonthsAgo | 0 |
+      | 12_MonthsAgo | 0 |
