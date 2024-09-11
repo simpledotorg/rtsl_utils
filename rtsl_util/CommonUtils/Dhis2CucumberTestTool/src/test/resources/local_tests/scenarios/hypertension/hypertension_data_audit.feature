@@ -738,7 +738,7 @@ Feature: Hypertension Data Audit
       | HTN - Blood sugar reading       | 100      |
       | HTN - Blood sugar unit          | MG_OR_DL |
 
-    When I
+    When I export the analytics
     
     Then The value of "PI":"HTN - Patients with controlled BP at latest visit in this quarter" with period type "Quarters" should be
       | 4_QuartersAgo | 0 |
