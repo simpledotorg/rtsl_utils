@@ -19,7 +19,6 @@ import org.rtsl.dhis2.cucumber.factories.OrganisationUnit;
 import org.rtsl.dhis2.cucumber.factories.TrackedEntityInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -187,6 +186,7 @@ public class Dhis2StepDefinitions {
     }
 
     @Given("Export the analytics")
+    @Given("I export the analytics")
     public void exportTheAnalytics() throws Exception {
         String exportAnalyticsJobId = testIdConverter.getJobConfigurationId("Matview Refresh");
         String jobStatus;
@@ -211,6 +211,7 @@ public class Dhis2StepDefinitions {
     }
 
     @Given("Run the Hypertension data aggregation")
+    @Given("I run the hypertension data aggregation")
     public void runTheHypertensionDataAggregation() throws Exception {
         String dataAggregationJobId = testIdConverter.getJobConfigurationId("ADEX - Hypertension dashboard");
         String jobStatus;
