@@ -2,13 +2,13 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
 
   Scenario: All TEIs must be hypertensive
     Given I create a new OrgUnit
-    Given I assign the current user to the current orgUnit
-    Given I register that Facility for program "Hypertension & Diabetes"
+    And I assign the current user to the current orgUnit
+    And I register that Facility for program "Hypertension & Diabetes"
     
     #
     # Patient 1 - Not a hypertension TEI
     #
-    Given I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
+    And I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
       | Given name         | Fabian       |
       | Family name        | Moore        |
       | Sex                | MALE         |
@@ -19,19 +19,19 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 206      |
       | HTN - Blood sugar unit          | MG_OR_DL |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 134      |
       | HTN - Blood sugar unit          | MG_OR_DL |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 130      |
       | HTN - Blood sugar unit          | MG_OR_DL |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 133      |
       | HTN - Blood sugar unit          | MG_OR_DL |
@@ -39,7 +39,7 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
     #
     # Patient 2
     #
-    Given I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
+    And I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
       | Given name         | Sue          |
       | Family name        | Perkins      |
       | Sex                | MALE         |
@@ -51,47 +51,47 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
 
-    Given That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 147 |
       | Diastole | 89  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 87  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 83  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | Systole  | 135 |
       | Diastole | 84  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | Systole  | 134 |
       | Diastole | 83  |
 
-    Given Export the analytics
-    Given Run the Hypertension data aggregation
+    When I export the analytics
+
     # NOTE the PI name has a '.' at the end.
-    Given The value of "PI":"HTN - Patients under care registered before the past 3 months." with period type "Months" should be
-      | 1_MonthAgo | 1 |
-      | 2_MonthsAgo | 1 |
-      | 3_MonthsAgo | 1 |
-      | 4_MonthsAgo | 1 |
-      | 5_MonthsAgo | 0 |
-      | 6_MonthsAgo | 0 |
-      | 7_MonthsAgo | 0 |
-      | 8_MonthsAgo | 0 |
-      | 9_MonthsAgo | 0 |
+    Then The value of "PI":"HTN - Patients under care registered before the past 3 months." with period type "Months" should be
+      | 1_MonthAgo   | 1 |
+      | 2_MonthsAgo  | 1 |
+      | 3_MonthsAgo  | 1 |
+      | 4_MonthsAgo  | 1 |
+      | 5_MonthsAgo  | 0 |
+      | 6_MonthsAgo  | 0 |
+      | 7_MonthsAgo  | 0 |
+      | 8_MonthsAgo  | 0 |
+      | 9_MonthsAgo  | 0 |
       | 10_MonthsAgo | 0 |
       | 11_MonthsAgo | 0 |
       | 12_MonthsAgo | 0 |
 
   Scenario: All dead TEIs are excluded
-    Given I create a new OrgUnit
-    Given I assign the current user to the current orgUnit
-    Given I register that Facility for program "Hypertension & Diabetes"
+    And I create a new OrgUnit
+    And I assign the current user to the current orgUnit
+    And I register that Facility for program "Hypertension & Diabetes"
     #
     # Patient 1 -Dead
     #
-    Given I create a new TEI on "6_MonthsAgo" for this Facility with the following attributes
+    And I create a new TEI on "6_MonthsAgo" for this Facility with the following attributes
       | Given name         | Fabian       |
       | Family name        | Moore        |
       | Sex                | MALE         |
@@ -102,34 +102,34 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 200      |
       | HTN - Blood sugar unit          | MG_OR_DL |
 
 
-    Given That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 130      |
       | HTN - Blood sugar unit          | MG_OR_DL |
 
-    Given That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 130      |
       | HTN - Blood sugar unit          | MG_OR_DL |
 
-    Given That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | HTN - Type of diabetes measure? | FBS      |
       | HTN - Blood sugar reading       | 130      |
       | HTN - Blood sugar unit          | MG_OR_DL |
 
-    Given That TEI was updated on "1_MonthAgo" with the following attributes
+    And That TEI was updated on "1_MonthAgo" with the following attributes
       | HTN - NCD Patient Status | DIED |
 
     #
     # Patient 2
     #
-    Given I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
+    And I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
       | Given name         | Sue          |
       | Family name        | Perkins      |
       | Sex                | MALE         |
@@ -141,47 +141,47 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
 
-    Given That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 147 |
       | Diastole | 89  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 87  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 83  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | Systole  | 135 |
       | Diastole | 84  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | Systole  | 134 |
       | Diastole | 83  |
 
-    Given Export the analytics
-    Given Run the Hypertension data aggregation
+    When I export the analytics
+
     # NOTE the PI name has a '.' at the end.
-    Given The value of "PI":"HTN - Patients under care registered before the past 3 months." with period type "Months" should be
-      | 1_MonthAgo | 1 |
-      | 2_MonthsAgo | 1 |
-      | 3_MonthsAgo | 1 |
-      | 4_MonthsAgo | 1 |
-      | 5_MonthsAgo | 0 |
-      | 6_MonthsAgo | 0 |
-      | 7_MonthsAgo | 0 |
-      | 8_MonthsAgo | 0 |
-      | 9_MonthsAgo | 0 |
+    Then The value of "PI":"HTN - Patients under care registered before the past 3 months." with period type "Months" should be
+      | 1_MonthAgo   | 1 |
+      | 2_MonthsAgo  | 1 |
+      | 3_MonthsAgo  | 1 |
+      | 4_MonthsAgo  | 1 |
+      | 5_MonthsAgo  | 0 |
+      | 6_MonthsAgo  | 0 |
+      | 7_MonthsAgo  | 0 |
+      | 8_MonthsAgo  | 0 |
+      | 9_MonthsAgo  | 0 |
       | 10_MonthsAgo | 0 |
       | 11_MonthsAgo | 0 |
       | 12_MonthsAgo | 0 |
 
   Scenario: All TEIs must be registered before 3 months
     Given I create a new OrgUnit
-    Given I assign the current user to the current orgUnit
-    Given I register that Facility for program "Hypertension & Diabetes"
+    And I assign the current user to the current orgUnit
+    And I register that Facility for program "Hypertension & Diabetes"
     #
     # Patient 1
     #
-    Given I create a new TEI on "10_MonthsAgo" for this Facility with the following attributes
+    And I create a new TEI on "10_MonthsAgo" for this Facility with the following attributes
       | Given name         | Fabian       |
       | Family name        | Moore        |
       | Sex                | MALE         |
@@ -192,29 +192,29 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "10_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "10_MonthsAgo" with following data
       | Systole  | 147 |
       | Diastole | 95  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "8_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "8_MonthsAgo" with following data
       | Systole  | 147 |
       | Diastole | 89  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 87  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 83  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | Systole  | 135 |
       | Diastole | 84  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | Systole  | 134 |
       | Diastole | 83  |
 
     #
     # Patient 2
     #
-    Given I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
+    And I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
       | Given name         | Sue          |
       | Family name        | Perkins      |
       | Sex                | MALE         |
@@ -226,47 +226,47 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
 
-    Given That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 147 |
       | Diastole | 89  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 87  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 83  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | Systole  | 135 |
       | Diastole | 84  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | Systole  | 134 |
       | Diastole | 83  |
 
-    Given Export the analytics
-    Given Run the Hypertension data aggregation
+    When I export the analytics
+
     # NOTE the PI name has a '.' at the end.
-    Given The value of "PI":"HTN - Patients under care registered before the past 3 months." with period type "Months" should be
-      | 1_MonthAgo | 2 |
-      | 2_MonthsAgo | 2 |
-      | 3_MonthsAgo | 2 |
-      | 4_MonthsAgo | 2 |
-      | 5_MonthsAgo | 1 |
-      | 6_MonthsAgo | 1 |
-      | 7_MonthsAgo | 1 |
-      | 8_MonthsAgo | 0 |
-      | 9_MonthsAgo | 0 |
+    Then The value of "PI":"HTN - Patients under care registered before the past 3 months." with period type "Months" should be
+      | 1_MonthAgo   | 2 |
+      | 2_MonthsAgo  | 2 |
+      | 3_MonthsAgo  | 2 |
+      | 4_MonthsAgo  | 2 |
+      | 5_MonthsAgo  | 1 |
+      | 6_MonthsAgo  | 1 |
+      | 7_MonthsAgo  | 1 |
+      | 8_MonthsAgo  | 0 |
+      | 9_MonthsAgo  | 0 |
       | 10_MonthsAgo | 0 |
       | 11_MonthsAgo | 0 |
       | 12_MonthsAgo | 0 |
 
   Scenario: All TEIs who have their last visit before 12 months must be excluded
     Given I create a new OrgUnit
-    Given I assign the current user to the current orgUnit
-    Given I register that Facility for program "Hypertension & Diabetes"
+    And I assign the current user to the current orgUnit
+    And I register that Facility for program "Hypertension & Diabetes"
     #
     # Patient 1
     #
-    Given I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
+    And I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
       | Given name         | Fabian       |
       | Family name        | Moore        |
       | Sex                | MALE         |
@@ -278,23 +278,23 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
 
-    Given That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 87  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 83  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | Systole  | 135 |
       | Diastole | 84  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | Systole  | 134 |
       | Diastole | 83  |
 
     #
     # Patient 2
     #
-    Given I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
+    And I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
       | Given name         | Joey         |
       | Family name        | Joseph       |
       | Sex                | MALE         |
@@ -306,26 +306,26 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
 
-    Given That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 147 |
       | Diastole | 89  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "6_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 87  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "5_MonthsAgo" with following data
       | Systole  | 140 |
       | Diastole | 83  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
       | Systole  | 135 |
       | Diastole | 84  |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "1_MonthAgo" with following data
       | Systole  | 134 |
       | Diastole | 83  |
 
     #
     # Patient 3
     #
-    Given I create a new TEI on "18_MonthsAgo" for this Facility with the following attributes
+    And I create a new TEI on "18_MonthsAgo" for this Facility with the following attributes
       | Given name         | Fabian       |
       | Family name        | Moore        |
       | Sex                | MALE         |
@@ -336,24 +336,23 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | District           | KOLARA       |
       | Data consent       | true         |
       | NCD Patient Status | ACTIVE       |
-    Given That TEI has a "Hypertension & Diabetes visit" event on "18_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "18_MonthsAgo" with following data
       | Systole  | 147 |
       | Diastole | 89  |
 
-    Given Export the analytics
-    Given Run the Hypertension data aggregation
+    When I export the analytics
 
     # NOTE the PI name has a '.' at the end.
-    Given The value of "PI":"HTN - Patients under care registered before the past 3 months." with period type "Months" should be
-      | 1_MonthAgo | 2 |
-      | 2_MonthsAgo | 2 |
-      | 3_MonthsAgo | 2 |
-      | 4_MonthsAgo | 2 |
-      | 5_MonthsAgo | 0 |
-      | 6_MonthsAgo | 0 |
-      | 7_MonthsAgo | 1 |
-      | 8_MonthsAgo | 1 |
-      | 9_MonthsAgo | 1 |
+    Then The value of "PI":"HTN - Patients under care registered before the past 3 months." with period type "Months" should be
+      | 1_MonthAgo   | 2 |
+      | 2_MonthsAgo  | 2 |
+      | 3_MonthsAgo  | 2 |
+      | 4_MonthsAgo  | 2 |
+      | 5_MonthsAgo  | 0 |
+      | 6_MonthsAgo  | 0 |
+      | 7_MonthsAgo  | 1 |
+      | 8_MonthsAgo  | 1 |
+      | 9_MonthsAgo  | 1 |
       | 10_MonthsAgo | 1 |
       | 11_MonthsAgo | 1 |
       | 12_MonthsAgo | 1 |
