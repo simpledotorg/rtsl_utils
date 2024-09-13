@@ -241,7 +241,7 @@ public class Dhis2StepDefinitions {
         String dimensionItemId = getDimensionItemId(dimensionItemType, dimensionItemName);
         Map<String, String> actualPeriodValues = getAnalyticData(dimensionItemId, dimensionItemName, periodType);
         for (String relativePeriod : dataTable.keySet()) {
-            String period = periodType.equalsIgnoreCase("months") ? Period.toMonthString(relativePeriod) :  Period.toQuarterString(relativePeriod);
+            String period = Period.toReportingDateString(relativePeriod, periodType);
             assertEquals(dataTable.get(relativePeriod),
                     actualPeriodValues.get(period),
                     dimensionItemName + ": <" + dimensionItemId + "> for the <" + period + "(" + relativePeriod + ")" + "> in Organisation Unit:<" + this.currentOrgUnitId + ">." +
