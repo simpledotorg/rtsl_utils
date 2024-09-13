@@ -151,11 +151,10 @@ Feature: Number of overdue patients
     And That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 95  |
-    And That TEI has a "Calling report" event on "5_MonthsAgo" with following data
+    And That TEI has a "Calling report" event on "5_MonthsAgo_Plus_1_Day" with following data
       | Result of call                          | REMOVE_FROM_OVERDUE |
       | HTN - Remove from overdue list because: | OTHER               |
-    And That TEI has a "Hypertension & Diabetes visit" event scheduled for "5_MonthsAgo"
-    And That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" with following data
+    And That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" which was scheduled on "5_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 95  |
 
