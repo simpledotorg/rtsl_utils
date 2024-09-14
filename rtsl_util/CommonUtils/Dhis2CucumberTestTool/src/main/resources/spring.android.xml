@@ -1,49 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:sec="http://www.springframework.org/schema/security"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:util="http://www.springframework.org/schema/util" 
-       xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:task="http://www.springframework.org/schema/task"
-       xsi:schemaLocation="
-       http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-       http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context-3.1.xsd
-       http://www.springframework.org/schema/security
-       http://www.springframework.org/schema/security/spring-security-3.1.xsd
-       http://www.springframework.org/schema/util
-       http://www.springframework.org/schema/util/spring-util-3.1.xsd
-       http://www.springframework.org/schema/tx
-       http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
-       http://www.springframework.org/schema/task
-       http://www.springframework.org/schema/task/spring-task.xsd
-       ">
-
-
-        
-    
-    <bean id="mobileDesiredCapabilities" class="org.openqa.selenium.remote.DesiredCapabilities">
-        <constructor-arg>
-            <util:map>
-                <entry key="platformName" value="Android" />
-                <entry key="platformVersion" value="8.0" />
-                <entry key="app" value="/Users/test/Downloads/FirstAutomationTest/src/test/resources/DemoApp.apk" />
-                <entry key="deviceName" value="c4e3f3cd" />
-                <entry key="automationName" value="UiAutomator2" />
-            </util:map>
-        </constructor-arg>
-    </bean>
-    
-    
-    <!--
-    <bean id="androidDriver" class="io.appium.java_client.android.AndroidDriver" >
-        <constructor-arg value="http://127.0.0.1:4723/" />
-        <constructor-arg ref="mobileDesiredCapabilities" />
-
-
-    </bean>
-      
--->                                                                                        
+    xmlns:sec="http://www.springframework.org/schema/security"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util" 
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.1.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-3.1.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-3.1.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+    http://www.springframework.org/schema/task
+    http://www.springframework.org/schema/task/spring-task.xsd
+    ">
 </beans>
