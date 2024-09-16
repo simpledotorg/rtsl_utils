@@ -194,6 +194,9 @@ public class Dhis2StepDefinitions {
         String response;
         String lastExecutedStatus;
 
+        // Wait 1 sec for the trigger logic to complete
+        Thread.sleep(1000);
+
         executeJob(exportAnalyticsJobId);
         do {
             // Loop until job is finished
