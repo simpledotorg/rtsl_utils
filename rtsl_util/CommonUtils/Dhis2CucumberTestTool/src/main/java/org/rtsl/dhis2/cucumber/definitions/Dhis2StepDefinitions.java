@@ -194,6 +194,9 @@ public class Dhis2StepDefinitions {
         String response;
         String lastExecutedStatus;
 
+        // Wait until the trigger logic completes
+        waitUntilDBTriggerCompletion();
+
         executeJob(exportAnalyticsJobId);
         do {
             // Loop until job is finished
@@ -290,6 +293,20 @@ public class Dhis2StepDefinitions {
         scenario.log("Signed in as a Superuser user with access to update the metadata");
     }
 
+    @Given("Clears cache")
+    public void clearsCache() throws Exception {
+        String endpoint = "api/maintenance?cacheClear=true&appReload=true";
+        String response = dhis2HttpClient.doPost(endpoint);
+        LOGGER.info("Response {}", response);
+        scenario.log("Cleared cache");
+    }
+
+//    TODO Rewrite the function to estimate the trigger completion time.
+//    Currently we wait for 1 second before we run analytics.
+    private void waitUntilDBTriggerCompletion() throws Exception{
+        Thread.sleep(1000);
+    }
+
     private List<AttributeInfo> getAttributes(Map<String, String> data) {
         List<AttributeInfo> returnList = new ArrayList<>();
         for (String currentKey : data.keySet()) {
@@ -338,13 +355,5 @@ public class Dhis2StepDefinitions {
         LOGGER.info("Response {}", response);
         scenario.log(dimensionItemName + ": " + dimensionItemId + " for the `" + periods + "` in Organisation Unit:" + orgUnit + " is " + actualPeriodValues);
         return actualPeriodValues;
-    }
-
-    @Given("Clears cache")
-    public void clearsCache() throws Exception {
-        String endpoint = "api/maintenance?cacheClear=true&appReload=true";
-        String response = dhis2HttpClient.doPost(endpoint);
-        LOGGER.info("Response {}", response);
-        scenario.log("Cleared cache");
     }
 }

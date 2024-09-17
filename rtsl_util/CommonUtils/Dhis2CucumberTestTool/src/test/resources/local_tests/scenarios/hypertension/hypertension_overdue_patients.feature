@@ -52,7 +52,7 @@ Feature: Number of overdue patients
       | 3_MonthsAgo  | 1 |
       | 4_MonthsAgo  | 1 |
       | 5_MonthsAgo  | 1 |
-      | 6_MonthsAgo  | 1 |
+      | 6_MonthsAgo  | 0 |
       | 7_MonthsAgo  | 0 |
       | 8_MonthsAgo  | 0 |
       | 9_MonthsAgo  | 0 |
@@ -108,7 +108,7 @@ Feature: Number of overdue patients
       | 3_MonthsAgo  | 1 |
       | 4_MonthsAgo  | 1 |
       | 5_MonthsAgo  | 1 |
-      | 6_MonthsAgo  | 1 |
+      | 6_MonthsAgo  | 0 |
       | 7_MonthsAgo  | 0 |
       | 8_MonthsAgo  | 0 |
       | 9_MonthsAgo  | 0 |
@@ -135,7 +135,7 @@ Feature: Number of overdue patients
     And That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
       | Systole  | 142 |
       | Diastole | 95  |
-    And That TEI has a "Hypertension & Diabetes visit" event scheduled for "6_MonthsAgo"
+    And That TEI has a "Hypertension & Diabetes visit" event scheduled for "6_MonthsAgo_Minus_1_Day"
 
     And I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
       | GEN - Given name                      | Angel        |
@@ -164,9 +164,9 @@ Feature: Number of overdue patients
       | thisMonth    | 1 |
       | 1_MonthAgo   | 1 |
       | 2_MonthsAgo  | 1 |
-      | 3_MonthsAgo  | 1 |
+      | 3_MonthsAgo  | 2 |
       | 4_MonthsAgo  | 2 |
-      | 5_MonthsAgo  | 2 |
+      | 5_MonthsAgo  | 1 |
       | 6_MonthsAgo  | 1 |
       | 7_MonthsAgo  | 0 |
       | 8_MonthsAgo  | 0 |
