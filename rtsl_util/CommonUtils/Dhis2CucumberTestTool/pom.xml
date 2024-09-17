@@ -16,6 +16,30 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.4</version>
+                <configuration>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>module-info.class</exclude>
+                                <exclude>META-INF/*.MF</exclude>
+                                <exclude>META-INF/license*</exclude>
+                                <exclude>META-INF/LICENSE*</exclude>
+                                <exclude>META-INF/notice*</exclude>
+                                <exclude>META-INF/NOTICE*</exclude>
+                                <exclude>META-INF/DEPENDENCIES*</exclude>
+                                <exclude>META-INF/**/pom.properties</exclude>
+                                <exclude>META-INF/**/pom.xml</exclude>
+                                <exclude>META-INF/spring/*</exclude>
+                                <exclude>META-INF/okio*</exclude>
+                                <exclude>META-INF/spring.tooling</exclude>
+                                <!-- <exclude>META-INF/*.SF</exclude> -->
+                                <!-- <exclude>META-INF/*.DSA</exclude> -->
+                                <!-- <exclude>META-INF/*.RSA</exclude> -->
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
