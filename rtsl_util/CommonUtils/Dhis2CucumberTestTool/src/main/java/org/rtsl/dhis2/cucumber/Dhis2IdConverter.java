@@ -23,7 +23,7 @@ public final class Dhis2IdConverter {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Dhis2HttpClient dhis2HttpClient;
-    // TODO Might cause type conflicts if two object of different type share the name, shortName
+    // TODO Refactor the code. We probably do not need all these maps.
     private final Map<String, String> trackedEntityAttributeIdFromShortName = new HashMap<>();
     private final Map<String, String> trackedEntityAttributeIdFromName = new HashMap<>();
     private final Map<String, String> trackedEntityAttributeIdFromId = new HashMap<>();
