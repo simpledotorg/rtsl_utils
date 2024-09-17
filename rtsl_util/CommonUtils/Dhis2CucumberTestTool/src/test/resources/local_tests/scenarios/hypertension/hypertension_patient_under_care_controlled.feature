@@ -11,7 +11,6 @@
   And I assign the current user to the current orgUnit
   And I register that Facility for program "Hypertension & Diabetes"
   And I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
-  Given I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
    | GEN - Given name                      | Priyanka     |
    | GEN - Family name                     | Chopra       |
    | GEN - Sex                             | MALE         |
