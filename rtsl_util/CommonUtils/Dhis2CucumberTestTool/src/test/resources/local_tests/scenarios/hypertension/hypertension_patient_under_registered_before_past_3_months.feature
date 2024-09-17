@@ -351,9 +351,9 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | 4_MonthsAgo  | 2 |
       | 5_MonthsAgo  | 1 |
       | 6_MonthsAgo  | 1 |
-      | 7_MonthsAgo  | 1 |
-      | 8_MonthsAgo  | 0 |
-      | 9_MonthsAgo  | 0 |
-      | 10_MonthsAgo | 0 |
-      | 11_MonthsAgo | 0 |
-      | 12_MonthsAgo | 0 |
+      | 7_MonthsAgo  | 2 |
+      | 8_MonthsAgo  | 1 |
+      | 9_MonthsAgo  | 1 |
+      | 10_MonthsAgo | 1 |
+      | 11_MonthsAgo | 1 |
+      | 12_MonthsAgo | 1 |

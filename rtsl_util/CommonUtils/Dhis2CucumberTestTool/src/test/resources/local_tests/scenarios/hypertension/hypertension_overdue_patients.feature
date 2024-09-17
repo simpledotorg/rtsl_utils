@@ -52,7 +52,7 @@ Feature: Number of overdue patients
       | 3_MonthsAgo  | 1 |
       | 4_MonthsAgo  | 1 |
       | 5_MonthsAgo  | 1 |
-      | 6_MonthsAgo  | 1 |
+      | 6_MonthsAgo  | 0 |
       | 7_MonthsAgo  | 0 |
       | 8_MonthsAgo  | 0 |
       | 9_MonthsAgo  | 0 |
@@ -108,7 +108,7 @@ Feature: Number of overdue patients
       | 3_MonthsAgo  | 1 |
       | 4_MonthsAgo  | 1 |
       | 5_MonthsAgo  | 1 |
-      | 6_MonthsAgo  | 1 |
+      | 6_MonthsAgo  | 0 |
       | 7_MonthsAgo  | 0 |
       | 8_MonthsAgo  | 0 |
       | 9_MonthsAgo  | 0 |
