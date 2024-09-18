@@ -43,7 +43,8 @@ Feature: Number of overdue patients
       | Diastole | 95  |
     And That TEI has a "Hypertension & Diabetes visit" event scheduled for "6_MonthsAgo"
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     Then The value of "PI":"HTN - Overdue patients" with period type "Months" should be
       | thisMonth    | 1 |
@@ -99,7 +100,8 @@ Feature: Number of overdue patients
     And That TEI was updated on "2_MonthsAgo" with the following attributes
       | HTN - NCD Patient Status | DIED |
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     Then The value of "PI":"HTN - Overdue patients" with period type "Months" should be
       | thisMonth    | 1 |
@@ -158,7 +160,8 @@ Feature: Number of overdue patients
       | Systole  | 142 |
       | Diastole | 95  |
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     Then The value of "PI":"HTN - Overdue patients" with period type "Months" should be
       | thisMonth    | 1 |

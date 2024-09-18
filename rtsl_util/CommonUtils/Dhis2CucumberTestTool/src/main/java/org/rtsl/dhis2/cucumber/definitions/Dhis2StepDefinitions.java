@@ -298,7 +298,8 @@ public class Dhis2StepDefinitions {
         scenario.log("Cleared cache");
     }
 
-    @Given("I wait {int} seconds")
+    @Given("I wait for {int} second")
+    @Given("I wait for {int} seconds")
     public void waitUntilDBTriggerCompletion(int seconds) throws Exception{
         Thread.sleep(1000 * seconds);
     }

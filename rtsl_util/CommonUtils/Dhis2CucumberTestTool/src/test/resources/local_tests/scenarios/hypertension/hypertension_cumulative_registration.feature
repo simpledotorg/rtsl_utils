@@ -110,7 +110,8 @@ Feature: Audit HTN - Cumulative registrations
       | Systole  | 140 |
       | Diastole | 88  |
 
-    When Export the analytics
+    When I wait for 1 second
+    And Export the analytics
 
     Then The value of "PI":"HTN - Cumulative registrations" with period type "Months" should be
       | thisMonth    | 2 |
@@ -226,7 +227,8 @@ Feature: Audit HTN - Cumulative registrations
       | Systole  | 140 |
       | Diastole | 88  |
 
-    When Export the analytics
+    When I wait for 1 second
+    And Export the analytics
     And Run the Hypertension data aggregation
 
     Then The value of "PI":"HTN - Cumulative registrations" with period type "Months" should be
@@ -336,7 +338,8 @@ Feature: Audit HTN - Cumulative registrations
       | Systole  | 134 |
       | Diastole | 83  |
 
-    When Export the analytics
+    When I wait for 1 second
+    And Export the analytics
 
 
 
