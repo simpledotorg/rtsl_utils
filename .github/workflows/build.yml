@@ -26,7 +26,7 @@ jobs:
           maven-version: 3.9.6
       - name: tests
         working-directory: rtsl_util
-        run: echo "docker compose \"\$@\"" > /usr/bin/docker-compose ; chmod 777 /usr/bin/docker-compose
+        run: echo "docker compose \"\$@\"" > /tmp/docker-compose ; chmod 777 /tmp/docker-compose ; echo "/tmp" >> $GITHUB_PATH
       - name: Sets up version
         working-directory: rtsl_util
         run: mvn versions:set -DnewVersion=${{github.ref_name}}.${{github.run_number}}
