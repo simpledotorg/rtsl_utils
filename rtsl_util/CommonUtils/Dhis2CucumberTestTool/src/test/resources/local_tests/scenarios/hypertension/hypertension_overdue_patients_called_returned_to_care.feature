@@ -135,3 +135,48 @@ Feature: Number of overdue patients
       | 5_MonthsAgo  | 0 |
       | 6_MonthsAgo  | 0 |
 
+  Scenario: Exclude patients called and realized to be dead
+    Given I am signed in as a user with role "Superuser"
+    And I have access to an organisation unit at level 5
+    And I register that organisation unit for program "Hypertension & Diabetes"
+
+
+  Scenario: Exclude patients called and realized as transfered to other facilities
+    Given I am signed in as a user with role "Superuser"
+    And I have access to an organisation unit at level 5
+    And I register that organisation unit for program "Hypertension & Diabetes"
+
+
+  Scenario: Exclude patients who had their last visit more than a year ago
+    Given I am signed in as a user with role "Superuser"
+    And I have access to an organisation unit at level 5
+    And I register that organisation unit for program "Hypertension & Diabetes"
+
+    Given I create a new TEI on "13_MonthsAgo" for this Facility with the following attributes
+      | GEN - Given name                      | Priyanka     |
+      | GEN - Family name                     | Chopra       |
+      | GEN - Sex                             | MALE         |
+      | HTN - Does patient have hypertension? | YES          |
+      | HTN - Does patient have diabetes?     | YES          |
+      | GEN - Date of birth                   | 32           |
+      | Address (current)                     | Rose Gardens |
+      | District                              | KOLARA       |
+      | HTN - Consent to record data          | true         |
+      | HTN - NCD Patient Status              | ACTIVE       |
+    And That TEI has a "Hypertension & Diabetes visit" event on "13_MonthsAgo" with following data
+      | Systole  | 142 |
+      | Diastole | 95  |
+    And That TEI has a "Hypertension & Diabetes visit" event scheduled for "12_MonthsAgo"
+    And That TEI has a "Calling report" event on "12_MonthsAgo_Plus_1_Day" with following data
+      | Result of call                          | AGREE_TO_VISIT |
+    And That TEI has a "Hypertension & Diabetes visit" event on "12_MonthsAgo_Plus_5_Day" with following data
+      | Systole  | 142 |
+      | Diastole | 95  |
+
+    When I export the analytics
+
+    Then The value of "PI":"HTN - Overdue patients called and returned to care" with period type "Months" should be
+      | thisMonth     | 0 |
+      | 11_MonthsAgo  | 0 |
+      | 12_MonthsAgo  | 1 |
+
