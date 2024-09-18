@@ -23,10 +23,7 @@
 
     <import resource="classpath:org.rtsl.common.properties.standard.context.xml" />
     <import resource="spring.api.xml" />
-    
-    <!-- Maybe later :) /-->
-    <!-- import resource="spring.android.xml" /-->
-   
+
     <bean id="org.rtsl.common.properties.standard.rawProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="ignoreResourceNotFound" value="true"/>
         <property name="localOverride" value="true"/>
@@ -59,41 +56,26 @@
     </bean>
     <bean id="trackedEntityInstance" class="org.rtsl.dhis2.cucumber.factories.TrackedEntityInstance" scope="cucumber-glue"/>
     <bean id="testAtomicInt" class="java.util.concurrent.atomic.AtomicInteger" scope="cucumber-glue"/>
-    <bean id="webDriver" class="org.openqa.selenium.firefox.FirefoxDriver" scope="cucumber-glue"/>              
-     
     <bean id="dhis2Config" class="org.hisp.dhis.Dhis2Config">
         <constructor-arg value="${dhis2.api.url}" />
         <constructor-arg value="${dhis2.api.username}" />
         <constructor-arg value="${dhis2.api.password}" />
     </bean>
-    
     <bean id="dhisClient" class="org.hisp.dhis.Dhis2">
         <constructor-arg ref="dhis2Config" />
-    </bean>        
-    
-         
+    </bean>
     <bean id="dhis2SdkClientBuilder" class="org.hisp.dhis.integration.sdk.Dhis2ClientBuilder" factory-method="newClient">
         <constructor-arg value="${dhis2.api.url}/api" />
         <constructor-arg value="${dhis2.api.username}" />
         <constructor-arg value="${dhis2.api.password}" />
     </bean>
-    
-                  
     <bean id="dhisSdkClient" factory-bean="dhis2SdkClientBuilder" factory-method="build" />
-                       
-                    
     <bean id="testClient" class="org.rtsl.dhis2.cucumber.Dhis2HttpClient" scope="singleton">
         <constructor-arg value="${dhis2.api.url}" />
         <constructor-arg value="${dhis2.api.username}" />
         <constructor-arg value="${dhis2.api.password}" />
-    </bean>    
-         
-         
+    </bean>
     <bean id="testIdConverter" class="org.rtsl.dhis2.cucumber.Dhis2IdConverter" init-method="getMetadata" scope="singleton">
         <constructor-arg ref="testClient" />
-    </bean>                      
-                                               
-                                              
-                                                                          
-                                             
+    </bean>
 </beans>

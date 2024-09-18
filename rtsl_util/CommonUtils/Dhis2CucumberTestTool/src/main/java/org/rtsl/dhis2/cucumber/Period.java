@@ -10,7 +10,6 @@ import java.time.temporal.TemporalAdjusters;
 
 public class Period {
 
-    private static final LocalDateTime now = LocalDateTime.now();
     private static final LocalDate today = LocalDate.now();
     final static DateTimeFormatter YEAR_MONTH_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     final static DateTimeFormatter REPORTING_YEAR_MONTH_FORMATTER = DateTimeFormatter.ofPattern("yyyyMM");
@@ -25,10 +24,6 @@ public class Period {
             return parseRelativeDate(relativeDate).format(REPORTING_YEAR_MONTH_FORMATTER);
         else
             return parseRelativeDate(relativeDate).format(REPORTING_YEAR_QUARTER_FORMATTER);
-    }
-
-    public static LocalDate toDate(String relativeDate) {
-        return parseRelativeDate(relativeDate);
     }
 
     public static LocalDate parseRelativeDate(String relativeDate) {

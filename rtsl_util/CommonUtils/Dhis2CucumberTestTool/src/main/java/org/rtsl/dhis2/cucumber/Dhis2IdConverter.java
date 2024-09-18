@@ -337,5 +337,4 @@ public final class Dhis2IdConverter {
 
         return returnMap;
     }
-
 }

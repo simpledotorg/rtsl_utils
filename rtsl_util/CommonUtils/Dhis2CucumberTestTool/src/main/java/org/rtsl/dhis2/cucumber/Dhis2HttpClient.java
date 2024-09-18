@@ -185,5 +185,4 @@ public class Dhis2HttpClient {
         }
         return responseBody;
     }
-
 }

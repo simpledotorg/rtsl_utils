@@ -31,5 +31,4 @@ public class Helper {
     public static LocalDateTime toDateTime(String dateTimeString) throws Exception {
         return LocalDateTime.parse(dateTimeString, ISO_DATE_TIME_FORMATTER);
     }
-
 }
