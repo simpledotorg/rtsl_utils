@@ -108,8 +108,9 @@ Feature: Number of overdue patients called
       | District                              | KOLARA       |
       | HTN - Consent to record data          | true         |
       | HTN - NCD Patient Status              | ACTIVE       |
-    And That TEI was updated on "4_MonthsAgo" with the following attributes
-      | NCD Patient Status | DIED |
+    And That TEI has a "Calling report" event on "4_MonthsAgo" with following data
+      | Result of call                          | REMOVE_FROM_OVERDUE |
+      | HTN - Remove from overdue list because: | DIED                |
 
     When I export the analytics
 
