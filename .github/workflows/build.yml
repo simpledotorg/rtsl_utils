@@ -24,6 +24,9 @@ jobs:
       - uses: stCarolas/setup-maven@v4.5
         with:
           maven-version: 3.9.6
+      - name: tests
+        working-directory: rtsl_util
+        run: which docker ; which docker-compose
       - name: Sets up version
         working-directory: rtsl_util
         run: mvn versions:set -DnewVersion=${{github.ref_name}}.${{github.run_number}}
