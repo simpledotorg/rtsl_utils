@@ -24,9 +24,9 @@ jobs:
       - uses: stCarolas/setup-maven@v4.5
         with:
           maven-version: 3.9.6
-      - name: tests
+      - name: docker-compose workaround
         working-directory: rtsl_util
-        run: echo "docker compose \"\$@\"" > /tmp/docker-compose ; chmod 777 /tmp/docker-compose ; echo "/tmp" >> $GITHUB_PATH
+        run: echo "docker compose \"\$@\"" > $HOME/docker-compose ; chmod 777 $HOME/docker-compose ; echo "$HOME/" >> $GITHUB_PATH
       - name: Sets up version
         working-directory: rtsl_util
         run: mvn versions:set -DnewVersion=${{github.ref_name}}.${{github.run_number}}
