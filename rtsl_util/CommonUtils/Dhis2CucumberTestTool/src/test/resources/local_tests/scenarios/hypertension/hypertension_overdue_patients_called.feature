@@ -75,7 +75,7 @@ Feature: Number of overdue patients called
       | 6_MonthsAgo | 1 |
       | 7_MonthsAgo | 0 |
 
-  Scenario: Only managed patients should be counted (Non-hypertensive, alive, and in-facility)
+  Scenario: Only managed patients should be counted (Hypertensive, alive, and in-facility)
     Given I am signed in as a user with role "Superuser"
     And I have access to an organisation unit at level 5
     And I register that organisation unit for program "Hypertension & Diabetes"
