@@ -10,11 +10,6 @@ import org.junit.jupiter.api.Test;
 
 public class PeriodTests {
     @Test
-    public void testLint() throws Exception {
-        Assertions.assertTrue(true);
-    }
-
-    @Test
     public void testMonthsAgo() throws Exception {
         assertMonthsBetween("3_MonthsAgo", -3);
     }
