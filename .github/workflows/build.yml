@@ -26,13 +26,13 @@ jobs:
           maven-version: 3.9.6
       - name: tests
         working-directory: rtsl_util
-        run: which docker ; which docker-compose
+        run: echo "docker compose \"\$@\"" > /usr/bin/docker-compose ; chmod 777 /usr/bin/docker-compose
       - name: Sets up version
         working-directory: rtsl_util
         run: mvn versions:set -DnewVersion=${{github.ref_name}}.${{github.run_number}}
       - name: Builds Artifacts and Images
         working-directory: rtsl_util
-        run: alias docker-compose="docker compose" ; mvn clean install
+        run: mvn clean install
       - name: Lists all docker images
         working-directory: rtsl_util
         run:  docker image list
