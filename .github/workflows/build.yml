@@ -34,7 +34,7 @@ jobs:
           echo "Cleaned branch name: $CLEAN_BRANCH_NAME"
       - name: Sets up version
         working-directory: rtsl_util
-        run: mvn versions:set -DnewVersion=${{github.ref_name}}.${{github.run_number}}
+        run: mvn versions:set -DnewVersion=$CLEAN_BRANCH_NAME.${{github.run_number}}
       - name: Builds Artifacts and Images
         working-directory: rtsl_util
         run: mvn clean install
