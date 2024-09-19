@@ -44,10 +44,10 @@ jobs:
         run:  docker image list
       - name: Publish Images
         working-directory: rtsl_util
-        run:  docker push simpledotorg/prometheusdbexporter:${{github.ref_name}}.${{github.run_number}}
+        run:  docker push simpledotorg/prometheusdbexporter:${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}
       - name: Archive Dhis2TestTool jar file
         uses: actions/upload-artifact@v4
         with:
-          name: Dhis2CucumberTestTool-${{github.ref_name}}.${{github.run_number}}.jar
-          path: rtsl_util/CommonUtils/Dhis2CucumberTestTool/target/Dhis2CucumberTestTool-${{github.ref_name}}.${{github.run_number}}.jar
+          name: Dhis2CucumberTestTool-${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}.jar
+          path: rtsl_util/CommonUtils/Dhis2CucumberTestTool/target/Dhis2CucumberTestTool-${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}.jar
       - run: find . -name "*.jar"
