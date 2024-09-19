@@ -194,9 +194,6 @@ public class Dhis2StepDefinitions {
         String response;
         String lastExecutedStatus;
 
-        // Wait until the trigger logic completes
-        waitUntilDBTriggerCompletion();
-
         executeJob(exportAnalyticsJobId);
         do {
             // Loop until job is finished
@@ -301,10 +298,10 @@ public class Dhis2StepDefinitions {
         scenario.log("Cleared cache");
     }
 
-//    TODO Rewrite the function to estimate the trigger completion time.
-//    Currently we wait for 1 second before we run analytics.
-    private void waitUntilDBTriggerCompletion() throws Exception{
-        Thread.sleep(1000);
+    @Given("I wait for {int} second")
+    @Given("I wait for {int} seconds")
+    public void waitUntilDBTriggerCompletion(int seconds) throws Exception{
+        Thread.sleep(1000 * seconds);
     }
 
     private List<AttributeInfo> getAttributes(Map<String, String> data) {

@@ -314,7 +314,8 @@ Feature: Hypertension Data Audit
       | HTN - Blood sugar reading       | 100      |
       | HTN - Blood sugar unit          | MG_OR_DL |
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     Then The value of "PI":"HTN - Cumulative dead patients" with period type "Months" should be
       | 12_MonthsAgo | 0 |
@@ -738,7 +739,8 @@ Feature: Hypertension Data Audit
       | HTN - Blood sugar reading       | 100      |
       | HTN - Blood sugar unit          | MG_OR_DL |
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     Then The value of "PI":"HTN - Total patient registrations in previous quarter" with period type "Quarters" should be
       | 4_QuartersAgo | 1 |

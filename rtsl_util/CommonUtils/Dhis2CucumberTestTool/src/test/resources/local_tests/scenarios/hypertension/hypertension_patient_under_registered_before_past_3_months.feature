@@ -67,7 +67,8 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | Systole  | 134 |
       | Diastole | 83  |
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     # NOTE the PI name has a '.' at the end.
     Then The value of "PI":"HTN - Patients under care registered before the past 3 months." with period type "Months" should be
@@ -157,7 +158,8 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | Systole  | 134 |
       | Diastole | 83  |
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     # NOTE the PI name has a '.' at the end.
     Then The value of "PI":"HTN - Patients under care registered before the past 3 months." with period type "Months" should be
@@ -242,7 +244,8 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | Systole  | 134 |
       | Diastole | 83  |
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     # NOTE the PI name has a '.' at the end.
     Then The value of "PI":"HTN - Patients under care registered before the past 3 months." with period type "Months" should be
@@ -340,7 +343,8 @@ Feature: Audit the program indicator: HTN - Patients under care registered befor
       | Systole  | 147 |
       | Diastole | 89  |
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     # NOTE the PI name has a '.' at the end.
     Then The value of "PI":"HTN - Patients under care registered before the past 3 months." with period type "Months" should be
