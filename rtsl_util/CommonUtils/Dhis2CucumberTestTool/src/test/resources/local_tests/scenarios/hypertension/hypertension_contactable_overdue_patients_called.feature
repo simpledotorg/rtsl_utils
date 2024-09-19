@@ -1,9 +1,9 @@
-Feature: Number of overdue patients called
+Feature: Contactable overdue patients called
   ___
   As a tester
-  Given I have some tracked entity instances with call history in the system
+  Given I call some contactable patients
   When  I export the analytics
-  Then I should should see the "HTN - Contactable overdue patients called" program indicator data for each month as expected
+  Then I should should see correct "HTN - Contactable overdue patients called" data
   ___
 
   Scenario: Contactable called overdue patients should be counted

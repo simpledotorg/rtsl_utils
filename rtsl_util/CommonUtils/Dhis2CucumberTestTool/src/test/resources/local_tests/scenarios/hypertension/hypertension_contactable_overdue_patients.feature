@@ -1,4 +1,4 @@
-Feature: Contactable Overdue Patients Program Indicator
+Feature: Contactable Overdue Patients
   ___
   As a tester
   Given I have some "overdue" tracked entity instances with contact information in the system
