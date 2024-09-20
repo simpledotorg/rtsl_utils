@@ -279,7 +279,7 @@ Feature: Contactable patients called and returned to care
       | 11_MonthsAgo  | 0 |
       | 12_MonthsAgo  | 1 |
 
-  Scenario: Overdue contactable patients called after a month overdue, but returned on time, should count
+  Scenario: Overdue contactable patients called anytime after they have become overdue, but returned on time, should count
     Given I am signed in as a user with role "Superuser"
     And I have access to an organisation unit at level 5
     And I register that organisation unit for program "Hypertension & Diabetes"
