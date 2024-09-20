@@ -62,7 +62,7 @@ Feature: Contactable Overdue Patients
       | 11_MonthsAgo | 0 |
       | 12_MonthsAgo | 0 |
 
-  Scenario: All patients has to be hypertensive
+  Scenario: All overdue patients has to be hypertensive
     Given I am signed in as a user with role "Superuser"
     And I have access to an organisation unit at level 5
     And I register that organisation unit for program "Hypertension & Diabetes"
