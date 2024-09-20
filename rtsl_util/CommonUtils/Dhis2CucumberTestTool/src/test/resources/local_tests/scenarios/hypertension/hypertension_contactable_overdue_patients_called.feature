@@ -30,8 +30,7 @@ Feature: Contactable overdue patients called
     And That TEI has a "Calling report" event on "6_MonthsAgo_Plus_1_Day" with following data
       | Result of call                          | REMIND_TO_CALL_LATER |
     And That TEI has a "Calling report" event on "3_MonthsAgo_Plus_1_Day" with following data
-      | Result of call                          | REMOVE_FROM_OVERDUE |
-      | HTN - Remove from overdue list because: | OTHER               |
+      | Result of call                          | AGREE_TO_VISIT |
 
     When I wait for 1 second
     And I export the analytics
@@ -66,8 +65,7 @@ Feature: Contactable overdue patients called
     And That TEI has a "Calling report" event on "6_MonthsAgo_Plus_1_Day" with following data
       | Result of call                          | AGREE_TO_VISIT |
     And That TEI has a "Calling report" event on "3_MonthsAgo_Plus_1_Day" with following data
-      | Result of call                          | REMOVE_FROM_OVERDUE |
-      | HTN - Remove from overdue list because: | OTHER               |
+      | Result of call                          | AGREE_TO_VISIT |
 
     When I wait for 1 second
     And I export the analytics
@@ -113,8 +111,7 @@ Feature: Contactable overdue patients called
       | HTN - Consent to record data          | true         |
       | HTN - NCD Patient Status              | ACTIVE       |
     And That TEI has a "Calling report" event on "4_MonthsAgo" with following data
-      | Result of call                          | REMOVE_FROM_OVERDUE |
-      | HTN - Remove from overdue list because: | DIED                |
+      | Result of call                          | AGREE_TO_VISIT |
 
     When I wait for 1 second
     And I export the analytics
