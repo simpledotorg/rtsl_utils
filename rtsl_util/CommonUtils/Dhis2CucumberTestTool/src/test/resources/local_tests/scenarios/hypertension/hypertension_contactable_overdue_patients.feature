@@ -44,7 +44,7 @@ Feature: Contactable Overdue Patients
       | Diastole | 95  |
     And That TEI has a "Hypertension & Diabetes visit" event scheduled for "6_MonthsAgo"
 
-    When wait for 1 second
+    When I wait for 1 second
     And I export the analytics
 
     Then The value of "PI":"HTN - Contactable overdue patients" with period type "Months" should be
@@ -101,7 +101,7 @@ Feature: Contactable Overdue Patients
       | Diastole | 95  |
     And That TEI has a "Hypertension & Diabetes visit" event scheduled for "6_MonthsAgo"
 
-    When wait for 1 second
+    When I wait for 1 second
     And I export the analytics
 
     Then The value of "PI":"HTN - Contactable overdue patients" with period type "Months" should be
@@ -160,7 +160,7 @@ Feature: Contactable Overdue Patients
     And That TEI was updated on "2_MonthsAgo" with the following attributes
       | HTN - NCD Patient Status | DIED |
 
-    When wait for 1 second
+    When I wait for 1 second
     And I export the analytics
 
     Then The value of "PI":"HTN - Contactable overdue patients" with period type "Months" should be
@@ -222,7 +222,28 @@ Feature: Contactable Overdue Patients
       | Systole  | 142 |
       | Diastole | 95  |
 
-    When wait for 1 second
+    And I create a new TEI on "7_MonthsAgo" for this Facility with the following attributes
+      | GEN - Given name                      | Angel        |
+      | GEN - Family name                     | John         |
+      | GEN - Sex                             | FEMALE       |
+      | HTN - Does patient have hypertension? | YES          |
+      | HTN - Does patient have diabetes?     | YES          |
+      | GEN - Date of birth                   | 32           |
+      | Address (current)                     | Rose Gardens |
+      | District                              | KOLARA       |
+      | HTN - Consent to record data          | true         |
+      | HTN - NCD Patient Status              | ACTIVE       |
+    And That TEI has a "Hypertension & Diabetes visit" event on "7_MonthsAgo" with following data
+      | Systole  | 142 |
+      | Diastole | 95  |
+    And That TEI has a "Calling report" event on "5_MonthsAgo_Plus_1_Day" with following data
+      | Result of call                          | REMOVE_FROM_OVERDUE |
+      | HTN - Remove from overdue list because: | OTHER               |
+    And That TEI has a "Hypertension & Diabetes visit" event on "3_MonthsAgo" which was scheduled on "5_MonthsAgo" with following data
+      | Systole  | 142 |
+      | Diastole | 95  |
+
+    When I wait for 1 second
     And I export the analytics
 
     Then The value of "PI":"HTN - Contactable overdue patients" with period type "Months" should be

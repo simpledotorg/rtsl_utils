@@ -33,7 +33,7 @@ Feature: Contactable overdue patients called
       | Result of call                          | REMOVE_FROM_OVERDUE |
       | HTN - Remove from overdue list because: | OTHER               |
 
-    When wait for 1 second
+    When I wait for 1 second
     And I export the analytics
 
     Then The value of "PI":"HTN - Contactable overdue patients called" with period type "Months" should be
@@ -69,7 +69,7 @@ Feature: Contactable overdue patients called
       | Result of call                          | REMOVE_FROM_OVERDUE |
       | HTN - Remove from overdue list because: | OTHER               |
 
-    When wait for 1 second
+    When I wait for 1 second
     And I export the analytics
 
     Then The value of "PI":"HTN - Contactable overdue patients called" with period type "Months" should be
@@ -116,7 +116,7 @@ Feature: Contactable overdue patients called
       | Result of call                          | REMOVE_FROM_OVERDUE |
       | HTN - Remove from overdue list because: | DIED                |
 
-    When wait for 1 second
+    When I wait for 1 second
     And I export the analytics
 
     Then The value of "PI":"HTN - Contactable overdue patients called" with period type "Months" should be

@@ -33,7 +33,7 @@ Feature: Contactable patients called and returned to care
       | Systole  | 142 |
       | Diastole | 95  |
 
-    When wait for 1 second
+    When I wait for 1 second
     And I export the analytics
 
     Then The value of "PI":"HTN - Contactable overdue patients called and returned to care" with period type "Months" should be
@@ -67,7 +67,7 @@ Feature: Contactable patients called and returned to care
       | Systole  | 142 |
       | Diastole | 95  |
 
-    When wait for 1 second
+    When I wait for 1 second
     And I export the analytics
 
     Then The value of "PI":"HTN - Contactable overdue patients called and returned to care" with period type "Months" should be
@@ -99,7 +99,7 @@ Feature: Contactable patients called and returned to care
     And That TEI has a "Calling report" event on "5_MonthsAgo_Plus_1_Day" with following data
       | Result of call                          | AGREE_TO_VISIT |
 
-    When wait for 1 second
+    When I wait for 1 second
     And I export the analytics
 
     Then The value of "PI":"HTN - Contactable overdue patients called and returned to care" with period type "Months" should be
@@ -132,7 +132,7 @@ Feature: Contactable patients called and returned to care
       | Systole  | 142 |
       | Diastole | 95  |
 
-    When wait for 1 second
+    When I wait for 1 second
     And I export the analytics
 
     Then The value of "PI":"HTN - Contactable overdue patients called and returned to care" with period type "Months" should be
@@ -169,7 +169,7 @@ Feature: Contactable patients called and returned to care
       | Systole  | 142 |
       | Diastole | 95  |
 
-    When wait for 1 second
+    When I wait for 1 second
     And I export the analytics
 
     Then The value of "PI":"HTN - Contactable overdue patients called and returned to care" with period type "Months" should be
@@ -202,7 +202,7 @@ Feature: Contactable patients called and returned to care
       | Result of call                          | REMOVE_FROM_OVERDUE |
       | HTN - Remove from overdue list because: | DIED                |
 
-    When wait for 1 second
+    When I wait for 1 second
     And I export the analytics
 
     Then The value of "PI":"HTN - Contactable overdue patients called and returned to care" with period type "Months" should be
@@ -236,7 +236,7 @@ Feature: Contactable patients called and returned to care
       | Result of call                          | REMOVE_FROM_OVERDUE             |
       | HTN - Remove from overdue list because: | TRANSFERRED_TO_ANOTHER_FACILITY |
 
-    When wait for 1 second
+    When I wait for 1 second
     And I export the analytics
 
     Then The value of "PI":"HTN - Contactable overdue patients called and returned to care" with period type "Months" should be
@@ -271,7 +271,7 @@ Feature: Contactable patients called and returned to care
       | Systole  | 142 |
       | Diastole | 95  |
 
-    When wait for 1 second
+    When I wait for 1 second
     And I export the analytics
 
     Then The value of "PI":"HTN - Contactable overdue patients called and returned to care" with period type "Months" should be
@@ -306,7 +306,7 @@ Feature: Contactable patients called and returned to care
       | Systole  | 142 |
       | Diastole | 95  |
 
-    When wait for 1 second
+    When I wait for 1 second
     And I export the analytics
 
     Then The value of "PI":"HTN - Contactable overdue patients called and returned to care" with period type "Months" should be
