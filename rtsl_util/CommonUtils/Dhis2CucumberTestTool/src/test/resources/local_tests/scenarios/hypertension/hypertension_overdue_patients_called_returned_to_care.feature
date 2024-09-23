@@ -32,7 +32,8 @@ Feature: Number of overdue patients
       | Systole  | 142 |
       | Diastole | 95  |
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     Then The value of "PI":"HTN - Overdue patients called and returned to care" with period type "Months" should be
       | 4_MonthsAgo  | 0 |
@@ -62,7 +63,8 @@ Feature: Number of overdue patients
     And That TEI has a "Calling report" event on "5_MonthsAgo_Plus_1_Day" with following data
       | Result of call                          | AGREE_TO_VISIT |
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     Then The value of "PI":"HTN - Overdue patients called and returned to care" with period type "Months" should be
       | 4_MonthsAgo  | 0 |
@@ -93,7 +95,8 @@ Feature: Number of overdue patients
       | Systole  | 142 |
       | Diastole | 95  |
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     Then The value of "PI":"HTN - Overdue patients called and returned to care" with period type "Months" should be
       | 3_MonthsAgo  | 0 |
@@ -128,7 +131,8 @@ Feature: Number of overdue patients
       | Systole  | 142 |
       | Diastole | 95  |
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     Then The value of "PI":"HTN - Overdue patients called and returned to care" with period type "Months" should be
       | 4_MonthsAgo  | 0 |
@@ -159,7 +163,8 @@ Feature: Number of overdue patients
       | Result of call                          | REMOVE_FROM_OVERDUE |
       | HTN - Remove from overdue list because: | DIED                |
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     Then The value of "PI":"HTN - Overdue patients called and returned to care" with period type "Months" should be
       | 4_MonthsAgo  | 0 |
@@ -191,7 +196,8 @@ Feature: Number of overdue patients
       | Result of call                          | REMOVE_FROM_OVERDUE             |
       | HTN - Remove from overdue list because: | TRANSFERRED_TO_ANOTHER_FACILITY |
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     Then The value of "PI":"HTN - Overdue patients called and returned to care" with period type "Months" should be
       | 4_MonthsAgo  | 0 |
@@ -224,7 +230,8 @@ Feature: Number of overdue patients
       | Systole  | 142 |
       | Diastole | 95  |
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     Then The value of "PI":"HTN - Overdue patients called and returned to care" with period type "Months" should be
       | thisMonth     | 0 |
@@ -257,7 +264,8 @@ Feature: Number of overdue patients
       | Systole  | 142 |
       | Diastole | 95  |
 
-    When I export the analytics
+    When I wait for 1 second
+    And I export the analytics
 
     Then The value of "PI":"HTN - Overdue patients called and returned to care" with period type "Months" should be
       | 4_MonthsAgo  | 1 |
