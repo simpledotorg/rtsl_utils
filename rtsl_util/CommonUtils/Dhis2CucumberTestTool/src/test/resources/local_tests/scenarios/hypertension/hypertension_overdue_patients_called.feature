@@ -98,13 +98,27 @@ Feature: Number of overdue patients called
     And That TEI has a "Calling report" event on "6_MonthsAgo_Plus_1_Day" with following data
       | Result of call                          | AGREE_TO_VISIT |
     And I create a new TEI on "5_MonthsAgo" for this Facility with the following attributes
-      | GEN - Given name                      | Swimming with|
-      | GEN - Family name                     | The Fishes   |
+      | GEN - Given name                      | Swimming with |
+      | GEN - Family name                     | The Fishes    |
+      | GEN - Sex                             | MALE          |
+      | HTN - Does patient have hypertension? | NO            |
+      | HTN - Does patient have diabetes?     | YES           |
+      | GEN - Date of birth                   | 32            |
+      | Address (current)                     | By the beach  |
+      | District                              | KOLARA        |
+      | HTN - Consent to record data          | true          |
+      | HTN - NCD Patient Status              | ACTIVE        |
+    And That TEI has a "Calling report" event on "4_MonthsAgo" with following data
+      | Result of call                          | REMOVE_FROM_OVERDUE |
+      | HTN - Remove from overdue list because: | DIED                |
+    And I create a new TEI on "5_MonthsAgo" for this Facility with the following attributes
+      | GEN - Given name                      | Moved To     |
+      | GEN - Family name                     | Another City |
       | GEN - Sex                             | MALE         |
       | HTN - Does patient have hypertension? | NO           |
       | HTN - Does patient have diabetes?     | YES          |
       | GEN - Date of birth                   | 32           |
-      | Address (current)                     | By the beach |
+      | Address (current)                     | New Home     |
       | District                              | KOLARA       |
       | HTN - Consent to record data          | true         |
       | HTN - NCD Patient Status              | ACTIVE       |
