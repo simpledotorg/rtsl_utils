@@ -1,0 +1,11 @@
+# Package files
+*.jar
+*.war
+
+# Compiled Java class files
+*.class
+
+# Maven
+target/
+dist/
+dependency-reduced-pom.xml
