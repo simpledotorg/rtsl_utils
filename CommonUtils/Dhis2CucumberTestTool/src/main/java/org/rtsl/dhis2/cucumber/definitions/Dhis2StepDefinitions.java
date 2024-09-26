@@ -1,9 +1,27 @@
 package org.rtsl.dhis2.cucumber.definitions;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.rtsl.dhis2.cucumber.utils.Helper.toISODateTimeString;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.hisp.dhis.api.model.v40_2_2.AttributeInfo;
+import org.rtsl.dhis2.cucumber.Dhis2HttpClient;
+import org.rtsl.dhis2.cucumber.Dhis2IdConverter;
+import org.rtsl.dhis2.cucumber.factories.OrganisationUnit;
+import org.rtsl.dhis2.cucumber.factories.TrackedEntityInstance;
+import org.rtsl.dhis2.cucumber.utils.Period;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
@@ -11,21 +29,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import org.hisp.dhis.api.model.v40_2_2.AttributeInfo;
-import org.rtsl.dhis2.cucumber.Dhis2HttpClient;
-import org.rtsl.dhis2.cucumber.Dhis2IdConverter;
-import org.rtsl.dhis2.cucumber.Period;
-import org.rtsl.dhis2.cucumber.factories.OrganisationUnit;
-import org.rtsl.dhis2.cucumber.factories.TrackedEntityInstance;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.rtsl.dhis2.cucumber.Helper.toISODateTimeString;
 
 public class Dhis2StepDefinitions {
 
@@ -298,6 +301,18 @@ public class Dhis2StepDefinitions {
         scenario.log("Cleared cache");
     }
 
+    /**
+     * I wait for {int} seconds.
+     *
+     *
+     * This pauses execution for the number of seconds.
+     *
+     * <p>Sometimes, the step just performed on DHIS may take a while to "settle";
+     * i.e. the DB (or some other component) may still be working. Use this
+     * step to give some time for existing processes to wrap up.</p>
+     *
+     * @param seconds The number of seconds to wait for
+     */
     @Given("I wait for {int} second")
     @Given("I wait for {int} seconds")
     public void waitUntilDBTriggerCompletion(int seconds) throws Exception{

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-import static org.rtsl.dhis2.cucumber.Helper.toISODateTimeString;
+import static org.rtsl.dhis2.cucumber.utils.Helper.toISODateTimeString;
 
 public class TrackedEntityInstance {
 

@@ -16,6 +16,6 @@ java \
     --glue "org.rtsl.dhis2.cucumber.definitions" \
     --glue "io.cucumber.spring" \
     --threads 1 \
-     ${BASEDIR}/scenarios
+    ${BASEDIR}/scenarios/hypertension/hypertension_patient_under_care_controlled.feature
 
 
