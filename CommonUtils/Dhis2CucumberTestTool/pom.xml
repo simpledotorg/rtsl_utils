@@ -67,7 +67,7 @@
                 <configuration>
                     <show>public</show>
                     <outputDirectory>${project.basedir}</outputDirectory>
-                    <excludePackageNames>org.rtsl.dhis2.cucumber.utils</excludePackageNames>
+                    <excludePackageNames>org.rtsl.dhis2.cucumber.factories:org.rtsl.dhis2.cucumber.utils</excludePackageNames>
                 </configuration>
             </plugin>
         </plugins>
