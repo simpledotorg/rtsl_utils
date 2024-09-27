@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.rtsl.dhis2.cucumber.Dhis2HttpClient;
+import org.rtsl.dhis2.cucumber.utils.Dhis2HttpClient;
 import org.rtsl.dhis2.cucumber.utils.TestUniqueId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -2,8 +2,8 @@ package org.rtsl.dhis2.cucumber.factories;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import org.rtsl.dhis2.cucumber.Dhis2HttpClient;
-import org.rtsl.dhis2.cucumber.Dhis2IdConverter;
+import org.rtsl.dhis2.cucumber.utils.Dhis2HttpClient;
+import org.rtsl.dhis2.cucumber.utils.Dhis2IdConverter;
 import org.rtsl.dhis2.cucumber.definitions.Dhis2StepDefinitions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

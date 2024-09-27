@@ -5,7 +5,4 @@ import org.springframework.test.context.ContextConfiguration;
 
 @CucumberContextConfiguration
 @ContextConfiguration("classpath:spring.main.xml")
-public class ContextConfig {
-
-    
-}
+public class ContextConfig {}
