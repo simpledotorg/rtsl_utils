@@ -1,9 +1,5 @@
-
 BASEDIR=$(dirname "$0")
 export TARGET_DIR=${BASEDIR}/../../../../target
-
-# -Dlogback.debug=true 
-#     --object-factory io.cucumber.spring.SpringFactory \
 
 java \
     -Dorg.rtsl.dhis2.testtool.properties=${BASEDIR}/testtool.properties \
@@ -16,6 +12,4 @@ java \
     --glue "org.rtsl.dhis2.cucumber.definitions" \
     --glue "io.cucumber.spring" \
     --threads 1 \
-    ${BASEDIR}/scenarios/hypertension/hypertension_patient_under_care_controlled.feature
-
-
+    ${BASEDIR}/scenarios
