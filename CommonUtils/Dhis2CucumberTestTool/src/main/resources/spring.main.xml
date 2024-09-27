@@ -45,7 +45,7 @@
         </property>
     </bean>
 
-    <bean id="testUniqueId" class="org.rtsl.dhis2.cucumber.TestUniqueId" scope="cucumber-glue"/>      
+    <bean id="testUniqueId" class="org.rtsl.dhis2.cucumber.utils.TestUniqueId" scope="cucumber-glue"/>      
     <bean id="organisationUnit" class="org.rtsl.dhis2.cucumber.factories.OrganisationUnit" scope="cucumber-glue">
         <constructor-arg value="${dhis2.orgUnit.level1Name}"/>
         <constructor-arg value="${dhis2.orgUnit.level2NamePrefix}"/>
