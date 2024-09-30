@@ -57,18 +57,46 @@ public class Dhis2StepDefinitions {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    /**
+     * Get current org unit id.
+     *
+     * <p>
+     * This is a helper method for FreeMarker templates.
+     * </p>
+     */
     public String getCurrentOrgUnitId() {
         return currentOrgUnitId;
     }
 
+    /**
+     * Get current event id.
+     *
+     * <p>
+     * This is a helper method for FreeMarker templates.
+     * </p>
+     */
     public String getCurrentEventId() {
         return currentEventId;
     }
 
+    /**
+     * Get current enrollment id.
+     *
+     * <p>
+     * This is a helper method for FreeMarker templates.
+     * </p>
+     */
     public String getCurrentEnrollmentId() {
         return currentEnrollmentId;
     }
 
+    /**
+     * Get current TEI id.
+     *
+     * <p>
+     * This is a helper method for FreeMarker templates.
+     * </p>
+     */
     public String getCurrentTeiId() {
         return currentTeiId;
     }
