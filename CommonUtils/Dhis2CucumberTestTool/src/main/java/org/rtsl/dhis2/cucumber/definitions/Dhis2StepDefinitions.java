@@ -1,9 +1,27 @@
 package org.rtsl.dhis2.cucumber.definitions;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.rtsl.dhis2.cucumber.utils.Helper.toISODateTimeString;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.hisp.dhis.api.model.v40_2_2.AttributeInfo;
+import org.rtsl.dhis2.cucumber.utils.Dhis2HttpClient;
+import org.rtsl.dhis2.cucumber.utils.Dhis2IdConverter;
+import org.rtsl.dhis2.cucumber.factories.OrganisationUnit;
+import org.rtsl.dhis2.cucumber.factories.TrackedEntityInstance;
+import org.rtsl.dhis2.cucumber.utils.Period;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
@@ -11,21 +29,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import org.hisp.dhis.api.model.v40_2_2.AttributeInfo;
-import org.rtsl.dhis2.cucumber.Dhis2HttpClient;
-import org.rtsl.dhis2.cucumber.Dhis2IdConverter;
-import org.rtsl.dhis2.cucumber.Period;
-import org.rtsl.dhis2.cucumber.factories.OrganisationUnit;
-import org.rtsl.dhis2.cucumber.factories.TrackedEntityInstance;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.rtsl.dhis2.cucumber.Helper.toISODateTimeString;
 
 public class Dhis2StepDefinitions {
 
@@ -54,18 +57,46 @@ public class Dhis2StepDefinitions {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    /**
+     * Get current org unit id.
+     *
+     * <p>
+     * This is a helper method for FreeMarker templates.
+     * </p>
+     */
     public String getCurrentOrgUnitId() {
         return currentOrgUnitId;
     }
 
+    /**
+     * Get current event id.
+     *
+     * <p>
+     * This is a helper method for FreeMarker templates.
+     * </p>
+     */
     public String getCurrentEventId() {
         return currentEventId;
     }
 
+    /**
+     * Get current enrollment id.
+     *
+     * <p>
+     * This is a helper method for FreeMarker templates.
+     * </p>
+     */
     public String getCurrentEnrollmentId() {
         return currentEnrollmentId;
     }
 
+    /**
+     * Get current TEI id.
+     *
+     * <p>
+     * This is a helper method for FreeMarker templates.
+     * </p>
+     */
     public String getCurrentTeiId() {
         return currentTeiId;
     }
@@ -77,12 +108,32 @@ public class Dhis2StepDefinitions {
         this.scenario = scenario;
     }
 
+    /**
+     * Create a new organisation unit.
+     *
+     * All tests (read "scenarios") will be run in an organisation unit (a.k.a
+     * "org unit"). This is the org unit under which the analytics would be
+     * aggregated. All org units would be created under a "TEST_COUNTRY". This
+     * way, the data from the tests do not pollute existing data in the DHIS2
+     * instance. When you create an organisation unit in any test scenario
+     * without specifying any level, the system will create one at level 5 with
+     * all the ancestor organisation units above it, i.e., levels 2 to 4.
+     *
+     * {@link OrganisationUnit}
+     */
     @Given("I create a new Facility")
     @Given("I create a new OrgUnit")
     public void iCreateANewOrganisationUnitAtLevel() throws Exception {
         iCreateANewOrganisationUnitAtLevel(5);
     }
 
+    /**
+     * Create a new organisation unit at a specific level.
+     *
+     * @see #iCreateANewOrganisationUnitAtLevel()
+     *
+     * @param level The level to create the oganisation unit at.
+     */
     @Given("I create a new organisationUnit at level {int}")
     public void iCreateANewOrganisationUnitAtLevel(int level) throws Exception {
         Map<String, String> newOrganisationUnit = organisationUnit.createOrganisationUnit(level);
@@ -91,12 +142,33 @@ public class Dhis2StepDefinitions {
         scenario.log("Created new OrgUnit with Id:" + currentOrgUnitId + " and Name:" + newOrganisationUnit.get("organisationUnitName"));
     }
 
+    /**
+     * Create an organisation unit at level if not exists, and grant access to existing user.
+     *
+     * A user should be able to access the test organisation units created in
+     * the tests. The default user in the test suite has “Superuser”
+     * permissions. Currently, the tool only supports running tests at
+     * organisation unit level 5. In order to support running tests at multiple
+     * levels in the future, the user is given access to the test root
+     * organisation unit, “TEST_COUNTRY”.
+     *
+     * @param level The level of oganisation unit to grant access at.
+     */
     @And("I have access to an organisation unit at level {int}")
     public void iHaveAccessToAnOrganisationUnitAtLevel(int level) throws Exception {
         iCreateANewOrganisationUnitAtLevel(level);
         iAssignTheCurrentUserToTheCurrentOrgUnit();
     }
 
+    /**
+     * Grant access to existing user to organisation unit at level.
+     *
+     * @see #iHaveAccessToAnOrganisationUnitAtLevel(int level)
+     *
+     * The difference between this method and the method above is that this
+     * method does not create a new organisation unit. It only assigns the
+     * current user permissions to the current organisation unit.
+     */
     @Given("I assign the current user to the current orgUnit")
     public void iAssignTheCurrentUserToTheCurrentOrgUnit() throws Exception {
         String currentUserId = dhis2HttpClient.getCurrentUserId();
@@ -118,10 +190,25 @@ public class Dhis2StepDefinitions {
         scenario.log("Current user: " + currentUserId + " has given access to the facility:" + currentOrgUnitId);
     }
 
+    /**
+     * Register an organizational unit in a program.
+     *
+     * <p>
+     * A program in DHIS2 is a collection of operations (a.k.a "program
+     * stages"). All organisation units should be part of a program. This
+     * method registers an organisation unit into an existing program.
+     * </p>
+     *
+     * <pre>
+     * Given I register that Facility for program "Hypertension &amp; Diabetes"
+     * </pre>
+     *
+     * @param program The name of the already existing program in the instance.
+     */
     @Given("I register that Facility for program {string}")
     @Given("I register that organisation unit for program {string}")
-    public void iRegisterThatOrganisationUnit(String string) throws Exception {
-        String programName = testIdConverter.getProgramId(string);
+    public void iRegisterThatOrganisationUnit(String program) throws Exception {
+        String programName = testIdConverter.getProgramId(program);
         String baseProgramJson = dhis2HttpClient.doGet("api/programs/" + programName);
         JsonNode rootNode = MAPPER.readTree(baseProgramJson);
         ArrayNode organisationUnits = (ArrayNode) rootNode.get("organisationUnits");
@@ -136,6 +223,36 @@ public class Dhis2StepDefinitions {
         scenario.log("Current facility: " + facilityId.get("id") + " has been assigned to the program:" + programName);
     }
 
+    /**
+     * Create a new TEI on a specific date.
+     *
+     * <p>
+     * This creates a new tracked entity instance (TEI) in the instance. Since
+     * report aggregations are done in relative terms — <code>2 months
+     * ago</code>, <code>last quarter</code> — the dates we specify when
+     * creating resources in the instance are all in relative terms. This makes
+     * a blocking API call to the instance.
+     * </p>
+     *
+     * <pre>
+     * Given I create a new TEI on "7_MonthsAgo" at this organisation unit with the following attributes
+     * | GEN - Given name                     | John         |
+     * | GEN - Family name                    | Doe          |
+     * | GEN - Sex                            | MALE         |
+     * | HTN - Does patient have hypertension?| YES          |
+     * | HTN - Does patient have diabetes?    | YES          |
+     * | GEN - Date of birth                  | 1999-05-09   |
+     * | Address (current)                    | Example Ave. |
+     * | District                             | Some Town    |
+     * | HTN - Consent to record data         | true         |
+     * | HTN - NCD Patient Status             | ACTIVE       |
+     * </pre>
+     *
+     * @param relativeEventDate The date to create the TEI, in relative terms.
+     * @param dataTable The TEI attributes to create the TEI with.
+     *
+     * @throws Exception as an effect of the network call to the instance
+     */
     @Given("I create a new TEI for this OrgUnit with the following attributes")
     @Given("I create a new TEI on {string} for this Facility with the following attributes")
     @Given("I create a new TEI on {string} at this organisation unit with the following attributes")
@@ -148,11 +265,50 @@ public class Dhis2StepDefinitions {
         scenario.log("Created new TEI with Id:" + currentTeiId + " and Enrollment with Id:" + currentEnrollmentId);
     }
 
+    /**
+     * Create an event for the TEI at the specified date.
+     *
+     * <p>
+     * This creates an event that's happening at the time the event is scheduled.
+     * </p>
+     *
+     * <pre>
+     * And That TEI has a "Hypertension &amp; Diabetes visit" event on "7_MonthsAgo" with following data
+     *   | Systole  | 145 |
+     *   | Diastole | 92  |
+     * </pre>
+     *
+     * @param relativeEventDate The date to create the TEI, in relative terms.
+     * @param dataTable The TEI attributes to create the TEI with.
+     *
+     * @throws Exception as an effect of the network call to the instance
+     *
+     * @see #thatTeiHasAEventOnWhichWasScheduledOnWithFollowingData(String eventName, String relativeEventDate, String relativeScheduledDate, Map<String, String> dataTable)
+     */
     @Given("That TEI has a {string} event on {string} with following data")
     public void thatTeiHasAEventOnWithFollowingData(String eventName, String relativeEventDate, Map<String, String> dataTable) throws Exception {
         thatTeiHasAEventOnWhichWasScheduledOnWithFollowingData(eventName, relativeEventDate, relativeEventDate, dataTable);
     }
 
+    /**
+     * Schedule an event for the TEI at the specified date.
+     *
+     * <p>
+     * An event, in DHIS2, is an occurence of a program stage. This allows the create date (i.e. the date the event happens) and the scheduled date (i.e. the date the event was supposed to happen) to vary.
+     * </p>
+     *
+     * <pre>
+     * And That TEI has a "Hypertension &amp; Diabetes visit" event on "3_MonthsAgo" which was scheduled on "5_MonthsAgo" with following data
+     *   | Systole  | 142 |
+     *   | Diastole | 95  |
+     * </pre>
+     *
+     * @param relativeEventDate when the event happened.
+     * @param relativeScheduledDate when the event was scheduled for.
+     * @param dataTable the attributes to create the event with.
+     *
+     * @throws Exception as an effect of the network call to the instance
+     */
     @Given("That TEI has a {string} event on {string} which was scheduled on {string} with following data")
     public void thatTeiHasAEventOnWhichWasScheduledOnWithFollowingData(String eventName, String relativeEventDate, String relativeScheduledDate, Map<String, String> dataTable) throws Exception {
         String eventDateString = Period.toDateString(relativeEventDate);
@@ -185,6 +341,26 @@ public class Dhis2StepDefinitions {
         createEvent(templateContext);
     }
 
+    /**
+     * Run and export the analytics.
+     *
+     * <pre>
+     * When I export the analytics
+     * </pre>
+     *
+     * <p>
+     * <b>Caution!!!</b> This step is costly.
+     * </p>
+     *
+     * <p>
+     * In order to verify the impact of our setup steps on the state of DHIS2,
+     * analytics need to be exported. This puts data in the necessary program
+     * attributes as defined in the program. This step is compute heavy, so
+     * it's recommended to have this after {@link waitUntilDBTriggerCompletion}.
+     * </p>
+     *
+     * @throws Exception as an effect of the network call to the instance
+     */
     @Given("Export the analytics")
     @Given("I export the analytics")
     public void exportTheAnalytics() throws Exception {
@@ -210,9 +386,21 @@ public class Dhis2StepDefinitions {
         scenario.log("Analytics job with Id:" + exportAnalyticsJobId + " took " + lastRuntimeExecution + " time to complete.");
     }
 
+    /**
+     * Run the HTN data aggregation.
+     *
+     * <p>
+     * This runs the specific "ADEX - Hypertension dashboard" aggregation. In
+     * subsequent versions, this would be a general step to run any aggregation
+     * configured on the instance.
+     * </p>
+     *
+     * @throws Exception as an effect of the network call to the instance
+     */
     @Given("Run the Hypertension data aggregation")
     @Given("I run the hypertension data aggregation")
     public void runTheHypertensionDataAggregation() throws Exception {
+        // TODO: Generalize this to run any aggregation on the instance.
         String dataAggregationJobId = testIdConverter.getJobConfigurationId("ADEX - Hypertension dashboard");
         String jobStatus;
         String lastRuntimeExecution;
@@ -236,6 +424,29 @@ public class Dhis2StepDefinitions {
 
     }
 
+    /**
+     * Verify some data over a period in time.
+     *
+     * <pre>
+     * Then The value of "PI":"HTN - Overdue patients" with period type "Months" should be
+     *   | thisMonth    | 1 |
+     *   | 5_MonthAgo   | 1 |
+     *   | 9_MonthsAgo  | 1 |
+     * </pre>
+     *
+     * This step allows you define the data you expect to see in a specific
+     * dimension in your DHIS2 instance. The {@code dimensionItemType} can be
+     * specified either in long form ("Program Indicator") or in short form
+     * ("PI"). The {@code dimensionItemName} must be specified in full as is
+     * defined in the DHIS2 instance.
+     *
+     * @param dimensionItemType the dimension type to check
+     * @param dimensionItemName the dimension to check
+     * @param periodType the categorization of time this validation is concerned with
+     * @param dataTable an expectation map of time-window and expectation
+     *
+     * @throws Exception as an effect of the network call to the instance
+     */
     @Then("The value of {string}:{string} with period type {string} should be")
     public void theValueOfShouldBe(String dimensionItemType, String dimensionItemName, String periodType, Map<String, String> dataTable) throws Exception {
         String dimensionItemId = getDimensionItemId(dimensionItemType, dimensionItemName);
@@ -264,13 +475,45 @@ public class Dhis2StepDefinitions {
         }
     }
 
+    /**
+     * Update the TEA at a specific date.
+     *
+     * <pre>
+     * And That TEI was updated on "2_MonthsAgo" with the following attributes
+     *   | HTN - NCD Patient Status | DIED |
+     * </pre>
+     *
+     * This sets updates the tracked entity attributes with the data specified in the table below.
+     *
+     * @param relativeDate the time, in relative terms, to update the tracked entity instance.
+     * @param dataTable the attributes to update the tracked entity instance with.
+     *
+     * @throws Exception as an effect of the network call to the instance
+     */
     @Given("That TEI was updated on {string} with the following attributes")
-    public void thatTeiWasUpdatedOnWithTheFollowingAttributes(String relativeVisitDate, Map<String, String> dataTable) throws Exception {
-        String visitDate = Period.toDateString(relativeVisitDate);
+    public void thatTeiWasUpdatedOnWithTheFollowingAttributes(String relativeDate, Map<String, String> dataTable) throws Exception {
+        String visitDate = Period.toDateString(relativeDate);
         trackedEntityInstance.update(dataTable, currentOrgUnitId, this.currentTeiId, visitDate);
         scenario.log("Created new TEI with Id:" + currentTeiId + " updated");
     }
 
+    /**
+     * Create an event scheduled at a specific date.
+     *
+     * <pre>
+     * And That TEI has a "Hypertension &amp; Diabetes visit" event scheduled for "6_MonthsAgo_Minus_1_Day"
+     * </pre>
+     *
+     * This creates an event for the tracked entity instance at a scheduled
+     * time which hasn't occured yet. This step often follows {@link
+     * #iCreateANewPatientOnAtOrganisationUnitWithTheFollowingAttributes}, and
+     * references the tracked entity instance created in that step.
+     *
+     * @param eventName name of the event to create
+     * @param relativeEventDate expected schedule time of the event
+     *
+     * @throws Exception as an effect of the network call to the instance
+     */
     @Given("That TEI has a {string} event scheduled for {string}")
     public void thatTeiHasAEventScheduledFor(String eventName, String relativeEventDate) throws Exception {
         String eventDateString = Period.toDateString(relativeEventDate);
@@ -298,6 +541,21 @@ public class Dhis2StepDefinitions {
         scenario.log("Cleared cache");
     }
 
+    /**
+     * I wait for {int} seconds.
+     *
+     * <pre>
+     * Given I wait for 1 second.
+     * </pre>
+     *
+     * This pauses execution for the number of seconds.
+     *
+     * <p>Sometimes, the step just performed on DHIS may take a while to "settle";
+     * i.e. the DB (or some other component) may still be working. Use this
+     * step to give some time for existing processes to wrap up.</p>
+     *
+     * @param seconds The number of seconds to wait for
+     */
     @Given("I wait for {int} second")
     @Given("I wait for {int} seconds")
     public void waitUntilDBTriggerCompletion(int seconds) throws Exception{

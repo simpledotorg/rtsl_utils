@@ -45,7 +45,7 @@
         </property>
     </bean>
 
-    <bean id="testUniqueId" class="org.rtsl.dhis2.cucumber.TestUniqueId" scope="cucumber-glue"/>      
+    <bean id="testUniqueId" class="org.rtsl.dhis2.cucumber.utils.TestUniqueId" scope="cucumber-glue"/>      
     <bean id="organisationUnit" class="org.rtsl.dhis2.cucumber.factories.OrganisationUnit" scope="cucumber-glue">
         <constructor-arg value="${dhis2.orgUnit.level1Name}"/>
         <constructor-arg value="${dhis2.orgUnit.level2NamePrefix}"/>
@@ -70,12 +70,12 @@
         <constructor-arg value="${dhis2.api.password}" />
     </bean>
     <bean id="dhisSdkClient" factory-bean="dhis2SdkClientBuilder" factory-method="build" />
-    <bean id="testClient" class="org.rtsl.dhis2.cucumber.Dhis2HttpClient" scope="singleton">
+    <bean id="testClient" class="org.rtsl.dhis2.cucumber.utils.Dhis2HttpClient" scope="singleton">
         <constructor-arg value="${dhis2.api.url}" />
         <constructor-arg value="${dhis2.api.username}" />
         <constructor-arg value="${dhis2.api.password}" />
     </bean>
-    <bean id="testIdConverter" class="org.rtsl.dhis2.cucumber.Dhis2IdConverter" init-method="getMetadata" scope="singleton">
+    <bean id="testIdConverter" class="org.rtsl.dhis2.cucumber.utils.Dhis2IdConverter" init-method="getMetadata" scope="singleton">
         <constructor-arg ref="testClient" />
     </bean>
 </beans>

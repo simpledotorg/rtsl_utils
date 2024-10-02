@@ -60,6 +60,16 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.10.0</version>
+                <configuration>
+                    <show>public</show>
+                    <outputDirectory>${project.basedir}</outputDirectory>
+                    <excludePackageNames>org.rtsl.dhis2.cucumber.factories:org.rtsl.dhis2.cucumber.utils</excludePackageNames>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -88,19 +98,11 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
         </dependency>
         <dependency>
             <groupId>org.hisp</groupId>
@@ -118,22 +120,11 @@
             <classifier>v40.2.2</classifier>
             <version>3.0.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>2.3.33</version>
         </dependency>
-
-        <!--
-        <dependency>
-            <groupId>org.hisp.dhis.integration.sdk</groupId>
-            <artifactId>jackson-resource-model</artifactId>
-            <classifier>v2.35.13</classifier>
-            <version>3.0.0</version>
-        </dependency>
-        -->
-        <!-- test dependencies -->
         <dependency>
             <groupId>org.rtsl.common.helper</groupId>
             <artifactId>TestCommon</artifactId>
@@ -142,16 +133,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.appium</groupId>
-            <artifactId>java-client</artifactId>
-            <version>9.2.2</version>
-        </dependency>
-        <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
+            <artifactId>junit-jupiter-api</artifactId>
             <version>5.11.0</version>
             <scope>compile</scope>
         </dependency>
-
     </dependencies>
 </project>

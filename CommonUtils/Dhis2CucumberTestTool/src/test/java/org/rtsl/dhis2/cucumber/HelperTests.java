@@ -1,4 +1,4 @@
-package org.rtsl.dhis2.cucumber;
+package org.rtsl.dhis2.cucumber.utils;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

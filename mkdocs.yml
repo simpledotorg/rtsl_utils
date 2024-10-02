@@ -1,0 +1,25 @@
+site_name: RTSL Utils
+repo_name: simpledotorg/rtsl_utils
+repo_url: https://github.com/simpledotorg/rtsl_utils
+theme:
+  name: material
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+    logo: fontawesome/solid/kitchen-set
+plugins:
+  - monorepo
+nav:
+  - index.md
+  - DHIS2 Cucumber Test Tool: "!include CommonUtils/Dhis2CucumberTestTool/mkdocs.yml"
+markdown_extensions:
+  - admonition
+  - footnotes
