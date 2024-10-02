@@ -1,0 +1,20 @@
+name: Publish built artefacts
+on:
+  push:
+    branches:
+      - 'master'
+jobs:
+  publish-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12.x
+          cache: 'pip'
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install mkdocs-material mkdocs-monorepo-plugin
+      - name: Publish Documentation
+        run: mkdocs gh-deploy --force
