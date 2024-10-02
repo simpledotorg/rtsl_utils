@@ -25,7 +25,6 @@ jobs:
         with:
           maven-version: 3.9.6
       - name: docker-compose workaround
-        working-directory: rtsl_util
         run: echo "docker compose \"\$@\"" > $HOME/docker-compose ; chmod 777 $HOME/docker-compose ; echo "$HOME/" >> $GITHUB_PATH
       - name: Clean branch name
         run: |
@@ -34,20 +33,16 @@ jobs:
           echo "Cleaned branch name: $CLEAN_BRANCH_NAME"
           echo CLEAN_BRANCH_NAME=$CLEAN_BRANCH_NAME >> $GITHUB_ENV
       - name: Sets up version
-        working-directory: rtsl_util
         run: mvn versions:set -DnewVersion=${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}
       - name: Builds Artifacts and Images
-        working-directory: rtsl_util
         run: mvn clean install
       - name: Lists all docker images
-        working-directory: rtsl_util
         run:  docker image list
       - name: Publish Images
-        working-directory: rtsl_util
         run:  docker push simpledotorg/prometheusdbexporter:${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}
       - name: Archive Dhis2TestTool jar file
         uses: actions/upload-artifact@v4
         with:
           name: Dhis2CucumberTestTool-${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}.jar
-          path: rtsl_util/CommonUtils/Dhis2CucumberTestTool/target/Dhis2CucumberTestTool-${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}.jar
+          path: CommonUtils/Dhis2CucumberTestTool/target/Dhis2CucumberTestTool-${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}.jar
       - run: find . -name "*.jar"
