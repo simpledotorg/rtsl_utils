@@ -36,8 +36,6 @@ jobs:
         run: mvn versions:set -DnewVersion=${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}
       - name: Builds Artifacts and Images
         run: mvn clean install
-      - name: Lists all docker images
-        run:  docker image list
       - name: Publish Images
         run:  docker push simpledotorg/prometheusdbexporter:${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}
       - name: Archive Dhis2TestTool jar file
@@ -45,4 +43,3 @@ jobs:
         with:
           name: Dhis2CucumberTestTool-${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}.jar
           path: CommonUtils/Dhis2CucumberTestTool/target/Dhis2CucumberTestTool-${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}.jar
-      - run: find . -name "*.jar"
