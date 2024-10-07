@@ -56,12 +56,10 @@ public class Dhis2HttpClient {
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 return handleResponse(response);
             }
-
         }
-
     }
-    
-        public String doPutWithBody(String relativeUrl, String body) throws Exception {
+
+    public String doPutWithBody(String relativeUrl, String body) throws Exception {
         LOGGER.info("Doing PUT call on url <{}> with body <{}>", dhis2RootUrl + relativeUrl, body);
         // Makes the call
         try (CloseableHttpClient httpClient = HttpClients.createDefault();) {
@@ -73,9 +71,7 @@ public class Dhis2HttpClient {
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 return handleResponse(response);
             }
-
         }
-
     }
 
     public String doPost(String relativeUrl, String templateName, Object templateContext) throws Exception { // TODO : factorize, possibly make a class ...
@@ -95,9 +91,7 @@ public class Dhis2HttpClient {
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 return handleResponse(response);
             }
-
         }
-
     }
 
     public String doPost(String relativeUrl) throws Exception{
@@ -108,7 +102,6 @@ public class Dhis2HttpClient {
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 return handleResponse(response);
             }
-
         }
     }
 
@@ -129,7 +122,6 @@ public class Dhis2HttpClient {
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 return handleResponse(response);
             }
-
         }
     }
 
@@ -144,7 +136,6 @@ public class Dhis2HttpClient {
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 return handleResponse(response);
             }
-
         }
     }
 
