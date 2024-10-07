@@ -1,5 +1,4 @@
 <configuration>
-
     <appender name="unitTestLogs" class="ch.qos.logback.core.FileAppender">
         <file>${TARGET_DIR}/cucumber-reports/test_reports.log</file>
         <append>true</append>
@@ -14,7 +13,4 @@
     <root level="trace">
         <appender-ref ref="unitTestLogs"/>
     </root>
-
-
-
 </configuration>
