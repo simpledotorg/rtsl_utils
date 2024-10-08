@@ -13,8 +13,8 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
                 <version>3.2.4</version>
                 <configuration>
                     <filters>
@@ -61,14 +61,30 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
                 <version>3.10.0</version>
                 <configuration>
                     <show>public</show>
                     <outputDirectory>${project.basedir}</outputDirectory>
                     <excludePackageNames>org.rtsl.dhis2.cucumber.factories:org.rtsl.dhis2.cucumber.utils</excludePackageNames>
                 </configuration>
+            </plugin>
+            <plugin>
+              <artifactId>maven-assembly-plugin</artifactId>
+              <configuration>
+                <descriptors>
+                  <descriptor>assemblers/release.xml</descriptor>
+                </descriptors>
+              </configuration>
+              <executions>
+                <execution>
+                  <phase>package</phase>
+                  <goals>
+                    <goal>single</goal>
+                  </goals>
+                </execution>
+              </executions>
             </plugin>
         </plugins>
     </build>
