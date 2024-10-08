@@ -21,19 +21,14 @@ jobs:
           cache: 'maven'
           server-id: github
           settings-path: ${{ github.workspace }}
+      - name: Set the version
+        run: |
+          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+          mvn versions:set -DnewVersion=${{ env.RELEASE_VERSION }}
       - name: Build with Maven
         run: mvn -B package --file pom.xml -DskipTests=true
-      - name: Prepare Release Artefacts
-        run: |
-          mkdir release-artefacts
-          cp target/Dhis2CucumberTestTool*.jar release-artefacts  # hardcoded name of the super-jar
-          cp target/classes/exec.sh target/classes/input.properties target/classes/log-config.xml release-artefacts
-      - name: Zip the Release Artefacts
-        uses: montudor/action-zip@v1
-        with:
-          args: zip -qq -r release-artefacts.zip release-artefacts
       - name: Create a release with the artefacts  # Note: this would create a new release…
         uses: ncipollo/release-action@v1.14.0
         with:
-          artifacts: "release-artefacts.zip"
+          artifacts: "target/Dhis2CucumberTestTool-${{ env.RELEASE_VERSION }}-release.zip"
           token: ${{ github.token }}
