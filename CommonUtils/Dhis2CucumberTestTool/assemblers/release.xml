@@ -8,7 +8,7 @@
 </formats>
 <fileSets>
   <fileSet>
-    <directory>${project.basedir}/packager</directory>
+    <directory>${project.basedir}/release-artefacts</directory>
     <outputDirectory></outputDirectory>
     <filtered>true</filtered>
     <includes>
@@ -17,7 +17,7 @@
     <fileMode>0744</fileMode>
   </fileSet>
   <fileSet>
-    <directory>${project.basedir}/packager</directory>
+    <directory>${project.basedir}/release-artefacts</directory>
     <outputDirectory></outputDirectory>
     <filtered>true</filtered>
     <includes>
@@ -29,7 +29,7 @@
     <directory>${project.build.directory}</directory>
     <outputDirectory></outputDirectory>
     <includes>
-      <include>*.jar</include>
+      <include>Dhis2CucumberTestTool*.jar</include>
     </includes>
   </fileSet>
 </fileSets>
