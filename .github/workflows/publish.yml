@@ -1,4 +1,4 @@
-name: Publish built artefacts
+name: Publish Docs
 on:
   push:
     branches:
