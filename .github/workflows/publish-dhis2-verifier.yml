@@ -32,14 +32,9 @@ jobs:
       - name: Build with Maven
         working-directory: .
         run: mvn -B package --file pom.xml -DskipTests=true
-      - name: verifier
-        run: |
-          echo "working in"
-          pwd
-          echo "target has"
-          ls target
       - name: Create a release with the artefacts  # Note: this would create a new release…
+        working-directory: .
         uses: ncipollo/release-action@v1.14.0
         with:
-          artifacts: "target/Dhis2CucumberTestTool-${{ github.ref_name }}-release.zip"
+          artifacts: "CommonUtils/Dhis2CucumberTestTool/target/Dhis2CucumberTestTool-${{ github.ref_name }}-release.zip"
           token: ${{ github.token }}
