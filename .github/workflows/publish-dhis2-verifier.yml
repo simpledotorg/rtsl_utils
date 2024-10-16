@@ -33,7 +33,6 @@ jobs:
         working-directory: .
         run: mvn -B package --file pom.xml -DskipTests=true
       - name: Create a release with the artefacts  # Note: this would create a new release…
-        working-directory: .
         uses: ncipollo/release-action@v1.14.0
         with:
           artifacts: "CommonUtils/Dhis2CucumberTestTool/target/Dhis2CucumberTestTool-${{ github.ref_name }}-release.zip"
