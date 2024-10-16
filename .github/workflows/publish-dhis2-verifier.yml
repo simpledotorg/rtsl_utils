@@ -22,6 +22,7 @@ jobs:
           server-id: github
           settings-path: ${{ github.workspace }}
       - name: Set the version
+        working-directory: .
         run: |
           mvn versions:set -DnewVersion=${{ github.ref_name }}
       - name: Build with Maven
