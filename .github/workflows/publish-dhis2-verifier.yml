@@ -13,6 +13,8 @@ jobs:
       contents: write
       packages: write
     steps:
+      - name: docker-compose workaround
+        run: echo "docker compose \"\$@\"" > $HOME/docker-compose ; chmod 777 $HOME/docker-compose ; echo "$HOME/" >> $GITHUB_PATH
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v3
         with:
