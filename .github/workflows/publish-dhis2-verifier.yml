@@ -32,6 +32,12 @@ jobs:
       - name: Build with Maven
         working-directory: .
         run: mvn -B package --file pom.xml -DskipTests=true
+      - name: verifier
+        run: |
+          echo "working in"
+          pwd
+          echo "target has"
+          ls target
       - name: Create a release with the artefacts  # Note: this would create a new release…
         uses: ncipollo/release-action@v1.14.0
         with:
