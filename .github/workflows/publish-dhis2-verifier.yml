@@ -26,8 +26,7 @@ jobs:
         run: |
           mvn versions:set -DnewVersion=${{ github.ref_name }}
       - name: Build with Maven
-        working-directory: .
-        run: mvn -B package --file pom.xml -DskipTests=true
+        run: mvn -B install package --file pom.xml -DskipTests=true
       - name: Create a release with the artefacts  # Note: this would create a new release…
         uses: ncipollo/release-action@v1.14.0
         with:
