@@ -19,7 +19,7 @@ plugins:
   - monorepo
 nav:
   - index.md
-  - DHIS2 Cucumber Test Tool: "!include CommonUtils/Dhis2CucumberTestTool/mkdocs.yml"
+  - DHIS2 Verifier: "!include CommonUtils/Dhis2Verifier/mkdocs.yml"
 markdown_extensions:
   - admonition
   - footnotes

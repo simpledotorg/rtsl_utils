@@ -15,7 +15,7 @@
         <module>PropertiesUtils</module>
         <module>ConfigUtils</module>
         <module>OpenmetricsUtils</module>
-        <module>Dhis2CucumberTestTool</module>
+        <module>Dhis2Verifier</module>
     </modules> 
     <dependencyManagement>
         <dependencies>	

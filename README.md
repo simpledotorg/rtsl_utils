@@ -17,7 +17,7 @@ mvn clean install
 # To test the cucumber POC
 
 ```
-cd rtsl_util/CommonUtils/Dhis2CucumberTestTool
+cd CommonUtils/Dhis2Verifier
 bash ./src/test/resources/local_tests/tests.ad.local.sh 
 ```
 
@@ -26,8 +26,8 @@ bash ./src/test/resources/local_tests/tests.ad.local.sh
 Tests results can be found here:
 
 ```
-cd rtsl_util/CommonUtils/Dhis2CucumberTestTool
-ls rtsl_util/CommonUtils/Dhis2CucumberTestTool/target/cucumber-reports 
+cd CommonUtils/Dhis2Verifier
+ls CommonUtils/Dhis2Verifier/target/cucumber-reports 
 ```
 
 
