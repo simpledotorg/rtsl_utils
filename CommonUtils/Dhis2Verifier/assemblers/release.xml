@@ -30,7 +30,7 @@
     <directory>${project.build.directory}</directory>
     <outputDirectory></outputDirectory>
     <includes>
-      <include>Dhis2CucumberTestTool*.jar</include>
+      <include>Dhis2Verifier*.jar</include>
     </includes>
   </fileSet>
 </fileSets>
