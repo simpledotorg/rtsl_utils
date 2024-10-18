@@ -26,7 +26,7 @@ if [ -z "$SCENARIOS" ] || [ "$SCENARIOS" = "<path-to-features[-folder]>" ]; then
   read -rsp $"Press enter to continue..."
   exit 1
 elif [ -f "$SCENARIOS" ] || [ -d "$SCENARIOS" ]; then
-  java -Dorg.rtsl.dhis2.testtool.properties=input.properties -Dlogback.configurationFile=log-config.xml -Dfile.ending=UTF8 -jar Dhis2CucumberTestTool-*.jar --object-factory io.cucumber.spring.SpringFactory --plugin html:./test_reports.html --plugin json:./test_reports.json --plugin pretty --glue "org.rtsl.dhis2.cucumber.definitions" --glue "io.cucumber.spring" --threads 1 $SCENARIOS
+  java -Dorg.rtsl.dhis2.testtool.properties=input.properties -Dlogback.configurationFile=log-config.xml -Dfile.ending=UTF8 -jar Dhis2Verifier-*.jar --object-factory io.cucumber.spring.SpringFactory --plugin html:./test_reports.html --plugin json:./test_reports.json --plugin pretty --glue "org.rtsl.dhis2.cucumber.definitions" --glue "io.cucumber.spring" --threads 1 $SCENARIOS
   read -rsp $"Press enter to continue..."
   exit 0
 fi

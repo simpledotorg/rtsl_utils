@@ -1,4 +1,4 @@
-# Dhis2CucumberTestTool
+# Dhis2Verifier
 
 This tool runs your test against a running version of DHIS2 accessible over the internet. The `exec` script is what ties everything together to run the tests. But before this can work, there are some pre-requisites necessary
 
