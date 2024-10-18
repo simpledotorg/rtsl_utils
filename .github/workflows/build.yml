@@ -41,5 +41,5 @@ jobs:
       - name: Archive Dhis2TestTool jar file
         uses: actions/upload-artifact@v4
         with:
-          name: Dhis2CucumberTestTool-${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}.jar
-          path: CommonUtils/Dhis2CucumberTestTool/target/Dhis2CucumberTestTool-${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}.jar
+          name: Dhis2Verifier-${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}.jar
+          path: CommonUtils/Dhis2Verifier/target/Dhis2Verifier-${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}.jar
