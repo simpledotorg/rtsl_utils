@@ -37,6 +37,7 @@ jobs:
       - name: Builds Artifacts and Images
         run: mvn clean install
       - name: Build PrometheousDBExporter
+        working-directory: ./Webapps/PrometheusDatabaseExporterWar
         run: docker build . -t simpledotorg/prometheusdbexporter:${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}} --build-arg PROJECT_VERSION=${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}
       - name: Publish Images
         run:  docker push simpledotorg/prometheusdbexporter:${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}
