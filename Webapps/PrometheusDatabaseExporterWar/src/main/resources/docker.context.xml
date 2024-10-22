@@ -1,0 +1,20 @@
+<Context path="/" docBase="/app/rtsl/prom_db_exporter/PrometheusDatabaseExporterWar-${project.version}.war">
+
+    <Resources>
+        <PostResources 
+            className="org.apache.catalina.webresources.FileResourceSet"
+            base="/app/rtsl/prom_db_exporter/logback.xml"
+            webAppMount="/WEB-INF/classes/config/logback.xml"/>
+    </Resources>
+
+    <!-- FOR LOGBACK -->
+    <Environment type="java.lang.String" override="false" name="logback/context-name" value="logback_config" />
+    <Environment type="java.lang.String" override="false" name="logback/configuration-resource" value="config/logback.xml" />
+    
+    <!-- FOR LOADING CONFIG -->
+    <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.1.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.1.properties" />
+    <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.2.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.2.properties" />
+    <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.3.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.3.properties" />
+    <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.4.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.4.properties" />
+    <Environment type="java.lang.String" override="false" name="org.rtsl.prometheus.exporter.5.properties" value="/app/rtsl/prom_db_exporter/prom_db_exporter.5.docker.properties" />
+</Context>
