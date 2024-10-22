@@ -35,7 +35,7 @@ jobs:
       - name: Sets up version
         run: mvn versions:set -DnewVersion=${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}
       - name: Builds Artifacts and Images
-        run: mvn clean install
+        run: mvn clean package
       - name: Build PrometheousDBExporter
         working-directory: ./Webapps/PrometheusDatabaseExporterWar
         run: docker build . -t simpledotorg/prometheusdbexporter:${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}} --build-arg PROJECT_VERSION=${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}
