@@ -7,13 +7,5 @@
         <format>zip</format>
     </formats>
     <fileSets>
-        <fileSet>
-            <directory>${project.basedir}/../docker_build</directory>
-            <outputDirectory>/</outputDirectory>
-            <filtered>true</filtered>
-            <excludes>
-                <exclude>target/**</exclude>
-            </excludes>
-        </fileSet>
     </fileSets>
 </assembly>
