@@ -35,6 +35,8 @@ For now, only two types exist: **sql** and **file**. File is implemented as the 
 
 ## Examples
 
+There's an example docker compose file at `docker/docker-compose.yml`.
+
 ### Heartbeat (synchronous)
 
 The simplest descriptor possible is that one:
@@ -165,5 +167,3 @@ The configuration can be done through a properties file containing the following
 | config.parallel.thread.pool.size | int | 10 | number of maximum concurrent threads |
 | config.root.folder | String |  | path to the folder containing the json descriptors|
 | cache.folder | String |  | Path to the folder that will be used as a local cache for asynch metrics.  |
-
-## Docker Image
