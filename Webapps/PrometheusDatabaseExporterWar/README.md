@@ -35,6 +35,8 @@ For now, only two types exist: **sql** and **file**. File is implemented as the 
 
 ## Examples
 
+The PrometheusDatabaseExporter is designed to turn any arbitrary SQL query into prometheus metrics. A few examples are provided below. They are just examples and not part of the application.
+
 ### Heartbeat (synchronous)
 
 The simplest descriptor possible is that one:
@@ -167,3 +169,81 @@ The configuration can be done through a properties file containing the following
 | cache.folder | String |  | Path to the folder that will be used as a local cache for asynch metrics.  |
 
 ## Docker Image
+
+A docker image is generated with the PrometheusDatabaseExporter, ready to use and (hopefully) easy to configure.
+
+### Where to find it
+
+The docker image is available on dockerhub :
+* https://hub.docker.com/r/simpledotorg/prometheusdbexporter
+
+
+### Integration
+
+
+#### Adding Metric Descriptors
+
+The image initially does not contain any Metric Descriptor. Metrics Descriptors should be present in the container in folder `/app/rtsl/prom_db_exporter/sources`
+
+This can be achieve by either extending the image (FROM) or mounting the Metric Descritors in the relevant folder. Below an example usable in a docker-compose.yaml
+
+``` docker-compose example
+    volumes:
+    - <folder_in_host>:/app/rtsl/prom_db_exporter/sources
+```
+
+#### Managing logs
+
+Logs are created by default in `/tmp/logs` and can be retrieve into host easily by mounting that volume anywhere.
+
+It's also possible to change log behaviour by overriding `/app/rtsl/prom_db_exporter/logback.xml`.
+
+#### Overriding Default Properties
+
+The properties defined above have default values that are likely not going to work in a real life scenario. Database url and credentials at the very least will need to be changed
+
+This can be done by overriding one of these 5 files either with on a new image (FROM) or with volumes.
+
+| File      | Default Content  | Load Order | Comment |
+| ----------- | ----------- |----------- |----------- |
+| `/app/rtsl/prom_db_exporter/prom_db_exporter.5.docker.properties`  | paths, mapping with environment variables        | last        | The values in that file should not be overridden |
+| `/app/rtsl/prom_db_exporter/prom_db_exporter.4.properties` | Empty        | placeholder for integtration     | 4 ||
+| `/app/rtsl/prom_db_exporter/prom_db_exporter.3.properties` | Empty        | placeholder for integtration     | 3 ||
+| `/app/rtsl/prom_db_exporter/prom_db_exporter.2.properties` | Empty        | placeholder for integtration     | 2 ||
+| `/app/rtsl/prom_db_exporter/prom_db_exporter.1.properties` | Empty        | placeholder for integtration     | 1 ||
+
+
+#### Overriding Default properties with Environment Variables
+
+TODO
+
+
+
+
+## Testing locally with docker
+
+### Testing a locally built image
+
+```
+cd docker_run
+docker compose up 
+```
+
+### Testing an image from docker hub
+
+Edit `docker_run/docker-compose.yaml` and replace `simpledotorg/prometheusdbexporter:0.0.0` by the version you want from docker hub.
+
+Then do the same: 
+
+```
+cd docker_run
+docker compose up 
+```
+
+### Accessing the metrics
+
+One this is done, your metrics should be accessible on the following URL: 
+- http://localhost:8080/PrometheusDbExporter/metrics
+
+
+
