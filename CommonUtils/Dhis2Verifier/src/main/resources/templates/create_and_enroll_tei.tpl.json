@@ -4,12 +4,7 @@
       "orgUnit": "${data.orgUnitId}",
       "trackedEntity": "${data.teiId}",
       "trackedEntityType": "MCPQUTHX1Ze",
-      "attributes": [
-        {
-          "attribute": "D9pz1vAbGPK",
-          "value": true
-        }
-      ]
+      "attributes": []
     }
   ],
   "enrollments": [
