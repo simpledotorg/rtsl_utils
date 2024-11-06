@@ -1,7 +1,8 @@
 services:
     prometheusdbexporter:
+        image: simpledotorg/prometheusdbexporter:${PROJECT_VERSION}
         build:
-            context: .
-            dockerfile: prometheus.db.exporter.docker
-        image: simpledotorg/prometheusdbexporter:${project.version}
-            
+            context: ..
+            dockerfile: ./docker_build/prometheus.db.exporter.docker
+            args:
+                PROJECT_VERSION: ${PROJECT_VERSION}
