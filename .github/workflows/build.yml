@@ -24,9 +24,7 @@ jobs:
       - uses: stCarolas/setup-maven@v4.5
         with:
           maven-version: 3.9.6
-      - name: docker-compose workaround
-        run: echo "docker compose \"\$@\"" > $HOME/docker-compose ; chmod 777 $HOME/docker-compose ; echo "$HOME/" >> $GITHUB_PATH
-      - name: Clean branch name
+      - name: Set Environment Variables
         run: |
           BRANCH_NAME=${{ github.ref_name }}
           CLEAN_BRANCH_NAME=$(echo $BRANCH_NAME | sed 's/[\/_]/-/g')
@@ -34,8 +32,12 @@ jobs:
           echo CLEAN_BRANCH_NAME=$CLEAN_BRANCH_NAME >> $GITHUB_ENV
       - name: Sets up version
         run: mvn versions:set -DnewVersion=${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}
-      - name: Builds Artifacts and Images
+      - name: Builds Artifacts
         run: mvn clean install
+      - name: Builds Images
+        run: |
+          export PROJECT_VERSION=${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}
+          docker compose build
       - name: Publish Images
         run:  docker push simpledotorg/prometheusdbexporter:${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}
       - name: Archive Dhis2TestTool jar file
