@@ -31,7 +31,7 @@ Feature: Number of overdue patients called
     And That TEI has a "Calling report" event on "3_MonthsAgo_Plus_1_Day" with following data
       | Result of call                          | REMOVE_FROM_OVERDUE |
       | HTN - Remove from overdue list because: | OTHER               |
-
+    And I wait for 1 second
     When I export the analytics
 
     Then The value of "PI":"HTN - Overdue patients called" with period type "Months" should be
@@ -66,6 +66,7 @@ Feature: Number of overdue patients called
       | Result of call                          | REMOVE_FROM_OVERDUE |
       | HTN - Remove from overdue list because: | OTHER               |
 
+    And I wait for 1 second
     When I export the analytics
 
     Then The value of "PI":"HTN - Overdue patients called" with period type "Months" should be
