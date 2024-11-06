@@ -35,6 +35,7 @@ jobs:
       - name: Builds Artifacts
         run: mvn clean install
       - name: Builds Images
+        working-directory: ./docker_build
         run: |
           export PROJECT_VERSION=${{ env.CLEAN_BRANCH_NAME }}.${{github.run_number}}
           docker compose build
