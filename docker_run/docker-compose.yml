@@ -16,7 +16,7 @@ services:
       retries: 5
     
   prometheusdbexporter:
-    image: simpledotorg/prometheusdbexporter:0.0.0
+    image: simpledotorg/prometheusdbexporter:ademarcq-13779.236
     ports:
       - 127.0.0.1:8080:8080
     environment:
