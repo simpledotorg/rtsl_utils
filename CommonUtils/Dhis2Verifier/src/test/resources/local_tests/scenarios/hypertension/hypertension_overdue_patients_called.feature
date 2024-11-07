@@ -33,6 +33,7 @@ Feature: Number of overdue patients called
       | HTN - Remove from overdue list because: | OTHER               |
 
     When I export the analytics
+    And I wait for 1 second
 
     Then The value of "PI":"HTN - Overdue patients called" with period type "Months" should be
       | 3_MonthsAgo | 1 |
@@ -67,6 +68,7 @@ Feature: Number of overdue patients called
       | HTN - Remove from overdue list because: | OTHER               |
 
     When I export the analytics
+    And I wait for 1 second
 
     Then The value of "PI":"HTN - Overdue patients called" with period type "Months" should be
       | 3_MonthsAgo | 1 |
