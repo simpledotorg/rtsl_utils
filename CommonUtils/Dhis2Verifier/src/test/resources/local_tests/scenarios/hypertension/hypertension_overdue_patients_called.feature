@@ -31,6 +31,7 @@ Feature: Number of overdue patients called
       | Result of call                          | REMOVE_FROM_OVERDUE |
       | HTN - Remove from overdue list because: | OTHER               |
 
+    And I wait for 1 second
     When I export the analytics
     And I wait for 1 second
 
@@ -65,6 +66,7 @@ Feature: Number of overdue patients called
       | Result of call                          | REMOVE_FROM_OVERDUE |
       | HTN - Remove from overdue list because: | OTHER               |
 
+    And I wait for 1 second
     When I export the analytics
     And I wait for 1 second
 
