@@ -1,4 +1,4 @@
-package org.rtsl.dhis2.cucumber.utils;
+package org.rtsl.dhis2.cucumber;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,7 +1,7 @@
 package org.rtsl.dhis2.cucumber.definitions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.rtsl.dhis2.cucumber.utils.Helper.toISODateTimeString;
+import static org.rtsl.dhis2.cucumber.Helper.toISODateTimeString;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.hisp.dhis.api.model.v40_2_2.AttributeInfo;
-import org.rtsl.dhis2.cucumber.utils.Dhis2HttpClient;
-import org.rtsl.dhis2.cucumber.utils.Dhis2IdConverter;
+import org.rtsl.dhis2.cucumber.Dhis2HttpClient;
+import org.rtsl.dhis2.cucumber.Dhis2IdConverter;
 import org.rtsl.dhis2.cucumber.factories.OrganisationUnit;
 import org.rtsl.dhis2.cucumber.factories.TrackedEntityInstance;
-import org.rtsl.dhis2.cucumber.utils.Period;
+import org.rtsl.dhis2.cucumber.Period;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
