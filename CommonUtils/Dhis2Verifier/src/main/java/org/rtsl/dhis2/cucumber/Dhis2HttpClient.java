@@ -1,4 +1,4 @@
-package org.rtsl.dhis2.cucumber.utils;
+package org.rtsl.dhis2.cucumber;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
